@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newth Rogue DPS Calculator - Turtle WoW</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.85) 100%),
+                        url('https://turtlecraft.gg/build/assets/rogue_mage-CZGMrVRM.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 380px 280px 280px 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: start;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            color: #ff6b6b;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .gear-slot {
+            margin-bottom: 15px;
+        }
+        
+        .gear-slot label {
+            display: block;
+            color: #4ecdc4;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .gear-slot select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(78, 205, 196, 0.4);
+            border-radius: 5px;
+            color: #e0e0e0;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        
+        .gear-slot select:hover {
+            border-color: rgba(78, 205, 196, 0.6);
+        }
+        
+        .stat-display {
+            background: rgba(255, 107, 107, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        .stat-label {
+            color: #a0a0a0;
+        }
+        
+        .stat-value {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        
+        .set-bonus {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .set-bonus-title {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .set-bonus-item {
+            color: #a0a0a0;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .set-bonus-active {
+            color: #4ecdc4;
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-group label {
+            display: block;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .preset-btn {
+            padding: 10px;
+            background: rgba(78, 205, 196, 0.2);
+            border: 1px solid rgba(78, 205, 196, 0.4);
+            border-radius: 8px;
+            color: #4ecdc4;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .preset-btn:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .dps-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.2));
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .dps-label {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin-bottom: 10px;
+        }
+        
+        .dps-value {
+            font-size: 4em;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+        
+        .stat-box .stat-label {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .stat-value {
+            color: #4ecdc4;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            cursor: pointer;
+        }
+        
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            min-width: 40px;
+            text-align: right;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .breakdown-table th,
+        .breakdown-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .breakdown-table th {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .breakdown-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .color-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Assassination Rogue - Goblin Gear Guidelines</h1>
+        <div class="subtitle">Turtle Craft - DPS Simulation (60s Fight) - Work in Progress</div>
+        
+        <div class="main-content">
+            <!-- GEAR PANEL -->
+            <div class="panel">
+                <div class="section-title">Equipment</div>
+                
+                <div class="gear-slot">
+                    <label>Head</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-head"></select>
+                        <select id="enchant-head" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="head-ap">+28 AP</option>
+                            <option value="head-haste">+1% Haste</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Neck</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-neck"></select>
+                        <select id="enchant-neck" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="neck-agi">+6 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Shoulders</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-shoulders"></select>
+                        <select id="enchant-shoulders" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="shoulders-haste">+2% Haste</option>
+                            <option value="shoulders-ap">+30 Attack Power</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Back</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-back"></select>
+                        <select id="enchant-back" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="back-agi">+3 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Chest</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-chest"></select>
+                        <select id="enchant-chest" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="chest-stats">+3 All Stats</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Wrists</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-wrists"></select>
+                        <select id="enchant-wrists" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="wrists-agi">+5 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Hands</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-hands"></select>
+                        <select id="enchant-hands" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="hands-haste">+1% Haste</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Waist</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-waist"></select>
+                        <select id="enchant-waist" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="waist-agi">+6 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Legs</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-legs"></select>
+                        <select id="enchant-legs" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="legs-ap">+28 AP</option>
+                            <option value="legs-haste">+1% Haste</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Feet</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-feet"></select>
+                        <select id="enchant-feet" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="feet-agi">+5 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Ring 1</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-ring1"></select>
+                        <select id="enchant-ring1" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="ring-agi">+6 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Ring 2</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-ring2"></select>
+                        <select id="enchant-ring2" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="ring-agi">+6 Agi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Trinket 1</label>
+                    <select id="slot-trinket1"></select>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Trinket 2</label>
+                    <select id="slot-trinket2"></select>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Main Hand</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-mainhand"></select>
+                        <select id="enchant-mainhand" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="weapon-crusader">Crusader</option>
+                            <option value="weapon-agi">+15 Agility</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Off Hand</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 5px;">
+                        <select id="slot-offhand"></select>
+                        <select id="enchant-offhand" style="font-size: 0.85em;">
+                            <option value="">No Enchant</option>
+                            <option value="weapon-crusader">Crusader</option>
+                            <option value="weapon-agi">+15 Agility</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="gear-slot">
+                    <label>Ranged</label>
+                    <select id="slot-ranged"></select>
+                </div>
+            </div>
+            
+            <!-- CHARACTER STATS PANEL -->
+            <div class="panel">
+                <div class="section-title">Character Stats</div>
+                
+                <div class="stat-display">
+                    <div class="stat-row">
+                        <span class="stat-label">Strength:</span>
+                        <span class="stat-value" id="totalStrength">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Agility:</span>
+                        <span class="stat-value" id="totalAgility">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Attack Power:</span>
+                        <span class="stat-value" id="totalAttackPower">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Crit Chance:</span>
+                        <span class="stat-value" id="totalCrit">0%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Hit Chance:</span>
+                        <span class="stat-value" id="totalHit">0%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Haste:</span>
+                        <span class="stat-value" id="totalHaste">0%</span>
+                    </div>
+                </div>
+                
+                <div id="setBonusContainer"></div>
+                
+                <div class="section-title" style="margin-top: 20px;">Energy Expenditure</div>
+                <div id="energyBreakdownContainer" style="font-size: 0.85em;">
+                    <!-- Energy breakdown will be populated here -->
+                </div>
+                
+                <div class="section-title" style="margin-top: 20px;">Presets</div>
+                <div class="preset-buttons">
+                    <button class="preset-btn" onclick="loadPreset('phase1bis')">Phase 1 - Best in Slot</button>
+                    <button class="preset-btn" onclick="loadPreset('phase2bis')">Phase 2 - Best in Slot</button>
+                    <button class="preset-btn" onclick="loadPreset('empty')">Empty (No Gear)</button>
+                </div>
+            </div>
+            
+            <!-- BUFFS & SETTINGS PANEL -->
+            <div class="panel">
+                <div class="section-title">Buffs & Settings</div>
+                
+                <div class="control-group">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="patch181">
+                        <span style="color: #ffd700;">Patch 1.8.1 Changes</span>
+                    </label>
+                    <div style="font-size: 0.75em; color: #a0a0a0; margin-left: 30px; margin-top: 3px;">
+                        TfB: 2% per CP, NA: 30% AP, Poison: No TfB
+                    </div>
+                </div>
+                
+                <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Raid Buffs</div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="battleShout">
+                        <span>Battle Shout - 232 AP</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="blessingMight">
+                        <span>Blessing of Might - 185 AP</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="blessingKings">
+                        <span>Blessing of Kings - 10% Stats</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="leaderPack">
+                        <span>Leader of the Pack - 3% Crit</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="tricksTrade">
+                        <span>Tricks of the Trade - 4% Crit</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="trueshot">
+                        <span>Trueshot Aura - 3% AP + 30</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="markDeath">
+                        <span>Mark for Death - 8s</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="markDeathPrep">
+                        <span>Mark for Death + Prep - 16s</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="windfury">
+                        <span>Windfury Totem</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="strengthEarth">
+                        <span>Strength of Earth - 77 Str</span>
+                    </label>
+                </div>
+                
+                <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Consumables</div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="mongoose">
+                        <span>Elixir of Mongoose - 25 Agi, 2% Crit</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="giants">
+                        <span>Elixir of Giants - 25 Str</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="firewater">
+                        <span>Winterfall Firewater - 35 AP</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="potionQuickness">
+                        <span>Potion of Quickness - 5% Haste (30s)</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="jujuFlurry">
+                        <span>Juju Flurry - 3% Haste (20s)</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="danonzoMedley">
+                        <span>Danonzo's Tel'Abim Medley - 2% Haste</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="thistleTea">
+                        <span>Thistle Tea - 100 Energy</span>
+                    </label>
+                </div>
+                
+                <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Armor Debuffs</div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="exposeArmor">
+                        <span>Imp. Expose Armor (5CP)</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="sunderArmor">
+                        <span>Sunder Armor (5 stacks)</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="curseRecklessness">
+                        <span>Curse of Recklessness</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="fairieFire">
+                        <span>Fairie Fire</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="natureAmmo">
+                        <span>Nature Ammunition</span>
+                    </label>
+                </div>
+                
+                <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Combat Settings</div>
+                
+                <div class="control-group">
+                    <label>Weapon Skill</label>
+                    <div class="slider-container">
+                        <input type="range" id="weaponSkill" min="300" max="320" value="315" step="1">
+                        <span class="value-display" id="weaponSkillValue">315</span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label>Armor Penetration</label>
+                    <div class="slider-container">
+                        <input type="range" id="armorPen" min="0" max="1000" value="0" step="10">
+                        <span class="value-display" id="armorPenValue">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RESULTS PANEL -->
+            <div class="panel">
+                <div class="dps-display">
+                    <div class="dps-label">Total DPS</div>
+                    <div class="dps-value" id="totalDPS">0</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Total Damage</div>
+                        <div class="stat-value" id="totalDamage">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Effective AP</div>
+                        <div class="stat-value" id="effectiveAP">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Boss Armor</div>
+                        <div class="stat-value" id="bossArmor">4,211</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Miss Rate</div>
+                        <div class="stat-value" id="missRate">0%</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="damageChart"></canvas>
+                </div>
+                
+                <table class="breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Damage Source</th>
+                            <th>Hits</th>
+                            <th>Damage</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody id="breakdownTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ITEM DATABASE
+        const ITEMS = {
+            // DARKMANTLE SET
+            'darkmantle-cap': {
+                name: 'Darkmantle Cap',
+                slot: 'head',
+                set: 'darkmantle',
+                stats: { strength: 13, agility: 26, stamina: 18, critPct: 1 }
+            },
+            'circlet-of-restless-dreams': {
+                name: 'Circlet of Restless Dreams',
+                slot: 'head',
+                stats: { armor: 183, agility: 24, stamina: 38 }
+            },
+            'darkmantle-spaulders': {
+                name: 'Darkmantle Spaulders',
+                slot: 'shoulders',
+                set: 'darkmantle',
+                stats: { agility: 24, stamina: 12, hitPct: 1 }
+            },
+            'darkmantle-tunic': {
+                name: 'Darkmantle Tunic',
+                slot: 'chest',
+                set: 'darkmantle',
+                stats: { agility: 31, stamina: 15, hitPct: 2 }
+            },
+            'darkmantle-bracers': {
+                name: 'Darkmantle Bracers',
+                slot: 'wrists',
+                set: 'darkmantle',
+                stats: { strength: 10, agility: 15, stamina: 10 }
+            },
+            'darkmantle-gloves': {
+                name: 'Darkmantle Gloves',
+                slot: 'hands',
+                set: 'darkmantle',
+                stats: { strength: 13, agility: 22, stamina: 13 }
+            },
+            'darkmantle-belt': {
+                name: 'Darkmantle Belt',
+                slot: 'waist',
+                set: 'darkmantle',
+                stats: { strength: 15, agility: 17, stamina: 16 }
+            },
+            'darkmantle-pants': {
+                name: 'Darkmantle Pants',
+                slot: 'legs',
+                set: 'darkmantle',
+                stats: { strength: 16, agility: 25, stamina: 17, critPct: 1 }
+            },
+            'darkmantle-boots': {
+                name: 'Darkmantle Boots',
+                slot: 'feet',
+                set: 'darkmantle',
+                stats: { agility: 24, stamina: 10 }
+            },
+            'boots-of-the-shadow-flame': {
+                name: 'Boots of the Shadow Flame',
+                slot: 'feet',
+                stats: { stamina: 22, attackPower: 54, hitPct: 2 }
+            },
+            
+            // BLOODFANG SET
+            'bloodfang-hood': {
+                name: 'Bloodfang Hood',
+                slot: 'head',
+                set: 'bloodfang',
+                stats: { strength: 19, agility: 27, stamina: 25, critPct: 1 }
+            },
+            'bloodfang-spaulders': {
+                name: 'Bloodfang Spaulders',
+                slot: 'shoulders',
+                set: 'bloodfang',
+                stats: { strength: 6, agility: 25, stamina: 17, hitPct: 1 }
+            },
+            'stormshroud-shoulders': {
+                name: 'Stormshroud Shoulders',
+                slot: 'shoulders',
+                set: 'stormshroud',
+                stats: { armor: 126, stamina: 12, critPct: 1, hitPct: 1, attackPower: 15 }
+            },
+            'zandalar-madcaps-mantle': {
+                name: "Zandalar Madcap's Mantle",
+                slot: 'shoulders',
+                set: 'madcap',
+                stats: { armor: 140, agility: 20, stamina: 12, strength: 12, hitPct: 1 }
+            },
+            'bloodfang-chestpiece': {
+                name: 'Bloodfang Chestpiece',
+                slot: 'chest',
+                set: 'bloodfang',
+                stats: { strength: 12, agility: 26, stamina: 17, hitPct: 2, critPct: 1 }
+            },
+            'stormshroud-armor': {
+                name: 'Stormshroud Armor',
+                slot: 'chest',
+                set: 'stormshroud',
+                stats: { armor: 163, critPct: 2, hastePct: 1 }
+            },
+            'bloodfang-bracers': {
+                name: 'Bloodfang Bracers',
+                slot: 'wrists',
+                set: 'bloodfang',
+                stats: { agility: 23, stamina: 13, hitPct: 1 }
+            },
+            'zandalar-madcaps-bracers': {
+                name: "Zandalar Madcap's Bracers",
+                slot: 'wrists',
+                set: 'madcap',
+                stats: { armor: 82, stamina: 14, agility: 14, strength: 9 }
+            },
+            'bloodfang-gloves': {
+                name: 'Bloodfang Gloves',
+                slot: 'hands',
+                set: 'bloodfang',
+                stats: { strength: 19, agility: 20, stamina: 20 }
+            },
+            'stormshroud-gloves': {
+                name: 'Stormshroud Gloves',
+                slot: 'hands',
+                set: 'stormshroud',
+                stats: { armor: 109, stamina: 12, hastePct: 1, hitPct: 1, attackPower: 20 }
+            },
+            'bloodfang-belt': {
+                name: 'Bloodfang Belt',
+                slot: 'waist',
+                set: 'bloodfang',
+                stats: { strength: 13, agility: 20, stamina: 15, critPct: 1 }
+            },
+            'bloodfang-pants': {
+                name: 'Bloodfang Pants',
+                slot: 'legs',
+                set: 'bloodfang',
+                stats: { strength: 11, agility: 37, stamina: 17, critPct: 1 }
+            },
+            'stormshroud-pants': {
+                name: 'Stormshroud Pants',
+                slot: 'legs',
+                set: 'stormshroud',
+                stats: { armor: 138, hastePct: 2, critPct: 1 }
+            },
+            'bloodfang-boots': {
+                name: 'Bloodfang Boots',
+                slot: 'feet',
+                set: 'bloodfang',
+                stats: { strength: 6, agility: 25, stamina: 17, hitPct: 1 }
+            },
+            
+            // WEAPONS
+            'alcors-sunrazor': {
+                name: "Alcor's Sunrazor",
+                slot: 'weapon',
+                weaponStats: { minDmg: 41, maxDmg: 77, speed: 1.30 },
+                stats: {}
+            },
+            'distracting-dagger': {
+                name: 'Distracting Dagger',
+                slot: 'offhand',
+                weaponStats: { minDmg: 42, maxDmg: 64, speed: 1.30 },
+                stats: {}
+            },
+            'fang-of-venoxis': {
+                name: 'Fang of Venoxis',
+                slot: 'mainhand',
+                weaponStats: { minDmg: 35.2, maxDmg: 72.2, speed: 1.30 }, // 47.8 DPS
+                stats: { intellect: 8, spirit: 6 }
+            },
+            'the-ripper': {
+                name: 'The Ripper',
+                slot: 'weapon',
+                weaponStats: { minDmg: 47, maxDmg: 85, speed: 1.40 },
+                stats: {} // Chance on hit: -60 armor + 10 Nature dmg/5s for 30s (5% proc) + Poison 19-32 dmg (5% proc)
+            },
+            'dooms-edge': {
+                name: "Doom's Edge",
+                slot: 'weapon',
+                weaponStats: { minDmg: 83, maxDmg: 154, speed: 2.30 },
+                stats: { agility: 12, strength: 9, stamina: 7 }
+            },
+            'crulshorukh-edge-of-chaos': {
+                name: "Crul'shorukh, Edge of Chaos",
+                slot: 'mainhand',
+                weaponStats: { minDmg: 101, maxDmg: 188, speed: 2.30 },
+                stats: { agility: 13, stamina: 13, attackPower: 36 }
+            },
+            
+            // TRINKETS
+            'hand-of-justice': {
+                name: 'Hand of Justice',
+                slot: 'trinket',
+                stats: { attackPower: 20 }
+            },
+            'whip-of-encouragement': {
+                name: 'Whip of Encouragement',
+                slot: 'trinket',
+                stats: { hastePct: 3 }
+            },
+            'venomous-totem': {
+                name: 'Venomous Totem',
+                slot: 'trinket',
+                stats: {} // Use: Increases chance to apply Rogue poisons by 30% for 20s
+            },
+            'drake-fang-talisman': {
+                name: 'Drake Fang Talisman',
+                slot: 'trinket',
+                stats: { attackPower: 56, hitPct: 2, critPct: 1 }
+            },
+            'renatakis-charm-of-trickery': {
+                name: "Renataki's Charm of Trickery",
+                slot: 'trinket',
+                set: 'madcap',
+                stats: {} // Use: Instantly increases energy by 60
+            },
+            
+            // NECK
+            'onyxia-tooth-pendant': {
+                name: 'Onyxia Tooth Pendant',
+                slot: 'neck',
+                stats: { agility: 12, stamina: 9, hitPct: 1, critPct: 1 }
+            },
+            'prestors-talisman-of-connivery': {
+                name: "Prestor's Talisman of Connivery",
+                slot: 'neck',
+                stats: { agility: 30, hitPct: 1 }
+            },
+            
+            // RINGS
+            'quick-strike-ring': {
+                name: 'Quick Strike Ring',
+                slot: 'ring',
+                stats: { strength: 5, stamina: 8, attackPower: 30, critPct: 1 }
+            },
+            'band-of-accuria': {
+                name: 'Band of Accuria',
+                slot: 'ring',
+                stats: { agility: 16, stamina: 10, hitPct: 2 }
+            },
+            'don-julios-band': {
+                name: "Don Julio's Band",
+                slot: 'ring',
+                stats: { stamina: 11, critPct: 1, hitPct: 1, attackPower: 16 }
+            },
+            'tarnished-elven-ring': {
+                name: 'Tarnished Elven Ring',
+                slot: 'ring',
+                stats: { agility: 15, hitPct: 1 }
+            },
+            
+            // CLOAK
+            'wing-of-the-time-lord': {
+                name: 'Wing of the Time-Lord',
+                slot: 'back',
+                stats: { strength: 11, agility: 11, stamina: 8, hastePct: 1 }
+            },
+            
+            // CLUTCH OF HIVAXXIS
+            'clutch-of-hivaxxis': {
+                name: 'Clutch of Hivaxxis',
+                slot: 'waist',
+                stats: { agility: 7, stamina: 13, attackPower: 44, hastePct: 1 }
+            },
+            
+            // NIGHTSLAYER GLOVES
+            'nightslayer-gloves': {
+                name: 'Nightslayer Gloves',
+                slot: 'hands',
+                set: 'nightslayer',
+                stats: { strength: 12, agility: 18, stamina: 17, hitPct: 1 }
+            },
+            
+            // RANGED
+            'time-frozen-bow': {
+                name: 'Time Frozen Bow',
+                slot: 'ranged',
+                weaponStats: { minDmg: 76, maxDmg: 139, speed: 3.50 },
+                stats: { hastePct: 1, hitPct: 1 }
+            }
+        };
+        
+        // SET BONUSES
+        const SET_BONUSES = {
+            darkmantle: {
+                2: '+8 All Resistances',
+                4: 'Chance on melee to restore 35 energy',
+                6: '+40 Attack Power',
+                8: '+200 Armor'
+            },
+            bloodfang: {
+                3: '+5% poison application chance',
+                5: 'Feint threat reduction +25%',
+                8: 'Melee hit chance to deal 283-318 damage and heal 50 HP/sec for 6sec'
+            },
+            nightslayer: {
+                3: 'Reduces cooldown of Vanish by 30000 sec',
+                5: 'Increases maximum Energy by 10',
+                8: 'Heals the rogue for 500 when Vanish is performed'
+            },
+            stormshroud: {
+                2: '+24 Attack Power',
+                3: '5% chance of dealing 35-51 Nature damage on melee attack',
+                4: '2% chance to restore 30 energy and increase dodge/melee speed by 10% for 8 sec'
+            },
+            madcap: {
+                2: '+20 Attack Power'
+            }
+        };
+        
+        // ENCHANTS
+        const ENCHANTS = {
+            'head-ap': { attackPower: 28 },
+            'head-haste': { hastePct: 1 },
+            'neck-agi': { agility: 6 },
+            'shoulders-haste': { hastePct: 2 },
+            'shoulders-ap': { attackPower: 30 },
+            'back-agi': { agility: 3 },
+            'chest-stats': { strength: 3, agility: 3 },
+            'wrists-agi': { agility: 5 },
+            'hands-haste': { hastePct: 1 },
+            'waist-agi': { agility: 6 },
+            'legs-ap': { attackPower: 28 },
+            'legs-haste': { hastePct: 1 },
+            'feet-agi': { agility: 5 },
+            'ring-agi': { agility: 6 },
+            'weapon-crusader': { attackPower: 100 },
+            'weapon-agi': { agility: 15 }
+        };
+        
+        // BASE STATS (Level 60)
+        const BASE_STATS = {
+            strength: 77,
+            agility: 132,
+            attackPower: 100
+        };
+        
+        // TALENTS
+        const TALENTS = {
+            precision: 5 // 5% hit from Precision (5/5)
+        };
+        
+        // CONFIGURATION - All ability values and constants
+        const CONFIG = {
+            // Fight settings
+            fightLength: 60, // Fixed at 60 seconds
+            bossLevel: 63,
+            bossArmorBase: 4211, // Turtle WoW boss armor
+            
+            // Energy system
+            baseEnergy: 100,
+            vigorBonus: 10,
+            energyRegen: 10, // per second
+            vigorEnergyPerPoison: 2,
+            
+            // Crit calculation
+            agilityPerCrit: 28, // 28 agility = 1% crit
+            maliceCrit: 0.05, // 5% from Malice talent
+            
+            // Talents & Passives
+            improvedSliceDice: 1.45, // 45% longer duration
+            tasteForBloodPre: 0.15, // 15% physical damage (pre-patch)
+            tasteForBloodPost: 0.10, // 10% physical damage (patch 1.8.1)
+            tasteForBloodUptime: 0.90, // 90% uptime
+            lethalityMultiplier: 1.30, // 30% increased crit damage
+            vilePoisons: 1.30, // 30% increased poison damage
+            improvedPoisons: 0.10, // 10% increased poison application
+            sealFate: 1.00, // 100% chance for CP-generating crits to add extra CP (already implemented in cpFromNoxiousCrits)
+            
+            // Relentless Strikes
+            relentlessChancePerCP: 0.20, // 20% per CP
+            relentlessEnergy: 20,
+            relentlessDmgBonus: 0.05, // 5% per stack
+            relentlessAvgStacks: 2.5, // Average stacks
+            
+            // Abilities - Energy Costs
+            noxiousAssaultEnergy: 45,
+            envenomEnergy: 20,
+            eviscrateEnergy: 30,
+            sndEnergy: 20,
+            ruptureEnergy: 20,
+            
+            // Abilities - Damage & Scaling
+            noxiousAssaultBaseDmg: 105,
+            noxiousAssaultAPRatioPre: 0.35, // 35% AP scaling (pre-patch)
+            noxiousAssaultAPRatioPost: 0.30, // 30% AP scaling (patch 1.8.1)
+            
+            eviscerateBaseDamage5CP: 900, // Base damage for 5 CP Eviscerate
+            
+            ruptureBaseDuration: 16,
+            ruptureTalentBonus: 6, // +6 seconds from Improved Rupture
+            ruptureDamage5CP: 1500,
+            
+            sndDuration1CP: 9,
+            envenomDuration1CP: 12,
+            envenomProcBonus: 0.30, // +30% poison proc chance
+            
+            // Poison
+            poisonBaseDmg: 124.5,
+            poisonAPRatio: 0.0475, // 4.75% AP scaling
+            poisonBaseProc: 0.30, // 30% base proc chance
+            
+            // Set Bonuses
+            darkmantleProc: 0.02, // 2% chance to restore energy
+            darkmantleEnergy: 35,
+            darkmantle6pcAP: 40,
+            
+            // Weapon Stats (from gear, will be updated dynamically)
+            mh: { minDmg: 41, maxDmg: 77, speed: 1.3 },
+            oh: { minDmg: 42, maxDmg: 64, speed: 1.3 },
+            
+            // Crusader
+            crusaderAP: 100,
+            
+            // Combat mechanics
+            baseMissDW: 0.27, // 27% base miss for dual wield vs boss (Turtle WoW)
+            glancingRate: 0.40, // 40% of hits are glancing
+            offhandPenalty: 0.50 // 50% damage penalty for off-hand
+        };
+        
+        let currentGear = {};
+        let currentEnchants = {};
+        let chart;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            populateGearSlots();
+            setupEnchantListeners();
+            initializeChart();
+            setupEventListeners();
+            
+            // Auto-load Phase 1 - Best in Slot preset
+            loadPreset('phase1bis');
+        });
+        
+        function populateGearSlots() {
+            const slots = ['head', 'neck', 'shoulders', 'back', 'chest', 'wrists', 'hands', 'waist', 
+                          'legs', 'feet', 'ring1', 'ring2', 'trinket1', 'trinket2', 'mainhand', 'offhand', 'ranged'];
+            
+            slots.forEach(slot => {
+                const select = document.getElementById(`slot-${slot}`);
+                select.innerHTML = '<option value="">None</option>';
+                
+                // Get matching slot type
+                let slotType = slot.replace(/[12]$/, ''); // Remove numbers from ring1/ring2, etc.
+                
+                // Find items for this slot
+                Object.entries(ITEMS).forEach(([id, item]) => {
+                    // Check if item matches this slot
+                    let matches = item.slot === slotType || item.slot === slot;
+                    
+                    // Special case: 'weapon' slot items can go in mainhand OR offhand
+                    if ((slot === 'mainhand' || slot === 'offhand') && item.slot === 'weapon') {
+                        matches = true;
+                    }
+                    
+                    if (matches) {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = item.name;
+                        select.appendChild(option);
+                    }
+                });
+                
+                // Event listener
+                select.addEventListener('change', function() {
+                    currentGear[slot] = this.value;
+                    calculate();
+                });
+            });
+        }
+        
+        function setupEnchantListeners() {
+            const enchantSlots = ['head', 'neck', 'shoulders', 'back', 'chest', 'wrists', 'hands', 
+                                 'waist', 'legs', 'feet', 'ring1', 'ring2', 'mainhand', 'offhand'];
+            
+            enchantSlots.forEach(slot => {
+                const select = document.getElementById(`enchant-${slot}`);
+                if (select) {
+                    select.addEventListener('change', function() {
+                        currentEnchants[slot] = this.value;
+                        calculate();
+                    });
+                }
+            });
+        }
+        
+        function calculateGearStats() {
+            let stats = {
+                strength: BASE_STATS.strength,
+                agility: BASE_STATS.agility,
+                attackPower: BASE_STATS.attackPower,
+                critPct: 0,
+                hitPct: 0,
+                hastePct: 0,
+                armorPen: 0
+            };
+            
+            let sets = {};
+            let weapons = {
+                mainhand: null,
+                offhand: null
+            };
+            
+            // Sum up all gear stats
+            Object.entries(currentGear).forEach(([slot, itemId]) => {
+                if (itemId && ITEMS[itemId]) {
+                    const item = ITEMS[itemId];
+                    
+                    // Track weapons separately
+                    if (slot === 'mainhand' || slot === 'offhand') {
+                        if (item.weaponStats) {
+                            weapons[slot] = item.weaponStats;
+                        }
+                    }
+                    
+                    // Add stats
+                    Object.entries(item.stats || {}).forEach(([stat, value]) => {
+                        stats[stat] = (stats[stat] || 0) + value;
+                    });
+                    
+                    // Track set pieces
+                    if (item.set) {
+                        sets[item.set] = (sets[item.set] || 0) + 1;
+                    }
+                }
+            });
+            
+            // Add enchant stats
+            Object.entries(currentEnchants).forEach(([slot, enchantId]) => {
+                if (enchantId && ENCHANTS[enchantId]) {
+                    const enchant = ENCHANTS[enchantId];
+                    Object.entries(enchant).forEach(([stat, value]) => {
+                        // Apply Crusader uptime (30% per weapon)
+                        if (enchantId === 'weapon-crusader' && stat === 'attackPower') {
+                            stats[stat] = (stats[stat] || 0) + (value * 0.30);
+                        } else {
+                            stats[stat] = (stats[stat] || 0) + value;
+                        }
+                    });
+                }
+            });
+            
+            // Apply set bonuses
+            let activeSetBonuses = [];
+            Object.entries(sets).forEach(([setName, count]) => {
+                if (setName === 'darkmantle') {
+                    if (count >= 6) stats.attackPower += 40;
+                }
+                // Track active bonuses for display
+                if (SET_BONUSES[setName]) {
+                    Object.entries(SET_BONUSES[setName]).forEach(([pieces, bonus]) => {
+                        if (count >= parseInt(pieces)) {
+                            activeSetBonuses.push({ set: setName, pieces: pieces, bonus: bonus, active: true });
+                        }
+                    });
+                }
+            });
+            
+            return { stats, sets, activeSetBonuses, weapons };
+        }
+        
+        function setupEventListeners() {
+            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'battleShout', 'blessingMight', 
+                              'blessingKings', 'leaderPack', 'tricksTrade', 'trueshot', 'markDeath', 'markDeathPrep',
+                              'mongoose', 'giants', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea',
+                              'exposeArmor', 'sunderArmor', 'curseRecklessness', 'fairieFire', 'natureAmmo'];
+            checkboxes.forEach(id => {
+                const elem = document.getElementById(id);
+                if (elem) {
+                    elem.addEventListener('change', function() {
+                        // Handle mutually exclusive armor debuffs
+                        if (id === 'exposeArmor' && this.checked) {
+                            document.getElementById('sunderArmor').checked = false;
+                        } else if (id === 'sunderArmor' && this.checked) {
+                            document.getElementById('exposeArmor').checked = false;
+                        }
+                        // Handle mutually exclusive Mark for Death
+                        else if (id === 'markDeath' && this.checked) {
+                            document.getElementById('markDeathPrep').checked = false;
+                        } else if (id === 'markDeathPrep' && this.checked) {
+                            document.getElementById('markDeath').checked = false;
+                        }
+                        calculate();
+                    });
+                }
+            });
+            
+            // Sliders
+            const sliders = ['weaponSkill', 'armorPen'];
+            sliders.forEach(id => {
+                const elem = document.getElementById(id);
+                if (elem) {
+                    elem.addEventListener('input', function() {
+                        updateValueDisplay(id);
+                        calculate();
+                    });
+                }
+            });
+        }
+        
+        function updateValueDisplay(id) {
+            const slider = document.getElementById(id);
+            const display = document.getElementById(id + 'Value');
+            if (slider && display) {
+                display.textContent = slider.value;
+            }
+        }
+        
+        function calculate() {
+            const { stats, sets, activeSetBonuses, weapons } = calculateGearStats();
+            
+            // Update CONFIG with equipped weapon stats
+            if (weapons.mainhand) {
+                CONFIG.mh = weapons.mainhand;
+            } else {
+                CONFIG.mh = { minDmg: 0, maxDmg: 0, speed: 1.0 }; // Default if no weapon
+            }
+            if (weapons.offhand) {
+                CONFIG.oh = weapons.offhand;
+            } else {
+                CONFIG.oh = { minDmg: 0, maxDmg: 0, speed: 1.0 }; // Default if no weapon
+            }
+            
+            const fightLength = CONFIG.fightLength;
+            
+            // Get all buff/consumable/debuff states
+            const isPatch181 = document.getElementById('patch181').checked;
+            const hasBattleShout = document.getElementById('battleShout').checked;
+            const hasBlessingMight = document.getElementById('blessingMight').checked;
+            const hasBlessingKings = document.getElementById('blessingKings').checked;
+            const hasLeaderPack = document.getElementById('leaderPack').checked;
+            const hasTricksTrade = document.getElementById('tricksTrade').checked;
+            const hasTrueshot = document.getElementById('trueshot').checked;
+            const hasMarkDeath = document.getElementById('markDeath').checked;
+            const hasMarkDeathPrep = document.getElementById('markDeathPrep').checked;
+            const hasWindfury = document.getElementById('windfury').checked;
+            const hasStrengthEarth = document.getElementById('strengthEarth').checked;
+            const hasMongoose = document.getElementById('mongoose').checked;
+            const hasGiants = document.getElementById('giants').checked;
+            const hasFirewater = document.getElementById('firewater').checked;
+            const hasPotionQuickness = document.getElementById('potionQuickness').checked;
+            const hasJujuFlurry = document.getElementById('jujuFlurry').checked;
+            const hasDanonzoMedley = document.getElementById('danonzoMedley').checked;
+            const hasThistleTea = document.getElementById('thistleTea').checked;
+            
+            // Armor debuffs
+            const hasExposeArmor = document.getElementById('exposeArmor').checked;
+            const hasSunderArmor = document.getElementById('sunderArmor').checked;
+            const hasCurseRecklessness = document.getElementById('curseRecklessness').checked;
+            const hasFairieFire = document.getElementById('fairieFire').checked;
+            const hasNatureAmmo = document.getElementById('natureAmmo').checked;
+            
+            // Combat settings
+            const weaponSkill = parseInt(document.getElementById('weaponSkill').value);
+            const armorPen = parseInt(document.getElementById('armorPen').value);
+            
+            // Start with gear stats
+            let totalStrength = stats.strength;
+            let totalAgility = stats.agility;
+            let totalAttackPower = stats.attackPower;
+            
+            // Add consumable stats BEFORE Kings
+            if (hasMongoose) totalAgility += 25;
+            if (hasGiants) totalStrength += 25;
+            if (hasFirewater) totalAttackPower += 35;
+            if (hasStrengthEarth) totalStrength += 77;
+            
+            // Apply Blessing of Kings (10% to Str/Agi)
+            if (hasBlessingKings) {
+                totalStrength *= 1.10;
+                totalAgility *= 1.10;
+            }
+            
+            // Convert Strength and Agility to Attack Power (1 AP per point for rogues)
+            const apFromStats = totalStrength + totalAgility;
+            let baseAP = totalAttackPower + apFromStats;
+            
+            // Stormshroud 2pc set bonus check
+            const stormshroudCount = sets.stormshroud || 0;
+            const hasStormshroud2pc = stormshroudCount >= 2;
+            const hasStormshroud3pc = stormshroudCount >= 3;
+            const hasStormshroud4pc = stormshroudCount >= 4;
+            
+            // Madcap 2pc set bonus check
+            const madcapCount = sets.madcap || 0;
+            const hasMadcap2pc = madcapCount >= 2;
+            
+            // Add flat AP buffs
+            if (hasBattleShout) baseAP += 232;
+            if (hasBlessingMight) baseAP += 185;
+            if (hasTrueshot) baseAP += 30;
+            
+            // Stormshroud 2pc: +24 Attack Power
+            if (hasStormshroud2pc) baseAP += 24;
+            
+            // Madcap 2pc: +20 Attack Power
+            if (hasMadcap2pc) baseAP += 20;
+            
+            // Trueshot 3% AP multiplier
+            if (hasTrueshot) {
+                const apBeforeTrueshot = baseAP - 30;
+                baseAP = (apBeforeTrueshot * 1.03) + 30;
+            }
+            
+            // Mark for Death uptime calculation
+            let markDeathUptime = 0;
+            if (hasMarkDeath) {
+                markDeathUptime = 8 / 60;
+            } else if (hasMarkDeathPrep) {
+                markDeathUptime = 16 / 60;
+            }
+            const markDeathBonus = markDeathUptime * 600;
+            
+            // Calculate crit
+            const baseCrit = CONFIG.maliceCrit;
+            const critFromAgi = totalAgility / CONFIG.agilityPerCrit / 100;
+            let totalCrit = baseCrit + critFromAgi + (stats.critPct || 0) / 100;
+            
+            if (hasLeaderPack) totalCrit += 0.03;
+            if (hasTricksTrade) totalCrit += 0.04;
+            if (hasMongoose) totalCrit += 0.02;
+            
+            // Calculate hit
+            let hit = (stats.hitPct || 0) / 100 + TALENTS.precision / 100;
+            
+            // Calculate haste
+            let haste = (stats.hastePct || 0) / 100;
+            if (hasPotionQuickness) haste += (30 / 60) * 0.05;
+            if (hasJujuFlurry) haste += (20 / 60) * 0.03;
+            if (hasDanonzoMedley) haste += 0.02; // 2% haste, permanent consumable
+            
+            // Effective AP with Crusader (30% uptime per weapon) and Mark for Death
+            let effectiveAP = baseAP + markDeathBonus;
+            const crusaderUptime = 0.30; // 30% uptime per weapon
+            if (currentEnchants['mainhand'] === 'weapon-crusader') effectiveAP += 100 * crusaderUptime; // 30 AP
+            if (currentEnchants['offhand'] === 'weapon-crusader') effectiveAP += 100 * crusaderUptime; // 30 AP
+            
+            // Calculate armor reduction
+            let armorReduction = 0;
+            if (hasExposeArmor) armorReduction += 2550;
+            else if (hasSunderArmor) armorReduction += 2250;
+            if (hasCurseRecklessness) armorReduction += 640;
+            if (hasFairieFire) armorReduction += 505;
+            if (hasNatureAmmo) armorReduction += 240;
+            
+            // The Ripper armor reduction (if equipped)
+            // 5% proc chance, 30s duration, ~100% uptime after first proc
+            if (currentGear['mainhand'] === 'the-ripper') {
+                armorReduction += 60; // -60 armor debuff
+            }
+            
+            const effectiveArmor = Math.max(0, CONFIG.bossArmorBase - armorReduction - armorPen);
+            const armorReductionPercent = effectiveArmor / (effectiveArmor + 400 + 85 * CONFIG.bossLevel);
+            const armorMultiplier = 1 - armorReductionPercent;
+            
+            // Weapon skill mechanics
+            const weaponSkillBonus = Math.max(0, weaponSkill - 300);
+            
+            // Glancing blow damage (capped at 315)
+            let glancingDmg = 0.65;
+            if (weaponSkill >= 305) glancingDmg = 0.85;
+            if (weaponSkill >= 310) glancingDmg = 0.91;
+            if (weaponSkill >= 315) glancingDmg = 0.95;
+            
+            // Miss rate reduction: 0.2% per weapon skill point up to 320
+            const weaponSkillReduction = Math.min(weaponSkillBonus, 20) * 0.002; // 0.2% per point, max 20 points (320 skill)
+            
+            // White attacks (auto-attacks): 24% base miss
+            const missRate = Math.max(0, CONFIG.baseMissDW - weaponSkillReduction - hit);
+            const hitRate = 1 - missRate;
+            
+            // Yellow attacks (special abilities): 8% base miss (Turtle WoW specific)
+            const yellowBaseMiss = 0.08;
+            const yellowMissRate = Math.max(0, yellowBaseMiss - weaponSkillReduction - hit);
+            const yellowHitRate = 1 - yellowMissRate;
+            
+            // Attack speed calculation
+            const sndHaste = 0.30;
+            
+            // Stormshroud 4pc: +10% melee attack speed for 8 seconds with 2% proc chance
+            // Using fixed 30% uptime estimate
+            const stormshroud4pcHasteUptime = hasStormshroud4pc ? 0.30 : 0;
+            const stormshroud4pcHaste = stormshroud4pcHasteUptime * 0.10; // 3% effective haste (30% uptime × 10% haste)
+            
+            const totalHaste = (1 + sndHaste) * (1 + haste + stormshroud4pcHaste);
+            const effectiveSpeed = CONFIG.mh.speed / totalHaste;
+            
+            // Swings per weapon
+            const swingsPerWeapon = fightLength / effectiveSpeed;
+            const mhHits = swingsPerWeapon * hitRate;
+            const ohHits = swingsPerWeapon * hitRate;
+            
+            // Energy budget - estimate poison procs more accurately for Vigor energy
+            const baseEnergyRegen = fightLength * CONFIG.energyRegen;
+            
+            // Estimate poison procs based on actual proc chances
+            const bloodfangCount = sets.bloodfang || 0;
+            const hasBloodfang3pc = bloodfangCount >= 3;
+            const basePoisonProcChance = CONFIG.poisonBaseProc + CONFIG.improvedPoisons + CONFIG.envenomProcBonus + (hasBloodfang3pc ? 0.05 : 0);
+            
+            // Estimate poison procs from auto-attacks (without Noxious - conservative)
+            let estimatedPoisonProcs = (mhHits + ohHits) * Math.min(1.0, basePoisonProcChance);
+            
+            // Add estimated Windfury poison procs
+            if (hasWindfury) {
+                const estimatedWindfuryProcs = mhHits * 0.20;
+                estimatedPoisonProcs += estimatedWindfuryProcs * Math.min(1.0, basePoisonProcChance);
+            }
+            
+            // If Venomous Totem equipped, account for increased proc rate during totem window
+            const hasVenomousTotem = currentGear['trinket1'] === 'venomous-totem' || currentGear['trinket2'] === 'venomous-totem';
+            if (hasVenomousTotem) {
+                // Rough estimate: 20s at 100% proc vs 40s at base proc = ~15% more procs overall
+                estimatedPoisonProcs *= 1.15;
+            }
+            
+            const autoAttackPoisonProcs = estimatedPoisonProcs;
+            
+            // Darkmantle set bonus energy
+            const darkmantleCount = sets.darkmantle || 0;
+            const hasDarkmantle4pc = darkmantleCount >= 4;
+            const conservativeDarkmantleProcs = hasDarkmantle4pc ? ((mhHits + ohHits) * CONFIG.darkmantleProc) : 0;
+            const conservativeDarkmantleEnergy = conservativeDarkmantleProcs * CONFIG.darkmantleEnergy;
+            
+            // Stormshroud 4pc: 2% chance on auto-attacks to restore 30 energy
+            const conservativeStormshroud4pcProcs = hasStormshroud4pc ? ((mhHits + ohHits) * 0.02) : 0;
+            const conservativeStormshroud4pcEnergy = conservativeStormshroud4pcProcs * 30;
+            
+            let thistleTeaEnergy = hasThistleTea ? 100 : 0;
+            
+            // Renataki's Charm of Trickery: +60 energy on use
+            const hasRenatakiCharm = currentGear['trinket1'] === 'renatakis-charm-of-trickery' || 
+                                     currentGear['trinket2'] === 'renatakis-charm-of-trickery';
+            const renatakiCharmEnergy = hasRenatakiCharm ? 60 : 0;
+            
+            // Relentless Strikes energy
+            // SnD (5 casts, 1 CP each): 5 × 0.20 × 20 = 20 energy
+            // Envenom (5 casts, 1 CP each): 5 × 0.20 × 20 = 20 energy
+            // Rupture (2 casts, 5 CP each): 2 × 1.00 × 20 = 40 energy
+            const relentlessEnergy = (5 * 0.20 * CONFIG.relentlessEnergy) + 
+                                    (5 * 0.20 * CONFIG.relentlessEnergy) + 
+                                    (2 * 1.00 * CONFIG.relentlessEnergy);
+            
+            const conservativeEnergy = baseEnergyRegen + 
+                                      (autoAttackPoisonProcs * CONFIG.vigorEnergyPerPoison) + 
+                                      conservativeDarkmantleEnergy + 
+                                      conservativeStormshroud4pcEnergy +
+                                      (CONFIG.baseEnergy + CONFIG.vigorBonus) +
+                                      thistleTeaEnergy +
+                                      renatakiCharmEnergy +
+                                      relentlessEnergy;
+            
+            // Calculate Noxious count
+            const energyForNoxious = conservativeEnergy - (5 * CONFIG.envenomEnergy) - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (2 * CONFIG.eviscrateEnergy);
+            let noxiousCount = Math.max(0, Math.floor(energyForNoxious / CONFIG.noxiousAssaultEnergy));
+            
+            // Collect energy data for display
+            const energyData = {
+                total: conservativeEnergy,
+                baseRegen: baseEnergyRegen,
+                vigorEnergy: autoAttackPoisonProcs * CONFIG.vigorEnergyPerPoison,
+                darkmantleEnergy: conservativeDarkmantleEnergy,
+                stormshroudEnergy: conservativeStormshroud4pcEnergy,
+                relentlessEnergy: relentlessEnergy,
+                thistleTeaEnergy: thistleTeaEnergy,
+                renatakiCharmEnergy: renatakiCharmEnergy,
+                startingPool: CONFIG.baseEnergy + CONFIG.vigorBonus,
+                noxiousCount: noxiousCount,
+                noxiousEnergy: noxiousCount * CONFIG.noxiousAssaultEnergy,
+                sndCount: 5,
+                sndEnergy: 5 * CONFIG.sndEnergy,
+                envenomCount: 5,
+                envenomEnergy: 5 * CONFIG.envenomEnergy,
+                eviscrateCount: 2,
+                eviscrateEnergy: 2 * CONFIG.eviscrateEnergy,
+                ruptureCount: 2,
+                ruptureEnergy: 2 * CONFIG.ruptureEnergy,
+                // Combo Points
+                cpFromNoxious: noxiousCount * 1, // Base 1 CP per Noxious
+                cpFromNoxiousCrits: noxiousCount * totalCrit, // Extra CP from crits
+                cpFromRuthlessness: (5 + 5 + 2 + 2) * 1, // 1 CP refunded per finisher (SnD + Envenom + Eviscerate + Rupture)
+                cpGenerated: (noxiousCount * 1) + (noxiousCount * totalCrit) + ((5 + 5 + 2 + 2) * 1), // Total CP generated
+                cpSpent: 5 + 5 + 10 + 10 // SnD(5) + Envenom(5) + Eviscerate(2×5) + Rupture(2×5)
+            };
+            
+            // Poison procs
+            const noxiousPoisons = noxiousCount * 2;
+            
+            // Bloodfang bonus and Venomous Totem already checked above
+            const bloodfangProcBonus = hasBloodfang3pc ? 0.05 : 0; // +5% proc chance
+            
+            // basePoisonProcChance already calculated above for energy estimation
+            
+            // Venomous Totem: +30% for 20 seconds (used at 10s into fight)
+            // Split the fight into two periods: 0-10s without totem, 10-30s with totem, 30-60s without totem
+            let totalPoisonProcs = 0;
+            
+            if (hasVenomousTotem) {
+                // Period 1: 0-10s (no totem)
+                const period1Duration = 10;
+                const period1Speed = CONFIG.mh.speed / totalHaste;
+                const period1Swings = period1Duration / period1Speed;
+                const period1Hits = period1Swings * hitRate * 2; // MH + OH
+                const period1ProcChance = Math.min(1.0, basePoisonProcChance); // Cap at 100%
+                const period1Procs = period1Hits * period1ProcChance;
+                
+                // Period 2: 10-30s (totem active, +30% proc)
+                const period2Duration = 20;
+                const period2Speed = CONFIG.mh.speed / totalHaste;
+                const period2Swings = period2Duration / period2Speed;
+                const period2Hits = period2Swings * hitRate * 2; // MH + OH
+                const period2ProcChance = Math.min(1.0, basePoisonProcChance + 0.30); // +30% from totem, capped at 100%
+                const period2Procs = period2Hits * period2ProcChance;
+                
+                // Period 3: 30-60s (totem expired)
+                const period3Duration = 30;
+                const period3Speed = CONFIG.mh.speed / totalHaste;
+                const period3Swings = period3Duration / period3Speed;
+                const period3Hits = period3Swings * hitRate * 2; // MH + OH
+                const period3ProcChance = Math.min(1.0, basePoisonProcChance); // Cap at 100%
+                const period3Procs = period3Hits * period3ProcChance;
+                
+                totalPoisonProcs = period1Procs + period2Procs + period3Procs + noxiousPoisons;
+            } else {
+                // No Venomous Totem - simple calculation
+                const poisonProcChance = Math.min(1.0, basePoisonProcChance); // Cap at 100%
+                totalPoisonProcs = (mhHits + ohHits) * poisonProcChance + noxiousPoisons;
+            }
+            
+            // Calculate Windfury procs early (needed for poison calculation)
+            const windfuryProcs = hasWindfury ? (mhHits * 0.20) : 0;
+            
+            // Add Windfury procs to poison calculation (Windfury attacks can proc poison)
+            if (hasWindfury) {
+                const windfuryProcChance = Math.min(1.0, basePoisonProcChance);
+                const windfuryPoisonProcs = windfuryProcs * windfuryProcChance;
+                totalPoisonProcs += windfuryPoisonProcs;
+            }
+            
+            // Taste for Blood multiplier
+            let tasteForBloodMultiplier;
+            if (isPatch181) {
+                tasteForBloodMultiplier = 1 + (CONFIG.tasteForBloodPost * CONFIG.tasteForBloodUptime);
+            } else {
+                tasteForBloodMultiplier = 1 + (CONFIG.tasteForBloodPre * CONFIG.tasteForBloodUptime);
+            }
+            
+            // Relentless Strikes bonus
+            const relentlessMultiplier = 1 + (CONFIG.relentlessDmgBonus * CONFIG.relentlessAvgStacks);
+            
+            // MH Auto-Attack Damage
+            const mhBaseDmg = (CONFIG.mh.minDmg + CONFIG.mh.maxDmg) / 2;
+            const mhAPBonus = (effectiveAP / 14) * CONFIG.mh.speed;
+            const mhBeforeArmor = mhBaseDmg + mhAPBonus;
+            const mhAfterArmor = mhBeforeArmor * armorMultiplier * tasteForBloodMultiplier;
+            
+            const glancingRate = CONFIG.glancingRate;
+            const normalRate = (1 - glancingRate) * (1 - totalCrit);
+            const critRate = (1 - glancingRate) * totalCrit;
+            
+            const mhDmgPerHit = (glancingRate * mhAfterArmor * glancingDmg) + 
+                                (normalRate * mhAfterArmor) + 
+                                (critRate * mhAfterArmor * 2.0);
+            const mhTotalDmg = mhHits * mhDmgPerHit;
+            
+            // OH Auto-Attack Damage
+            const ohBaseDmg = (CONFIG.oh.minDmg + CONFIG.oh.maxDmg) / 2;
+            const ohAPBonus = (effectiveAP / 14) * CONFIG.oh.speed;
+            const ohBeforeArmor = (ohBaseDmg + ohAPBonus) * CONFIG.offhandPenalty;
+            const ohAfterArmor = ohBeforeArmor * armorMultiplier * tasteForBloodMultiplier;
+            
+            const ohDmgPerHit = (glancingRate * ohAfterArmor * glancingDmg) + 
+                                (normalRate * ohAfterArmor) + 
+                                (critRate * ohAfterArmor * 2.0);
+            const ohTotalDmg = ohHits * ohDmgPerHit;
+            
+            let autoAttackDmg = mhTotalDmg + ohTotalDmg;
+            
+            // The Ripper procs (if equipped in main hand)
+            let ripperProcDmg = 0;
+            if (currentGear['mainhand'] === 'the-ripper') {
+                const ripperProcChance = 0.05; // 5% proc chance for each effect
+                const ripperProcs = mhHits * ripperProcChance;
+                
+                // Proc 1: Armor reduction (-60) + Nature DoT (10 dmg per 5s for 30s = 60 total dmg)
+                const ripperDotDmg = 60; // 10 damage × 6 ticks
+                const ripperDotTotalDmg = ripperProcs * ripperDotDmg;
+                
+                // Proc 2: Instant poison (19-32 damage, avg 25.5)
+                const ripperPoisonDmg = (19 + 32) / 2;
+                const ripperPoisonTotalDmg = ripperProcs * ripperPoisonDmg;
+                
+                ripperProcDmg = ripperDotTotalDmg + ripperPoisonTotalDmg;
+                autoAttackDmg += ripperProcDmg;
+            }
+            
+            // Windfury damage (windfuryProcs already calculated above)
+            let windfuryDmg = 0;
+            if (hasWindfury) {
+                const windfuryAPBonus = 315;
+                const windfuryExtraDmg = (windfuryAPBonus / 14) * CONFIG.mh.speed;
+                const windfuryMHDmg = mhAfterArmor + (windfuryExtraDmg * armorMultiplier * tasteForBloodMultiplier);
+                windfuryDmg = windfuryProcs * windfuryMHDmg;
+                autoAttackDmg += windfuryDmg;
+            }
+            
+            // Noxious Assault Damage
+            const noxiousAPRatio = isPatch181 ? CONFIG.noxiousAssaultAPRatioPost : CONFIG.noxiousAssaultAPRatioPre;
+            const noxiousBaseDmg = CONFIG.noxiousAssaultBaseDmg + (effectiveAP * noxiousAPRatio);
+            const noxiousAfterArmor = noxiousBaseDmg * armorMultiplier;
+            const noxiousWithBuffs = noxiousAfterArmor * tasteForBloodMultiplier * relentlessMultiplier;
+            
+            const noxiousDmgPerUse = (1 - totalCrit) * noxiousWithBuffs + 
+                                      totalCrit * noxiousWithBuffs * (2.0 * CONFIG.lethalityMultiplier);
+            const noxiousTotalDmg = noxiousCount * noxiousDmgPerUse * yellowHitRate; // Apply yellow hit rate
+            
+            // Poison Damage
+            const poisonBaseDmg = CONFIG.poisonBaseDmg + (effectiveAP * CONFIG.poisonAPRatio);
+            const poisonWithTalents = poisonBaseDmg * CONFIG.vilePoisons;
+            const poisonWithBuffs = isPatch181 ? poisonWithTalents : (poisonWithTalents * tasteForBloodMultiplier);
+            const poisonTotalDmg = totalPoisonProcs * poisonWithBuffs;
+            
+            // Rupture Damage
+            const ruptureCount = Math.floor(fightLength / (CONFIG.ruptureBaseDuration + CONFIG.ruptureTalentBonus));
+            const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * yellowHitRate; // Apply yellow hit rate
+            
+            // Eviscerate Damage (2 casts at 5 CP each)
+            const eviscrateCount = 2;
+            const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP;
+            const eviscrateAfterArmor = eviscrateBaseDmg * armorMultiplier;
+            const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier;
+            const eviscrateDmgPerUse = (1 - totalCrit) * eviscrateWithBuffs + 
+                                        totalCrit * eviscrateWithBuffs * (2.0 * CONFIG.lethalityMultiplier);
+            const eviscrateTotalDmg = eviscrateCount * eviscrateDmgPerUse * yellowHitRate; // Apply yellow hit rate
+            
+            // Stormshroud 3pc: 5% chance to deal 35-51 Nature damage (avg 43) on auto-attacks
+            const stormshroud3pcProcs = hasStormshroud3pc ? ((mhHits + ohHits) * 0.05) : 0;
+            const stormshroud3pcDmg = stormshroud3pcProcs * 43; // Average of 35-51
+            
+            // Total Damage and DPS
+            const totalDamage = autoAttackDmg + noxiousTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
+            const totalDPS = totalDamage / fightLength;
+            
+            // Update display
+            document.getElementById('totalStrength').textContent = Math.round(totalStrength);
+            document.getElementById('totalAgility').textContent = Math.round(totalAgility);
+            
+            // Character Stats AP includes gear AP + AP from stats + set bonuses
+            const characterStatsAP = apFromStats + totalAttackPower + (hasStormshroud2pc ? 24 : 0) + (hasMadcap2pc ? 20 : 0);
+            document.getElementById('totalAttackPower').textContent = Math.round(characterStatsAP);
+            document.getElementById('totalCrit').textContent = (totalCrit * 100).toFixed(2) + '%';
+            document.getElementById('totalHit').textContent = ((stats.hitPct || 0) + TALENTS.precision) + '%';
+            document.getElementById('totalHaste').textContent = ((stats.hastePct || 0) + (hasPotionQuickness ? 2.5 : 0) + (hasJujuFlurry ? 1 : 0) + (hasDanonzoMedley ? 2 : 0)).toFixed(1) + '%';
+            
+            displaySetBonuses(sets, activeSetBonuses);
+            
+            // Update Vigor energy with actual poison hits (not the estimate)
+            energyData.vigorEnergy = totalPoisonProcs * CONFIG.vigorEnergyPerPoison;
+            
+            displayEnergyBreakdown(energyData);
+            
+            document.getElementById('totalDPS').textContent = totalDPS.toFixed(0);
+            document.getElementById('totalDamage').textContent = Math.round(totalDamage).toLocaleString();
+            document.getElementById('effectiveAP').textContent = effectiveAP.toFixed(0);
+            document.getElementById('bossArmor').textContent = effectiveArmor.toLocaleString();
+            document.getElementById('missRate').textContent = (missRate * 100).toFixed(1) + '%';
+            
+            // Calculate total auto-attack hits (MH + OH + Windfury if applicable)
+            const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0);
+            
+            // Build damage breakdown array
+            const damageBreakdown = [
+                { name: 'Dissolvent Poison II', damage: poisonTotalDmg, hits: totalPoisonProcs, color: '#95e1d3' },
+                { name: 'Auto-Attacks', damage: autoAttackDmg, hits: totalAutoHits, color: '#ff6b6b' },
+                { name: 'Noxious Assault', damage: noxiousTotalDmg, hits: noxiousCount, color: '#4ecdc4' },
+                { name: 'Eviscerate', damage: eviscrateTotalDmg, hits: eviscrateCount, color: '#feca57' },
+                { name: 'Rupture', damage: ruptureTotalDmg, hits: ruptureCount, color: '#f38181' }
+            ];
+            
+            // Add Stormshroud 3pc if active
+            if (hasStormshroud3pc && stormshroud3pcDmg > 0) {
+                damageBreakdown.push({ 
+                    name: 'Stormshroud (Nature)', 
+                    damage: stormshroud3pcDmg, 
+                    hits: stormshroud3pcProcs, 
+                    color: '#48dbfb' 
+                });
+            }
+            
+            // Update damage breakdown
+            updateDamageBreakdown(damageBreakdown);
+        }
+        
+        function displaySetBonuses(sets, activeSetBonuses) {
+            const container = document.getElementById('setBonusContainer');
+            container.innerHTML = '';
+            
+            Object.entries(sets).forEach(([setName, count]) => {
+                const setDiv = document.createElement('div');
+                setDiv.className = 'set-bonus';
+                
+                let html = `<div class="set-bonus-title">${setName.charAt(0).toUpperCase() + setName.slice(1)} (${count} pieces)</div>`;
+                
+                if (SET_BONUSES[setName]) {
+                    Object.entries(SET_BONUSES[setName]).forEach(([pieces, bonus]) => {
+                        const active = count >= parseInt(pieces);
+                        html += `<div class="set-bonus-item ${active ? 'set-bonus-active' : ''}">(${pieces}) ${bonus}</div>`;
+                    });
+                }
+                
+                setDiv.innerHTML = html;
+                container.appendChild(setDiv);
+            });
+        }
+        
+        function displayEnergyBreakdown(energyData) {
+            const container = document.getElementById('energyBreakdownContainer');
+            
+            let html = '<div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-top: 5px;">';
+            
+            // Total energy available
+            html += `<div style="color: #4ecdc4; font-weight: bold; margin-bottom: 8px; font-size: 1em;">Total Energy: ${Math.round(energyData.total)}</div>`;
+            
+            // Energy sources
+            html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-bottom: 5px;">Sources:</div>';
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Base Regen: ${Math.round(energyData.baseRegen)}</div>`;
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Vigor: ${Math.round(energyData.vigorEnergy)}</div>`;
+            if (energyData.darkmantleEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Darkmantle: ${Math.round(energyData.darkmantleEnergy)}</div>`;
+            }
+            if (energyData.stormshroudEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Stormshroud: ${Math.round(energyData.stormshroudEnergy)}</div>`;
+            }
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Relentless: ${Math.round(energyData.relentlessEnergy)}</div>`;
+            if (energyData.thistleTeaEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Thistle Tea: ${energyData.thistleTeaEnergy}</div>`;
+            }
+            if (energyData.renatakiCharmEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Renataki's Charm: ${energyData.renatakiCharmEnergy}</div>`;
+            }
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Starting: ${energyData.startingPool}</div>`;
+            
+            // Energy usage
+            html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 8px; margin-bottom: 5px;">Usage:</div>';
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Noxious: ${Math.round(energyData.noxiousEnergy)} (${energyData.noxiousCount}×)</div>`;
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• SnD: ${energyData.sndEnergy} (${energyData.sndCount}×)</div>`;
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Envenom: ${energyData.envenomEnergy} (${energyData.envenomCount}×)</div>`;
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Eviscerate: ${energyData.eviscrateEnergy} (${energyData.eviscrateCount}×)</div>`;
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Rupture: ${energyData.ruptureEnergy} (${energyData.ruptureCount}×)</div>`;
+            
+            const totalSpent = energyData.noxiousEnergy + energyData.sndEnergy + energyData.envenomEnergy + energyData.eviscrateEnergy + energyData.ruptureEnergy;
+            const leftover = energyData.total - totalSpent;
+            html += `<div style="color: #a0a0a0; margin-top: 8px; font-size: 0.9em;">Spent: ${Math.round(totalSpent)}</div>`;
+            html += `<div style="color: ${leftover > 0 ? '#4ecdc4' : '#ff6b6b'}; font-size: 0.9em;">Leftover: ${Math.round(leftover)}</div>`;
+            
+            // Combo Points
+            html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 12px; margin-bottom: 5px;">Combo Points:</div>';
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (base): ${energyData.cpFromNoxious}</div>`;
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (crits): ${Math.round(energyData.cpFromNoxiousCrits)}</div>`;
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Ruthlessness: ${energyData.cpFromRuthlessness}</div>`;
+            html += `<div style="color: #4ecdc4; font-weight: bold; margin-top: 5px; font-size: 0.9em;">Total Generated: ${Math.round(energyData.cpGenerated)}</div>`;
+            html += `<div style="color: #ff6b6b; font-weight: bold; font-size: 0.9em;">Total Spent: ${energyData.cpSpent}</div>`;
+            const cpLeftover = energyData.cpGenerated - energyData.cpSpent;
+            html += `<div style="color: ${cpLeftover >= 0 ? '#4ecdc4' : '#ff6b6b'}; font-weight: bold; font-size: 0.9em;">Leftover: ${Math.round(cpLeftover)}</div>`;
+            
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+        
+        function updateDamageBreakdown(breakdown) {
+            breakdown.sort((a, b) => b.damage - a.damage);
+            
+            const total = breakdown.reduce((sum, item) => sum + item.damage, 0);
+            const tbody = document.getElementById('breakdownTable');
+            tbody.innerHTML = '';
+            
+            breakdown.forEach(item => {
+                const pct = ((item.damage / total) * 100).toFixed(1);
+                const hits = item.hits !== undefined ? Math.round(item.hits) : '-';
+                const row = `<tr>
+                    <td><span class="color-indicator" style="background: ${item.color}"></span>${item.name}</td>
+                    <td>${hits}</td>
+                    <td>${Math.round(item.damage).toLocaleString()}</td>
+                    <td>${pct}%</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+            
+            updateChart(breakdown);
+        }
+        
+        function initializeChart() {
+            const ctx = document.getElementById('damageChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                        borderColor: [],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { 
+                                color: '#e0e0e0', 
+                                font: { size: 13 }, 
+                                padding: 15,
+                                textAlign: 'left'
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: { weight: 'bold', size: 16 },
+                            formatter: (value, ctx) => {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                return ((value / total) * 100).toFixed(1) + '%';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChart(breakdown) {
+            chart.data.labels = breakdown.map(i => i.name);
+            chart.data.datasets[0].data = breakdown.map(i => Math.round(i.damage));
+            chart.data.datasets[0].backgroundColor = breakdown.map(i => i.color);
+            chart.update();
+        }
+        
+        function loadPreset(preset) {
+            // Clear all gear and enchants
+            Object.keys(currentGear).forEach(slot => {
+                currentGear[slot] = '';
+                const gearSelect = document.getElementById(`slot-${slot}`);
+                if (gearSelect) gearSelect.value = '';
+            });
+            
+            Object.keys(currentEnchants).forEach(slot => {
+                currentEnchants[slot] = '';
+                const enchantSelect = document.getElementById(`enchant-${slot}`);
+                if (enchantSelect) enchantSelect.value = '';
+            });
+            
+            // Clear all checkboxes first
+            ['patch181', 'battleShout', 'blessingMight', 'blessingKings', 'leaderPack', 'tricksTrade', 
+             'trueshot', 'markDeath', 'markDeathPrep', 'windfury', 'strengthEarth', 'mongoose', 
+             'giants', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea', 'exposeArmor', 
+             'sunderArmor', 'curseRecklessness', 'fairieFire', 'natureAmmo'].forEach(id => {
+                const elem = document.getElementById(id);
+                if (elem) elem.checked = false;
+            });
+            
+            if (preset === 'phase1bis') {
+                // Phase 1 Best in Slot - Gear
+                currentGear['head'] = 'darkmantle-cap';
+                currentGear['shoulders'] = 'zandalar-madcaps-mantle';
+                currentGear['chest'] = 'darkmantle-tunic';
+                currentGear['wrists'] = 'darkmantle-bracers';
+                currentGear['hands'] = 'darkmantle-gloves';
+                currentGear['waist'] = 'clutch-of-hivaxxis';
+                currentGear['legs'] = 'darkmantle-pants';
+                currentGear['feet'] = 'darkmantle-boots';
+                currentGear['mainhand'] = 'alcors-sunrazor';
+                currentGear['offhand'] = 'distracting-dagger';
+                currentGear['ranged'] = 'time-frozen-bow';
+                currentGear['neck'] = 'onyxia-tooth-pendant';
+                currentGear['ring1'] = 'quick-strike-ring';
+                currentGear['ring2'] = 'band-of-accuria';
+                currentGear['trinket1'] = 'renatakis-charm-of-trickery';
+                currentGear['trinket2'] = 'whip-of-encouragement';
+                currentGear['back'] = 'wing-of-the-time-lord';
+                
+                // Phase 1 Best in Slot - Enchants
+                currentEnchants['head'] = 'head-ap';
+                currentEnchants['neck'] = 'neck-agi';
+                currentEnchants['shoulders'] = 'shoulders-haste';
+                currentEnchants['back'] = 'back-agi';
+                currentEnchants['chest'] = 'chest-stats';
+                currentEnchants['wrists'] = 'wrists-agi';
+                currentEnchants['hands'] = 'hands-haste';
+                currentEnchants['waist'] = 'waist-agi';
+                currentEnchants['legs'] = 'legs-ap';
+                currentEnchants['feet'] = 'feet-agi';
+                currentEnchants['ring1'] = 'ring-agi';
+                currentEnchants['ring2'] = 'ring-agi';
+                currentEnchants['mainhand'] = 'weapon-crusader';
+                currentEnchants['offhand'] = 'weapon-crusader';
+                
+                // Auto-check default buffs/consumables/debuffs
+                document.getElementById('patch181').checked = true;
+                document.getElementById('battleShout').checked = true;
+                document.getElementById('blessingMight').checked = true;
+                document.getElementById('blessingKings').checked = true;
+                document.getElementById('tricksTrade').checked = true;
+                document.getElementById('trueshot').checked = true;
+                document.getElementById('markDeath').checked = true;
+                document.getElementById('windfury').checked = true;
+                document.getElementById('strengthEarth').checked = true;
+                document.getElementById('mongoose').checked = true;
+                document.getElementById('giants').checked = true;
+                document.getElementById('firewater').checked = true;
+                document.getElementById('thistleTea').checked = true;
+                document.getElementById('sunderArmor').checked = true;
+                document.getElementById('curseRecklessness').checked = true;
+                document.getElementById('fairieFire').checked = true;
+            } else if (preset === 'phase2bis') {
+                // Phase 2 Best in Slot - Gear
+                currentGear['head'] = 'darkmantle-cap';
+                currentGear['shoulders'] = 'darkmantle-spaulders';
+                currentGear['chest'] = 'bloodfang-chestpiece'; // Bloodfang
+                currentGear['wrists'] = 'bloodfang-bracers'; // Bloodfang
+                currentGear['hands'] = 'darkmantle-gloves'; // Darkmantle
+                currentGear['waist'] = 'bloodfang-belt'; // Bloodfang
+                currentGear['legs'] = 'darkmantle-pants';
+                currentGear['feet'] = 'boots-of-the-shadow-flame'; // Shadow Flame
+                currentGear['mainhand'] = 'alcors-sunrazor';
+                currentGear['offhand'] = 'distracting-dagger';
+                currentGear['ranged'] = 'time-frozen-bow';
+                currentGear['neck'] = 'onyxia-tooth-pendant';
+                currentGear['ring1'] = 'quick-strike-ring';
+                currentGear['ring2'] = 'band-of-accuria';
+                currentGear['trinket1'] = 'venomous-totem'; // Venomous Totem
+                currentGear['trinket2'] = 'drake-fang-talisman'; // Drake Fang
+                currentGear['back'] = 'wing-of-the-time-lord';
+                
+                // Phase 2 Best in Slot - Enchants
+                currentEnchants['head'] = 'head-ap';
+                currentEnchants['neck'] = 'neck-agi';
+                currentEnchants['shoulders'] = 'shoulders-haste';
+                currentEnchants['back'] = 'back-agi';
+                currentEnchants['chest'] = 'chest-stats';
+                currentEnchants['wrists'] = 'wrists-agi';
+                currentEnchants['hands'] = 'hands-haste';
+                currentEnchants['waist'] = 'waist-agi';
+                currentEnchants['legs'] = 'legs-ap';
+                currentEnchants['feet'] = 'feet-agi';
+                currentEnchants['ring1'] = 'ring-agi';
+                currentEnchants['ring2'] = 'ring-agi';
+                currentEnchants['mainhand'] = 'weapon-crusader';
+                currentEnchants['offhand'] = 'weapon-crusader';
+                
+                // Auto-check default buffs/consumables/debuffs (same as Phase 1)
+                document.getElementById('patch181').checked = true;
+                document.getElementById('battleShout').checked = true;
+                document.getElementById('blessingMight').checked = true;
+                document.getElementById('blessingKings').checked = true;
+                document.getElementById('tricksTrade').checked = true;
+                document.getElementById('trueshot').checked = true;
+                document.getElementById('markDeath').checked = true;
+                document.getElementById('windfury').checked = true;
+                document.getElementById('strengthEarth').checked = true;
+                document.getElementById('mongoose').checked = true;
+                document.getElementById('giants').checked = true;
+                document.getElementById('firewater').checked = true;
+                document.getElementById('thistleTea').checked = true;
+                document.getElementById('sunderArmor').checked = true;
+                document.getElementById('curseRecklessness').checked = true;
+                document.getElementById('fairieFire').checked = true;
+            } else if (preset === 'empty') {
+                // Empty - no gear or enchants or buffs
+            }
+            
+            // Update UI
+            Object.entries(currentGear).forEach(([slot, itemId]) => {
+                const select = document.getElementById(`slot-${slot}`);
+                if (select) select.value = itemId;
+            });
+            
+            Object.entries(currentEnchants).forEach(([slot, enchantId]) => {
+                const select = document.getElementById(`enchant-${slot}`);
+                if (select) select.value = enchantId;
+            });
+            
+            calculate();
+        }
+    </script>
+</body>
+</html>
