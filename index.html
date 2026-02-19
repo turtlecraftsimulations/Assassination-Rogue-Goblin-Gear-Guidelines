@@ -724,7 +724,7 @@
                 <div class="control-group">
                     <label>Weapon Skill</label>
                     <div class="slider-container">
-                        <input type="range" id="weaponSkill" min="300" max="320" value="315" step="1">
+                        <input type="range" id="weaponSkill" min="300" max="330" value="315" step="1">
                         <span class="value-display" id="weaponSkillValue">315</span>
                     </div>
                 </div>
@@ -908,6 +908,11 @@
                 set: 'stormshroud',
                 stats: { armor: 109, stamina: 12, hastePct: 1, hitPct: 1, attackPower: 20 }
             },
+            'aged-core-leather-gloves': {
+                name: 'Aged Core Leather Gloves',
+                slot: 'hands',
+                stats: { armor: 130, strength: 15, stamina: 15, critPct: 1 }
+            },
             'bloodfang-belt': {
                 name: 'Bloodfang Belt',
                 slot: 'waist',
@@ -1061,6 +1066,12 @@
                 slot: 'ranged',
                 weaponStats: { minDmg: 76, maxDmg: 139, speed: 3.50 },
                 stats: { hastePct: 1, hitPct: 1 }
+            },
+            'strikers-mark': {
+                name: "Striker's Mark",
+                slot: 'ranged',
+                weaponStats: { minDmg: 80, maxDmg: 129, speed: 2.50 },
+                stats: { attackPower: 22, hitPct: 1 }
             }
         };
         
@@ -1541,14 +1552,12 @@
             // Weapon skill mechanics
             const weaponSkillBonus = Math.max(0, weaponSkill - 300);
             
-            // Glancing blow damage (capped at 315)
-            let glancingDmg = 0.65;
-            if (weaponSkill >= 305) glancingDmg = 0.85;
-            if (weaponSkill >= 310) glancingDmg = 0.91;
-            if (weaponSkill >= 315) glancingDmg = 0.95;
+            // Glancing blow damage: 65% base + 2% per weapon skill point above 300 (Turtle WoW)
+            // 300→65%, 301→67%, 302→69%, 315→95%, 318→101%, etc.
+            const glancingDmg = 0.65 + (weaponSkillBonus * 0.02);
             
-            // Miss rate reduction: 0.2% per weapon skill point up to 320
-            const weaponSkillReduction = Math.min(weaponSkillBonus, 20) * 0.002; // 0.2% per point, max 20 points (320 skill)
+            // Miss rate reduction: 0.2% per weapon skill point up to 330
+            const weaponSkillReduction = Math.min(weaponSkillBonus, 30) * 0.002; // 0.2% per point, max 30 points (330 skill)
             
             // White attacks (auto-attacks): 24% base miss
             const missRate = Math.max(0, CONFIG.baseMissDW - weaponSkillReduction - hit);
@@ -2093,6 +2102,7 @@
                 document.getElementById('mongoose').checked = true;
                 document.getElementById('giants').checked = true;
                 document.getElementById('firewater').checked = true;
+                document.getElementById('danonzoMedley').checked = true;
                 document.getElementById('thistleTea').checked = true;
                 document.getElementById('sunderArmor').checked = true;
                 document.getElementById('curseRecklessness').checked = true;
@@ -2146,6 +2156,7 @@
                 document.getElementById('mongoose').checked = true;
                 document.getElementById('giants').checked = true;
                 document.getElementById('firewater').checked = true;
+                document.getElementById('danonzoMedley').checked = true;
                 document.getElementById('thistleTea').checked = true;
                 document.getElementById('sunderArmor').checked = true;
                 document.getElementById('curseRecklessness').checked = true;
