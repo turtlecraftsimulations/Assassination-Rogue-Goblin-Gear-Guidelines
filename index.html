@@ -1046,6 +1046,11 @@
                 slot: 'ring',
                 stats: { agility: 15, hitPct: 1 }
             },
+            'band-of-ancient-lethality': {
+                name: 'Band of Ancient Lethality',
+                slot: 'ring',
+                stats: { agility: 15, stamina: 6, hitPct: 1, hastePct: 1 }
+            },
             
             // CLOAK
             'wing-of-the-time-lord': {
@@ -1603,7 +1608,14 @@
             // Estimate poison procs based on actual proc chances
             const bloodfangCount = sets.bloodfang || 0;
             const hasBloodfang3pc = bloodfangCount >= 3;
-            const basePoisonProcChance = CONFIG.poisonBaseProc + CONFIG.improvedPoisons + CONFIG.envenomProcBonus + (hasBloodfang3pc ? 0.05 : 0);
+            
+            // Check if Band of Ancient Lethality is equipped (ring1 or ring2)
+            const hasBandOfAncientLethality = currentGear['ring1'] === 'band-of-ancient-lethality' || 
+                                             currentGear['ring2'] === 'band-of-ancient-lethality';
+            
+            const basePoisonProcChance = CONFIG.poisonBaseProc + CONFIG.improvedPoisons + CONFIG.envenomProcBonus + 
+                                        (hasBloodfang3pc ? 0.05 : 0) + 
+                                        (hasBandOfAncientLethality ? 0.01 : 0);
             
             // Estimate poison procs from auto-attacks (without Noxious - conservative)
             let estimatedPoisonProcs = (mhHits + ohHits) * Math.min(1.0, basePoisonProcChance);
