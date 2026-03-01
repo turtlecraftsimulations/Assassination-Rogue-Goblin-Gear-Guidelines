@@ -1124,8 +1124,20 @@
                             <span class="stat-value" id="talents-totalDPS">0</span>
                         </div>
                         <div class="stat-row">
-                            <span class="stat-label">Total Damage:</span>
-                            <span class="stat-value" id="talents-totalDamage">0</span>
+                            <span class="stat-label">Effective AP:</span>
+                            <span class="stat-value" id="talents-effectiveAP">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Boss Armor:</span>
+                            <span class="stat-value" id="talents-bossArmor">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Miss Rate:</span>
+                            <span class="stat-value" id="talents-missRate">0%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Dodge Chance:</span>
+                            <span class="stat-value" id="talents-dodgeRate">0%</span>
                         </div>
                     </div>
                     
@@ -1140,6 +1152,12 @@
                         <tbody id="talents-breakdownTable">
                             <!-- Populated by JS -->
                         </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold; border-top: 2px solid #4ecdc4;">
+                                <td>Total Damage:</td>
+                                <td id="talents-totalDamage">0</td>
+                            </tr>
+                        </tfoot>
                     </table>
                     
                     <div class="section-title" style="margin-top: 20px;">Energy Expenditure</div>
@@ -1651,7 +1669,8 @@
             // Combat mechanics
             baseMissDW: 0.27, // 27% base miss for dual wield vs boss (Turtle WoW)
             glancingRate: 0.40, // 40% of hits are glancing
-            offhandPenalty: 0.50 // 50% damage penalty for off-hand
+            offhandPenalty: 0.50, // 50% damage penalty for off-hand
+            bossDodge: 0.065 // 6.5% dodge chance for level 63 bosses (white hits only)
         };
         
         let currentGear = {};
@@ -2022,8 +2041,14 @@
             
             // Swings per weapon
             const swingsPerWeapon = fightLength / effectiveSpeed;
-            const mhHits = swingsPerWeapon * hitRate;
-            const ohHits = swingsPerWeapon * hitRate;
+            
+            // White hits: Apply both miss AND dodge (6.5% for level 63 bosses)
+            // Weapon skill reduces dodge: -0.1% per point above 300
+            const dodgeReduction = weaponSkillBonus * 0.001; // 0.1% per point
+            const whiteDodgeRate = Math.max(0, CONFIG.bossDodge - dodgeReduction);
+            const whiteHitRate = hitRate * (1 - whiteDodgeRate); // Miss first, then dodge
+            const mhHits = swingsPerWeapon * whiteHitRate;
+            const ohHits = swingsPerWeapon * whiteHitRate;
             
             // Energy budget - estimate poison procs more accurately for Vigor energy
             // IMPORTANT: In Turtle WoW, haste does NOT increase energy regeneration (always 10/sec)
@@ -2324,9 +2349,13 @@
             document.getElementById('bossArmor').textContent = effectiveArmor.toLocaleString();
             document.getElementById('missRate').textContent = (missRate * 100).toFixed(1) + '%';
             
-            // Update talents page display too
+            // Update talents page display
             document.getElementById('talents-totalDPS').textContent = totalDPS.toFixed(0);
             document.getElementById('talents-totalDamage').textContent = Math.round(totalDamage).toLocaleString();
+            document.getElementById('talents-effectiveAP').textContent = effectiveAP.toFixed(0);
+            document.getElementById('talents-bossArmor').textContent = effectiveArmor.toLocaleString();
+            document.getElementById('talents-missRate').textContent = (missRate * 100).toFixed(1) + '%';
+            document.getElementById('talents-dodgeRate').textContent = (whiteDodgeRate * 100).toFixed(1) + '%';
             
             // Calculate total auto-attack hits (MH + OH + Windfury if applicable)
             const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0);
