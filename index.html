@@ -312,13 +312,168 @@
             border-radius: 2px;
             margin-right: 8px;
         }
+        
+        /* TAB NAVIGATION */
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid rgba(78, 205, 196, 0.3);
+        }
+        
+        .tab-btn {
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            padding: 12px 30px;
+            color: #e0e0e0;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(78, 205, 196, 0.2);
+        }
+        
+        .tab-btn.active {
+            background: rgba(78, 205, 196, 0.4);
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        /* TALENTS PAGE LAYOUT */
+        .talents-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .talents-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .results-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .talent-tree-section {
+            margin-bottom: 20px;
+        }
+        
+        .talent-slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        
+        .talent-slider-row:hover {
+            background: rgba(78, 205, 196, 0.1);
+        }
+        
+        .talent-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .talent-name {
+            font-weight: bold;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+        
+        .talent-effect {
+            color: #4ecdc4;
+            font-size: 0.9em;
+        }
+        
+        .talent-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .talent-controls input[type="range"] {
+            width: 120px;
+            height: 6px;
+            background: rgba(78, 205, 196, 0.2);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .talent-controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .talent-controls input[type="range"]::-webkit-slider-thumb:hover {
+            background: #00ff00;
+            transform: scale(1.2);
+        }
+        
+        .talent-controls input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .talent-controls input[type="range"]::-moz-range-thumb:hover {
+            background: #00ff00;
+            transform: scale(1.2);
+        }
+        
+        .talent-rank {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: #00ff00;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Assassination Rogue - Goblin Gear Guidelines</h1>
-        <div class="subtitle">Turtle Craft - DPS Breakdown (60s Fight) - A Work in Progress by Newth</div>
+        <div class="subtitle">Turtle Craft - DPS Simulation (60s Fight) - A Work in Progress by Newth</div>
         
+        <!-- TAB NAVIGATION -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('gear')">Gear & Stats</button>
+            <button class="tab-btn" onclick="switchTab('talents')">Talents</button>
+        </div>
+        
+        <!-- GEAR & STATS PAGE -->
+        <div id="gear-page" class="page-content active">
         <div class="main-content">
             <!-- GEAR PANEL -->
             <div class="panel">
@@ -377,7 +532,6 @@
                         <select id="enchant-chest" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="chest-stats">+3 All Stats</option>
-                            <option value="chest-stats-4">+4 All Stats</option>
                         </select>
                     </div>
                 </div>
@@ -389,7 +543,6 @@
                         <select id="enchant-wrists" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="wrists-agi">+5 Agi</option>
-                            <option value="wrists-agi-7">+7 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -401,7 +554,6 @@
                         <select id="enchant-hands" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="hands-haste">+1% Haste</option>
-                            <option value="hands-agi">+15 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -436,7 +588,6 @@
                         <select id="enchant-feet" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="feet-agi">+5 Agi</option>
-                            <option value="feet-agi-7">+7 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -786,9 +937,292 @@
                 </table>
             </div>
         </div>
+        </div> <!-- Close gear-page -->
+        
+        <!-- TALENTS PAGE -->
+        <div id="talents-page" class="page-content">
+            <div class="talents-layout">
+                <!-- COLUMN 1: ASSASSINATION -->
+                <div class="talents-panel">
+                    <h3 style="color: #ff6b6b; margin-bottom: 15px; text-align: center;">ASSASSINATION</h3>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Malice</span>
+                            <span class="talent-effect">+1% Crit per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-malice" min="0" max="5" value="5" oninput="updateTalentDisplay('malice', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-malice">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Murder</span>
+                            <span class="talent-effect">+1% Overall Damage per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-murder" min="0" max="2" value="2" oninput="updateTalentDisplay('murder', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-murder">2/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Lethality</span>
+                            <span class="talent-effect">+6% Crit Damage per rank (CP-generators)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-lethality" min="0" max="5" value="5" oninput="updateTalentDisplay('lethality', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-lethality">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Relentless Strikes</span>
+                            <span class="talent-effect">20% Energy Refund + Finisher Damage</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-relentless-strikes" min="0" max="1" value="1" oninput="updateTalentDisplay('relentless-strikes', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-relentless-strikes">1/1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Improved Poisons</span>
+                            <span class="talent-effect">+2% Poison Proc per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-poisons" min="0" max="5" value="5" oninput="updateTalentDisplay('improved-poisons', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-poisons">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Vile Poisons</span>
+                            <span class="talent-effect">+10% Poison Damage per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-vile-poisons" min="0" max="3" value="3" oninput="updateTalentDisplay('vile-poisons', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-vile-poisons">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Seal Fate</span>
+                            <span class="talent-effect">Crits Grant Extra CP (20% per rank)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-seal-fate" min="0" max="5" value="5" oninput="updateTalentDisplay('seal-fate', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-seal-fate">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Ruthlessness</span>
+                            <span class="talent-effect">Finishers Add CP (33% per rank)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-ruthlessness" min="0" max="3" value="3" oninput="updateTalentDisplay('ruthlessness', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-ruthlessness">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Vigor</span>
+                            <span class="talent-effect">+5 Max Energy, 50% chance for +2 Energy per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-vigor" min="0" max="2" value="2" oninput="updateTalentDisplay('vigor', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-vigor">2/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Improved SnD</span>
+                            <span class="talent-effect">+15/40/45% Duration</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-snd" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-snd', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-snd">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Taste for Blood</span>
+                            <span class="talent-effect">+2s Rupture, +5% Damage per rank (at 5CP)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-rupture" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-rupture', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-rupture">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Cold Blood</span>
+                            <span class="talent-effect">Next offensive ability guaranteed crit</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-cold-blood" min="0" max="1" value="1" oninput="updateTalentDisplay('cold-blood', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-cold-blood">1/1</span>
+                        </div>
+                    </div>
+                    
+                    <!-- PRESET BUTTONS -->
+                    <div style="margin-top: 20px;">
+                        <button class="preset-btn" onclick="loadTalentPreset('all-on')">Enable All</button>
+                        <button class="preset-btn" onclick="loadTalentPreset('all-off')">Disable All</button>
+                    </div>
+                </div>
+                
+                <!-- COLUMN 2: COMBAT -->
+                <div class="talents-panel">
+                    <h3 style="color: #ffaa00; margin-bottom: 15px; text-align: center;">COMBAT</h3>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Precision</span>
+                            <span class="talent-effect">+1% Hit per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-precision" min="0" max="5" value="5" oninput="updateTalentDisplay('precision', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-precision">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div style="color: #888; font-style: italic; margin-top: 20px; text-align: center;">
+                        More Combat talents coming soon...
+                    </div>
+                </div>
+                
+                <!-- COLUMN 3: SUBTLETY -->
+                <div class="talents-panel">
+                    <h3 style="color: #aa00ff; margin-bottom: 15px; text-align: center;">SUBTLETY</h3>
+                    
+                    <div style="color: #888; font-style: italic; margin-top: 20px; text-align: center;">
+                        Subtlety talents coming soon...
+                    </div>
+                </div>
+                
+                <!-- COLUMN 4: DPS BREAKDOWN -->
+                <div class="results-panel">
+                    <h3 style="color: #4ecdc4; margin-bottom: 15px; text-align: center;">DPS BREAKDOWN</h3>
+                    
+                    <div class="stat-display">
+                        <div class="stat-row">
+                            <span class="stat-label">Total DPS:</span>
+                            <span class="stat-value" id="talents-totalDPS">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Damage:</span>
+                            <span class="stat-value" id="talents-totalDamage">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title" style="margin-top: 20px;">Damage Sources</div>
+                    <table class="breakdown-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Damage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="talents-breakdownTable">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="section-title" style="margin-top: 20px;">Energy Expenditure</div>
+                    <div id="talents-energyBreakdownContainer" style="font-size: 0.85em;">
+                        <!-- Energy breakdown will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Close talents-page -->
     </div>
 
     <script>
+        // TALENT STATE
+        const talentState = {
+            malice: 5,
+            murder: 2,
+            lethality: 5,
+            relentlessStrikes: 1,
+            improvedPoisons: 5,
+            vilePoisons: 3,
+            sealFate: 5,
+            ruthlessness: 3,
+            vigor: 2,
+            improvedSnD: 3,
+            improvedRupture: 3,
+            precision: 5,
+            coldBlood: 1
+        };
+        
+        // TAB SWITCHING
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            
+            if (tabName === 'gear') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('gear-page').classList.add('active');
+            } else if (tabName === 'talents') {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('talents-page').classList.add('active');
+            }
+        };
+        
+        // Update talent rank display
+        window.updateTalentDisplay = function(talentName, maxRank) {
+            const value = document.getElementById(`talent-${talentName}`).value;
+            document.getElementById(`rank-${talentName}`).textContent = `${value}/${maxRank}`;
+        };
+        
+        // TALENT TOGGLE
+        window.toggleTalent = function() {
+            // Update talent state from sliders (now get .value instead of .checked)
+            talentState.malice = parseInt(document.getElementById('talent-malice').value);
+            talentState.murder = parseInt(document.getElementById('talent-murder').value);
+            talentState.lethality = parseInt(document.getElementById('talent-lethality').value);
+            talentState.relentlessStrikes = parseInt(document.getElementById('talent-relentless-strikes').value);
+            talentState.improvedPoisons = parseInt(document.getElementById('talent-improved-poisons').value);
+            talentState.vilePoisons = parseInt(document.getElementById('talent-vile-poisons').value);
+            talentState.sealFate = parseInt(document.getElementById('talent-seal-fate').value);
+            talentState.ruthlessness = parseInt(document.getElementById('talent-ruthlessness').value);
+            talentState.vigor = parseInt(document.getElementById('talent-vigor').value);
+            talentState.improvedSnD = parseInt(document.getElementById('talent-improved-snd').value);
+            talentState.improvedRupture = parseInt(document.getElementById('talent-improved-rupture').value);
+            talentState.precision = parseInt(document.getElementById('talent-precision').value);
+            talentState.coldBlood = parseInt(document.getElementById('talent-cold-blood').value);
+            
+            // Recalculate DPS
+            calculate();
+        };
+        
+        // TALENT PRESETS
+        window.loadTalentPreset = function(presetName) {
+            const allOn = presetName === 'all-on';
+            
+            Object.keys(talentState).forEach(talent => {
+                talentState[talent] = allOn;
+                const checkbox = document.getElementById(`talent-${talent.replace(/([A-Z])/g, '-$1').toLowerCase()}`);
+                if (checkbox) checkbox.checked = allOn;
+            });
+            
+            calculate();
+        };
+        
         // ITEM DATABASE
         const ITEMS = {
             // DARKMANTLE SET
@@ -849,6 +1283,11 @@
                 name: 'Boots of the Shadow Flame',
                 slot: 'feet',
                 stats: { stamina: 22, attackPower: 54, hitPct: 2 }
+            },
+            'windwalker-boots': {
+                name: 'Windwalker Boots',
+                slot: 'feet',
+                stats: { agility: 22, stamina: 10, hastePct: 2 }
             },
             
             // BLOODFANG SET
@@ -940,11 +1379,6 @@
                 slot: 'feet',
                 set: 'bloodfang',
                 stats: { strength: 6, agility: 25, stamina: 17, hitPct: 1 }
-            },
-            'windwalker-boots': {
-                name: 'Windwalker Boots',
-                slot: 'feet',
-                stats: { armor: 138, agility: 22, stamina: 10, hastePct: 2 }
             },
             
             // WEAPONS
@@ -1046,11 +1480,6 @@
                 slot: 'ring',
                 stats: { agility: 15, hitPct: 1 }
             },
-            'band-of-ancient-lethality': {
-                name: 'Band of Ancient Lethality',
-                slot: 'ring',
-                stats: { agility: 15, stamina: 6, hitPct: 1, hastePct: 1 }
-            },
             
             // CLOAK
             'wing-of-the-time-lord': {
@@ -1126,16 +1555,12 @@
             'shoulders-ap': { attackPower: 30 },
             'back-agi': { agility: 3 },
             'chest-stats': { strength: 3, agility: 3 },
-            'chest-stats-4': { strength: 4, agility: 4 },
             'wrists-agi': { agility: 5 },
-            'wrists-agi-7': { agility: 7 },
             'hands-haste': { hastePct: 1 },
-            'hands-agi': { agility: 15 },
             'waist-agi': { agility: 6 },
             'legs-ap': { attackPower: 28 },
             'legs-haste': { hastePct: 1 },
             'feet-agi': { agility: 5 },
-            'feet-agi-7': { agility: 7 },
             'ring-agi': { agility: 6 },
             'weapon-crusader': { attackPower: 100 },
             'weapon-agi': { agility: 15 }
@@ -1172,10 +1597,8 @@
             
             // Talents & Passives
             improvedSliceDice: 1.45, // 45% longer duration
-            tasteForBloodPre: 0.15, // 15% physical damage (pre-patch)
-            tasteForBloodPost: 0.10, // 10% physical damage (patch 1.8.1)
-            tasteForBloodUptime: 0.90, // 90% uptime
-            lethalityMultiplier: 1.30, // 30% increased crit damage
+            // Taste for Blood: Now handled by talent (improvedRupture state)
+            lethalityMultiplier: 1.30, // 30% increased crit damage (only CP-generators: Noxious, SS, Backstab, Hemorrhage)
             vilePoisons: 1.30, // 30% increased poison damage
             improvedPoisons: 0.10, // 10% increased poison application
             sealFate: 1.00, // 100% chance for CP-generating crits to add extra CP (already implemented in cpFromNoxiousCrits)
@@ -1201,7 +1624,7 @@
             eviscerateBaseDamage5CP: 900, // Base damage for 5 CP Eviscerate
             
             ruptureBaseDuration: 16,
-            ruptureTalentBonus: 6, // +6 seconds from Improved Rupture
+            ruptureTalentBonus: 6, // +6 seconds from Taste for Blood
             ruptureDamage5CP: 1500,
             
             sndDuration1CP: 9,
@@ -1526,7 +1949,7 @@
             const markDeathBonus = markDeathUptime * 600;
             
             // Calculate crit
-            const baseCrit = CONFIG.maliceCrit;
+            const baseCrit = talentState.malice * 0.01; // Malice: +1% crit per rank (0-5 ranks)
             const critFromAgi = totalAgility / CONFIG.agilityPerCrit / 100;
             let totalCrit = baseCrit + critFromAgi + (stats.critPct || 0) / 100;
             
@@ -1535,7 +1958,7 @@
             if (hasMongoose) totalCrit += 0.02;
             
             // Calculate hit
-            let hit = (stats.hitPct || 0) / 100 + TALENTS.precision / 100;
+            let hit = (stats.hitPct || 0) / 100 + (talentState.precision * 0.01); // Precision: +1% hit per rank (0-5 ranks)
             
             // Calculate haste
             let haste = (stats.hastePct || 0) / 100;
@@ -1603,19 +2026,13 @@
             const ohHits = swingsPerWeapon * hitRate;
             
             // Energy budget - estimate poison procs more accurately for Vigor energy
+            // IMPORTANT: In Turtle WoW, haste does NOT increase energy regeneration (always 10/sec)
             const baseEnergyRegen = fightLength * CONFIG.energyRegen;
             
             // Estimate poison procs based on actual proc chances
             const bloodfangCount = sets.bloodfang || 0;
             const hasBloodfang3pc = bloodfangCount >= 3;
-            
-            // Check if Band of Ancient Lethality is equipped (ring1 or ring2)
-            const hasBandOfAncientLethality = currentGear['ring1'] === 'band-of-ancient-lethality' || 
-                                             currentGear['ring2'] === 'band-of-ancient-lethality';
-            
-            const basePoisonProcChance = CONFIG.poisonBaseProc + CONFIG.improvedPoisons + CONFIG.envenomProcBonus + 
-                                        (hasBloodfang3pc ? 0.05 : 0) + 
-                                        (hasBandOfAncientLethality ? 0.01 : 0);
+            const basePoisonProcChance = CONFIG.poisonBaseProc + (talentState.improvedPoisons * 0.02) + CONFIG.envenomProcBonus + (hasBloodfang3pc ? 0.05 : 0); // Improved Poisons: +2% per rank (0-5 ranks)
             
             // Estimate poison procs from auto-attacks (without Noxious - conservative)
             let estimatedPoisonProcs = (mhHits + ohHits) * Math.min(1.0, basePoisonProcChance);
@@ -1653,53 +2070,61 @@
             const renatakiCharmEnergy = hasRenatakiCharm ? 60 : 0;
             
             // Relentless Strikes energy
-            // SnD (5 casts, 1 CP each): 5 × 0.20 × 20 = 20 energy
-            // Envenom (5 casts, 1 CP each): 5 × 0.20 × 20 = 20 energy
-            // Rupture (2 casts, 5 CP each): 2 × 1.00 × 20 = 40 energy
-            const relentlessEnergy = (5 * 0.20 * CONFIG.relentlessEnergy) + 
-                                    (5 * 0.20 * CONFIG.relentlessEnergy) + 
-                                    (2 * 1.00 * CONFIG.relentlessEnergy);
+            // SnD (5 casts, 1 CP each): 5 × 1 × 0.20 × 20 = 20 energy
+            // Envenom (5 casts, 1 CP each): 5 × 1 × 0.20 × 20 = 20 energy
+            // Eviscerate (3 casts, 5 CP each): 3 × 5 × 0.20 × 20 = 60 energy
+            // Rupture (2 casts, 5 CP each): 2 × 5 × 0.20 × 20 = 40 energy
+            const relentlessEnergy = talentState.relentlessStrikes > 0 ? 
+                ((5 * 1 * 0.20 * CONFIG.relentlessEnergy) +    // SnD
+                 (5 * 1 * 0.20 * CONFIG.relentlessEnergy) +    // Envenom
+                 (3 * 5 * 0.20 * CONFIG.relentlessEnergy) +    // Eviscerate
+                 (2 * 5 * 0.20 * CONFIG.relentlessEnergy)) : 0; // Rupture
+            
+            const vigorEnergyBonus = (talentState.vigor * 0.50) * CONFIG.vigorEnergyPerPoison; // 50/100% chance for 2 energy per poison
+            const vigorMaxEnergyBonus = talentState.vigor * 5; // +5/+10 max energy
             
             const conservativeEnergy = baseEnergyRegen + 
-                                      (autoAttackPoisonProcs * CONFIG.vigorEnergyPerPoison) + 
+                                      (autoAttackPoisonProcs * vigorEnergyBonus) + 
                                       conservativeDarkmantleEnergy + 
                                       conservativeStormshroud4pcEnergy +
-                                      (CONFIG.baseEnergy + CONFIG.vigorBonus) +
+                                      (CONFIG.baseEnergy + vigorMaxEnergyBonus) +
                                       thistleTeaEnergy +
                                       renatakiCharmEnergy +
                                       relentlessEnergy;
             
             // Calculate Noxious count
-            const energyForNoxious = conservativeEnergy - (5 * CONFIG.envenomEnergy) - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (2 * CONFIG.eviscrateEnergy);
+            const energyForNoxious = conservativeEnergy - (5 * CONFIG.envenomEnergy) - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
             let noxiousCount = Math.max(0, Math.floor(energyForNoxious / CONFIG.noxiousAssaultEnergy));
             
             // Collect energy data for display
             const energyData = {
                 total: conservativeEnergy,
                 baseRegen: baseEnergyRegen,
-                vigorEnergy: autoAttackPoisonProcs * CONFIG.vigorEnergyPerPoison,
+                vigorEnergy: autoAttackPoisonProcs * vigorEnergyBonus,
                 darkmantleEnergy: conservativeDarkmantleEnergy,
                 stormshroudEnergy: conservativeStormshroud4pcEnergy,
                 relentlessEnergy: relentlessEnergy,
                 thistleTeaEnergy: thistleTeaEnergy,
                 renatakiCharmEnergy: renatakiCharmEnergy,
-                startingPool: CONFIG.baseEnergy + CONFIG.vigorBonus,
+                startingPool: CONFIG.baseEnergy + vigorMaxEnergyBonus,
                 noxiousCount: noxiousCount,
                 noxiousEnergy: noxiousCount * CONFIG.noxiousAssaultEnergy,
                 sndCount: 5,
                 sndEnergy: 5 * CONFIG.sndEnergy,
                 envenomCount: 5,
                 envenomEnergy: 5 * CONFIG.envenomEnergy,
-                eviscrateCount: 2,
-                eviscrateEnergy: 2 * CONFIG.eviscrateEnergy,
+                eviscrateCount: 3,
+                eviscrateEnergy: 3 * CONFIG.eviscrateEnergy,
                 ruptureCount: 2,
                 ruptureEnergy: 2 * CONFIG.ruptureEnergy,
                 // Combo Points
                 cpFromNoxious: noxiousCount * 1, // Base 1 CP per Noxious
-                cpFromNoxiousCrits: noxiousCount * totalCrit, // Extra CP from crits
-                cpFromRuthlessness: (5 + 5 + 2 + 2) * 1, // 1 CP refunded per finisher (SnD + Envenom + Eviscerate + Rupture)
-                cpGenerated: (noxiousCount * 1) + (noxiousCount * totalCrit) + ((5 + 5 + 2 + 2) * 1), // Total CP generated
-                cpSpent: 5 + 5 + 10 + 10 // SnD(5) + Envenom(5) + Eviscerate(2×5) + Rupture(2×5)
+                cpFromSealFate: (noxiousCount * totalCrit) * (talentState.sealFate * 0.20), // Seal Fate: 20/40/60/80/100% chance (0-5 ranks)
+                cpFromRuthlessness: ((5 + 5 + 3 + 2) * 1) * (talentState.ruthlessness / 3), // Ruthlessness: SnD(5) + Envenom(5) + Eviscerate(3) + Rupture(2)
+                cpGenerated: (noxiousCount * 1) + 
+                            ((noxiousCount * totalCrit) * (talentState.sealFate * 0.20)) + 
+                            (((5 + 5 + 3 + 2) * 1) * (talentState.ruthlessness / 3)), // Total CP generated (includes 3 Eviscerates)
+                cpSpent: 5 + 5 + 15 + 10 // SnD(5) + Envenom(5) + Eviscerate(3×5) + Rupture(2×5)
             };
             
             // Poison procs
@@ -1756,16 +2181,11 @@
                 totalPoisonProcs += windfuryPoisonProcs;
             }
             
-            // Taste for Blood multiplier
-            let tasteForBloodMultiplier;
-            if (isPatch181) {
-                tasteForBloodMultiplier = 1 + (CONFIG.tasteForBloodPost * CONFIG.tasteForBloodUptime);
-            } else {
-                tasteForBloodMultiplier = 1 + (CONFIG.tasteForBloodPre * CONFIG.tasteForBloodUptime);
-            }
+            // Taste for Blood talent: +1/2/3% damage per CP at 5CP = 5/10/15% total
+            const tasteForBloodMultiplier = 1 + (talentState.improvedRupture * 0.05);
             
             // Relentless Strikes bonus
-            const relentlessMultiplier = 1 + (CONFIG.relentlessDmgBonus * CONFIG.relentlessAvgStacks);
+            const relentlessMultiplier = talentState.relentlessStrikes > 0 ? (1 + (CONFIG.relentlessDmgBonus * CONFIG.relentlessAvgStacks)) : 1.0;
             
             // MH Auto-Attack Damage
             const mhBaseDmg = (CONFIG.mh.minDmg + CONFIG.mh.maxDmg) / 2;
@@ -1827,37 +2247,57 @@
             const noxiousAPRatio = isPatch181 ? CONFIG.noxiousAssaultAPRatioPost : CONFIG.noxiousAssaultAPRatioPre;
             const noxiousBaseDmg = CONFIG.noxiousAssaultBaseDmg + (effectiveAP * noxiousAPRatio);
             const noxiousAfterArmor = noxiousBaseDmg * armorMultiplier;
-            const noxiousWithBuffs = noxiousAfterArmor * tasteForBloodMultiplier * relentlessMultiplier;
+            const noxiousWithBuffs = noxiousAfterArmor * tasteForBloodMultiplier; // Relentless Strikes doesn't affect CP-generators
             
+            // Normal crit rate for Noxious (Cold Blood used elsewhere)
             const noxiousDmgPerUse = (1 - totalCrit) * noxiousWithBuffs + 
-                                      totalCrit * noxiousWithBuffs * (2.0 * CONFIG.lethalityMultiplier);
+                                      totalCrit * noxiousWithBuffs * (2.0 + (talentState.lethality * 0.06)); // Lethality: +6% crit dmg per rank (0-5 ranks)
             const noxiousTotalDmg = noxiousCount * noxiousDmgPerUse * yellowHitRate; // Apply yellow hit rate
             
             // Poison Damage
             const poisonBaseDmg = CONFIG.poisonBaseDmg + (effectiveAP * CONFIG.poisonAPRatio);
-            const poisonWithTalents = poisonBaseDmg * CONFIG.vilePoisons;
+            const poisonWithTalents = poisonBaseDmg * (1 + (talentState.vilePoisons * 0.10)); // Vile Poisons: +10% per rank (0-3 ranks)
             const poisonWithBuffs = isPatch181 ? poisonWithTalents : (poisonWithTalents * tasteForBloodMultiplier);
             const poisonTotalDmg = totalPoisonProcs * poisonWithBuffs;
             
             // Rupture Damage
-            const ruptureCount = Math.floor(fightLength / (CONFIG.ruptureBaseDuration + CONFIG.ruptureTalentBonus));
-            const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * yellowHitRate; // Apply yellow hit rate
+            const ruptureCount = Math.floor(fightLength / (CONFIG.ruptureBaseDuration + (talentState.improvedRupture * 2))); // Taste for Blood: +2/4/6s duration
+            const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * relentlessMultiplier * yellowHitRate; // Relentless Strikes affects finishers
             
-            // Eviscerate Damage (2 casts at 5 CP each)
-            const eviscrateCount = 2;
+            // Eviscerate Damage (3 casts at 5 CP each)
+            const eviscrateCount = 3;
             const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP;
             const eviscrateAfterArmor = eviscrateBaseDmg * armorMultiplier;
             const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier;
-            const eviscrateDmgPerUse = (1 - totalCrit) * eviscrateWithBuffs + 
-                                        totalCrit * eviscrateWithBuffs * (2.0 * CONFIG.lethalityMultiplier);
-            const eviscrateTotalDmg = eviscrateCount * eviscrateDmgPerUse * yellowHitRate; // Apply yellow hit rate
+            
+            // Cold Blood: ONE guaranteed crit Eviscerate, rest use normal crit rate
+            let eviscrateTotalDmg = 0;
+            if (talentState.coldBlood > 0 && eviscrateCount > 0) {
+                // First Eviscerate: Guaranteed crit with Cold Blood
+                const eviscrateCritDmg = eviscrateWithBuffs * 2.0;
+                eviscrateTotalDmg += eviscrateCritDmg * yellowHitRate;
+                
+                // Remaining Eviscerates: Normal crit rate
+                const remainingEviscerates = eviscrateCount - 1;
+                const normalEviscrateDmg = (1 - totalCrit) * eviscrateWithBuffs + totalCrit * eviscrateWithBuffs * 2.0;
+                eviscrateTotalDmg += remainingEviscerates * normalEviscrateDmg * yellowHitRate;
+            } else {
+                // No Cold Blood: All Eviscerates use normal crit rate
+                const eviscrateDmgPerUse = (1 - totalCrit) * eviscrateWithBuffs + totalCrit * eviscrateWithBuffs * 2.0;
+                eviscrateTotalDmg = eviscrateCount * eviscrateDmgPerUse * yellowHitRate;
+            }
             
             // Stormshroud 3pc: 5% chance to deal 35-51 Nature damage (avg 43) on auto-attacks
             const stormshroud3pcProcs = hasStormshroud3pc ? ((mhHits + ohHits) * 0.05) : 0;
             const stormshroud3pcDmg = stormshroud3pcProcs * 43; // Average of 35-51
             
             // Total Damage and DPS
-            const totalDamage = autoAttackDmg + noxiousTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
+            let totalDamage = autoAttackDmg + noxiousTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
+            
+            // Murder talent: +1% per rank (0/1/2 ranks)
+            const murderMultiplier = 1 + (talentState.murder * 0.01);
+            totalDamage *= murderMultiplier;
+            
             const totalDPS = totalDamage / fightLength;
             
             // Update display
@@ -1868,13 +2308,13 @@
             const characterStatsAP = apFromStats + totalAttackPower + (hasStormshroud2pc ? 24 : 0) + (hasMadcap2pc ? 20 : 0);
             document.getElementById('totalAttackPower').textContent = Math.round(characterStatsAP);
             document.getElementById('totalCrit').textContent = (totalCrit * 100).toFixed(2) + '%';
-            document.getElementById('totalHit').textContent = ((stats.hitPct || 0) + TALENTS.precision) + '%';
+            document.getElementById('totalHit').textContent = ((stats.hitPct || 0) + (talentState.precision ? 5 : 0)) + '%';
             document.getElementById('totalHaste').textContent = ((stats.hastePct || 0) + (hasPotionQuickness ? 2.5 : 0) + (hasJujuFlurry ? 1 : 0) + (hasDanonzoMedley ? 2 : 0)).toFixed(1) + '%';
             
             displaySetBonuses(sets, activeSetBonuses);
             
             // Update Vigor energy with actual poison hits (not the estimate)
-            energyData.vigorEnergy = totalPoisonProcs * CONFIG.vigorEnergyPerPoison;
+            energyData.vigorEnergy = (totalPoisonProcs * (talentState.vigor * 0.50) * CONFIG.vigorEnergyPerPoison); // Vigor: 50/100% proc chance
             
             displayEnergyBreakdown(energyData);
             
@@ -1883,6 +2323,10 @@
             document.getElementById('effectiveAP').textContent = effectiveAP.toFixed(0);
             document.getElementById('bossArmor').textContent = effectiveArmor.toLocaleString();
             document.getElementById('missRate').textContent = (missRate * 100).toFixed(1) + '%';
+            
+            // Update talents page display too
+            document.getElementById('talents-totalDPS').textContent = totalDPS.toFixed(0);
+            document.getElementById('talents-totalDamage').textContent = Math.round(totalDamage).toLocaleString();
             
             // Calculate total auto-attack hits (MH + OH + Windfury if applicable)
             const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0);
@@ -1975,7 +2419,7 @@
             // Combo Points
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 12px; margin-bottom: 5px;">Combo Points:</div>';
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (base): ${energyData.cpFromNoxious}</div>`;
-            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (crits): ${Math.round(energyData.cpFromNoxiousCrits)}</div>`;
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Seal Fate: ${Math.round(energyData.cpFromSealFate)}</div>`;
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Ruthlessness: ${energyData.cpFromRuthlessness}</div>`;
             html += `<div style="color: #4ecdc4; font-weight: bold; margin-top: 5px; font-size: 0.9em;">Total Generated: ${Math.round(energyData.cpGenerated)}</div>`;
             html += `<div style="color: #ff6b6b; font-weight: bold; font-size: 0.9em;">Total Spent: ${energyData.cpSpent}</div>`;
@@ -1985,25 +2429,38 @@
             html += '</div>';
             
             container.innerHTML = html;
+            
+            // Also update talents page energy breakdown
+            const talentsContainer = document.getElementById('talents-energyBreakdownContainer');
+            if (talentsContainer) {
+                talentsContainer.innerHTML = html;
+            }
         }
         
         function updateDamageBreakdown(breakdown) {
             breakdown.sort((a, b) => b.damage - a.damage);
             
             const total = breakdown.reduce((sum, item) => sum + item.damage, 0);
+            
+            // Update gear page table
             const tbody = document.getElementById('breakdownTable');
             tbody.innerHTML = '';
+            
+            // Update talents page table
+            const talentsTbody = document.getElementById('talents-breakdownTable');
+            talentsTbody.innerHTML = '';
             
             breakdown.forEach(item => {
                 const pct = ((item.damage / total) * 100).toFixed(1);
                 const hits = item.hits !== undefined ? Math.round(item.hits) : '-';
                 const row = `<tr>
                     <td><span class="color-indicator" style="background: ${item.color}"></span>${item.name}</td>
-                    <td>${hits}</td>
                     <td>${Math.round(item.damage).toLocaleString()}</td>
                     <td>${pct}%</td>
+                    <td>${hits}</td>
                 </tr>`;
                 tbody.innerHTML += row;
+                talentsTbody.innerHTML += row;
             });
             
             updateChart(breakdown);
@@ -2103,12 +2560,12 @@
                 currentEnchants['neck'] = 'neck-agi';
                 currentEnchants['shoulders'] = 'shoulders-haste';
                 currentEnchants['back'] = 'back-agi';
-                currentEnchants['chest'] = 'chest-stats-4';
-                currentEnchants['wrists'] = 'wrists-agi-7';
+                currentEnchants['chest'] = 'chest-stats';
+                currentEnchants['wrists'] = 'wrists-agi';
                 currentEnchants['hands'] = 'hands-haste';
                 currentEnchants['waist'] = 'waist-agi';
                 currentEnchants['legs'] = 'legs-ap';
-                currentEnchants['feet'] = 'feet-agi-7';
+                currentEnchants['feet'] = 'feet-agi';
                 currentEnchants['ring1'] = 'ring-agi';
                 currentEnchants['ring2'] = 'ring-agi';
                 currentEnchants['mainhand'] = 'weapon-crusader';
@@ -2157,12 +2614,12 @@
                 currentEnchants['neck'] = 'neck-agi';
                 currentEnchants['shoulders'] = 'shoulders-haste';
                 currentEnchants['back'] = 'back-agi';
-                currentEnchants['chest'] = 'chest-stats-4';
-                currentEnchants['wrists'] = 'wrists-agi-7';
+                currentEnchants['chest'] = 'chest-stats';
+                currentEnchants['wrists'] = 'wrists-agi';
                 currentEnchants['hands'] = 'hands-haste';
                 currentEnchants['waist'] = 'waist-agi';
                 currentEnchants['legs'] = 'legs-ap';
-                currentEnchants['feet'] = 'feet-agi-7';
+                currentEnchants['feet'] = 'feet-agi';
                 currentEnchants['ring1'] = 'ring-agi';
                 currentEnchants['ring2'] = 'ring-agi';
                 currentEnchants['mainhand'] = 'weapon-crusader';
