@@ -22,7 +22,7 @@
             background-attachment: fixed;
             background-repeat: no-repeat;
             color: #e0e0e0;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
         }
         
@@ -34,62 +34,64 @@
         h1 {
             text-align: center;
             color: #ff6b6b;
-            margin-bottom: 10px;
-            font-size: 2.5em;
+            margin-bottom: 5px;
+            font-size: 2em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .subtitle {
             text-align: center;
             color: #a0a0a0;
-            margin-bottom: 30px;
-            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-size: 1em;
         }
         
         .main-content {
             display: grid;
             grid-template-columns: 380px 280px 280px 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-            align-items: start;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: stretch;
         }
         
         .panel {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 15px;
+            padding: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
         }
         
         .section-title {
             color: #ff6b6b;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            padding-bottom: 6px;
+            font-size: 1em;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
             border-bottom: 2px solid rgba(255, 107, 107, 0.3);
         }
         
         .gear-slot {
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
         
         .gear-slot label {
             display: block;
             color: #4ecdc4;
-            font-size: 0.9em;
-            margin-bottom: 3px;
+            font-size: 0.85em;
+            margin-bottom: 2px;
             font-weight: bold;
         }
         
         .gear-slot select {
             width: 100%;
-            padding: 5px;
+            padding: 4px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(78, 205, 196, 0.4);
             border-radius: 5px;
             color: #e0e0e0;
-            font-size: 0.9em;
+            font-size: 0.85em;
             cursor: pointer;
         }
         
@@ -99,17 +101,17 @@
         
         .stat-display {
             background: rgba(255, 107, 107, 0.15);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
         
         .stat-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.95em;
+            margin-bottom: 3px;
+            font-size: 0.85em;
         }
         
         .stat-label {
@@ -124,21 +126,22 @@
         .set-bonus {
             background: rgba(255, 215, 0, 0.1);
             border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
         }
         
         .set-bonus-title {
             color: #ffd700;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            font-size: 0.9em;
         }
         
         .set-bonus-item {
             color: #a0a0a0;
-            font-size: 0.85em;
-            margin-left: 10px;
+            font-size: 0.8em;
+            margin-left: 8px;
         }
         
         .set-bonus-active {
@@ -146,36 +149,36 @@
         }
         
         .control-group {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         
         .control-group label {
             display: block;
             color: #ff6b6b;
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 0.95em;
+            margin-bottom: 3px;
+            font-size: 0.85em;
         }
         
         input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
             cursor: pointer;
         }
         
         .preset-buttons {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
         
         .preset-btn {
-            padding: 10px;
+            padding: 8px;
             background: rgba(78, 205, 196, 0.2);
             border: 1px solid rgba(78, 205, 196, 0.4);
-            border-radius: 8px;
+            border-radius: 6px;
             color: #4ecdc4;
             cursor: pointer;
             transition: all 0.3s;
@@ -286,12 +289,13 @@
         .breakdown-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 8px;
+            font-size: 0.85em;
         }
         
         .breakdown-table th,
         .breakdown-table td {
-            padding: 6px 8px;
+            padding: 4px 6px;
             text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -354,35 +358,35 @@
         .talents-layout {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 20px;
+            gap: 10px;
         }
         
         .talents-panel {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(78, 205, 196, 0.3);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 10px;
         }
         
         .results-panel {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(78, 205, 196, 0.3);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 10px;
         }
         
         .talent-tree-section {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
         .talent-slider-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            margin: 5px 0;
+            padding: 8px;
+            margin: 3px 0;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
+            border-radius: 4px;
             transition: all 0.2s;
         }
         
@@ -393,29 +397,29 @@
         .talent-info {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
         
         .talent-name {
             font-weight: bold;
             color: #e0e0e0;
-            font-size: 1em;
+            font-size: 0.9em;
         }
         
         .talent-effect {
             color: #4ecdc4;
-            font-size: 0.9em;
+            font-size: 0.75em;
         }
         
         .talent-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
         
         .talent-controls input[type="range"] {
-            width: 120px;
-            height: 6px;
+            width: 100px;
+            height: 5px;
             background: rgba(78, 205, 196, 0.2);
             border-radius: 3px;
             outline: none;
@@ -687,8 +691,8 @@
                 
                 <div id="setBonusContainer"></div>
                 
-                <div class="section-title" style="margin-top: 20px;">Energy Expenditure</div>
-                <div id="energyBreakdownContainer" style="font-size: 0.85em;">
+                <div class="section-title" style="margin-top: 10px;">Energy Expenditure</div>
+                <div id="energyBreakdownContainer" style="font-size: 0.8em;">
                     <!-- Energy breakdown will be populated here -->
                 </div>
                 
@@ -1160,8 +1164,8 @@
                         </tfoot>
                     </table>
                     
-                    <div class="section-title" style="margin-top: 20px;">Energy Expenditure</div>
-                    <div id="talents-energyBreakdownContainer" style="font-size: 0.85em;">
+                    <div class="section-title" style="margin-top: 10px;">Energy Expenditure</div>
+                    <div id="talents-energyBreakdownContainer" style="font-size: 0.8em;">
                         <!-- Energy breakdown will be populated here -->
                     </div>
                 </div>
