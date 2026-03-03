@@ -376,17 +376,17 @@
         }
         
         .talent-tree-section {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .talent-slider-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px;
-            margin: 3px 0;
+            padding: 5px 6px;
+            margin: 2px 0;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+            border-radius: 3px;
             transition: all 0.2s;
         }
         
@@ -397,18 +397,18 @@
         .talent-info {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
         }
         
         .talent-name {
             font-weight: bold;
             color: #e0e0e0;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
         
         .talent-effect {
             color: #4ecdc4;
-            font-size: 0.75em;
+            font-size: 0.7em;
         }
         
         .talent-controls {
@@ -457,11 +457,11 @@
         }
         
         .talent-rank {
-            min-width: 40px;
+            min-width: 35px;
             text-align: center;
             font-weight: bold;
             color: #00ff00;
-            font-size: 1em;
+            font-size: 0.85em;
         }
     </style>
 </head>
@@ -948,7 +948,10 @@
             <div class="talents-layout">
                 <!-- COLUMN 1: ASSASSINATION -->
                 <div class="talents-panel">
-                    <h3 style="color: #ff6b6b; margin-bottom: 15px; text-align: center;">ASSASSINATION</h3>
+                    <h3 style="color: #ff6b6b; margin-bottom: 6px; text-align: center; font-size: 1em;">ASSASSINATION</h3>
+                    
+                    <!-- TIER 1 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 1</div>
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
@@ -958,6 +961,31 @@
                         <div class="talent-controls">
                             <input type="range" id="talent-malice" min="0" max="5" value="5" oninput="updateTalentDisplay('malice', 5); toggleTalent()">
                             <span class="talent-rank" id="rank-malice">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Improved Eviscerate</span>
+                            <span class="talent-effect">+5% Eviscerate damage per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-eviscerate" min="0" max="3" value="0" oninput="updateTalentDisplay('improved-eviscerate', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-eviscerate">0/3</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 2 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 2</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Ruthlessness</span>
+                            <span class="talent-effect">Finishers Add CP (33% per rank)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-ruthlessness" min="0" max="3" value="3" oninput="updateTalentDisplay('ruthlessness', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-ruthlessness">3/3</span>
                         </div>
                     </div>
                     
@@ -974,14 +1002,17 @@
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
-                            <span class="talent-name">Lethality</span>
-                            <span class="talent-effect">+6% Crit Damage per rank (CP-generators)</span>
+                            <span class="talent-name">Improved SnD</span>
+                            <span class="talent-effect">+15/40/45% Duration</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-lethality" min="0" max="5" value="5" oninput="updateTalentDisplay('lethality', 5); toggleTalent()">
-                            <span class="talent-rank" id="rank-lethality">5/5</span>
+                            <input type="range" id="talent-improved-snd" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-snd', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-snd">3/3</span>
                         </div>
                     </div>
+                    
+                    <!-- TIER 3 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 3</div>
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
@@ -996,12 +1027,26 @@
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
-                            <span class="talent-name">Improved Poisons</span>
-                            <span class="talent-effect">+2% Poison Proc per rank</span>
+                            <span class="talent-name">Lethality</span>
+                            <span class="talent-effect">+6% Crit Damage per rank (CP-generators)</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-improved-poisons" min="0" max="5" value="5" oninput="updateTalentDisplay('improved-poisons', 5); toggleTalent()">
-                            <span class="talent-rank" id="rank-improved-poisons">5/5</span>
+                            <input type="range" id="talent-lethality" min="0" max="5" value="5" oninput="updateTalentDisplay('lethality', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-lethality">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 4 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 4</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Taste for Blood</span>
+                            <span class="talent-effect">+2s Rupture, +5% Damage per rank (at 5CP)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-rupture" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-rupture', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-rupture">3/3</span>
                         </div>
                     </div>
                     
@@ -1018,56 +1063,37 @@
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
-                            <span class="talent-name">Seal Fate</span>
-                            <span class="talent-effect">Crits Grant Extra CP (20% per rank)</span>
+                            <span class="talent-name">Improved Poisons</span>
+                            <span class="talent-effect">+3/6/10% Poison Proc</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-seal-fate" min="0" max="5" value="5" oninput="updateTalentDisplay('seal-fate', 5); toggleTalent()">
-                            <span class="talent-rank" id="rank-seal-fate">5/5</span>
+                            <input type="range" id="talent-improved-poisons" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-poisons', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-poisons">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 5 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 5</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Efficient Poisons</span>
+                            <span class="talent-effect">-12% resist, 45% chance no charge consumed</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-efficient-poisons" min="0" max="3" value="3" oninput="updateTalentDisplay('efficient-poisons', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-efficient-poisons">3/3</span>
                         </div>
                     </div>
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
-                            <span class="talent-name">Ruthlessness</span>
-                            <span class="talent-effect">Finishers Add CP (33% per rank)</span>
+                            <span class="talent-name">Envenom</span>
+                            <span class="talent-effect">Finisher: +30% poison effectiveness and application</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-ruthlessness" min="0" max="3" value="3" oninput="updateTalentDisplay('ruthlessness', 3); toggleTalent()">
-                            <span class="talent-rank" id="rank-ruthlessness">3/3</span>
-                        </div>
-                    </div>
-                    
-                    <div class="talent-slider-row">
-                        <div class="talent-info">
-                            <span class="talent-name">Vigor</span>
-                            <span class="talent-effect">+5 Max Energy, 50% chance for +2 Energy per rank</span>
-                        </div>
-                        <div class="talent-controls">
-                            <input type="range" id="talent-vigor" min="0" max="2" value="2" oninput="updateTalentDisplay('vigor', 2); toggleTalent()">
-                            <span class="talent-rank" id="rank-vigor">2/2</span>
-                        </div>
-                    </div>
-                    
-                    <div class="talent-slider-row">
-                        <div class="talent-info">
-                            <span class="talent-name">Improved SnD</span>
-                            <span class="talent-effect">+15/40/45% Duration</span>
-                        </div>
-                        <div class="talent-controls">
-                            <input type="range" id="talent-improved-snd" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-snd', 3); toggleTalent()">
-                            <span class="talent-rank" id="rank-improved-snd">3/3</span>
-                        </div>
-                    </div>
-                    
-                    <div class="talent-slider-row">
-                        <div class="talent-info">
-                            <span class="talent-name">Taste for Blood</span>
-                            <span class="talent-effect">+2s Rupture, +5% Damage per rank (at 5CP)</span>
-                        </div>
-                        <div class="talent-controls">
-                            <input type="range" id="talent-improved-rupture" min="0" max="3" value="3" oninput="updateTalentDisplay('improved-rupture', 3); toggleTalent()">
-                            <span class="talent-rank" id="rank-improved-rupture">3/3</span>
+                            <input type="range" id="talent-envenom" min="0" max="1" value="1" oninput="updateTalentDisplay('envenom', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-envenom">1/1</span>
                         </div>
                     </div>
                     
@@ -1082,16 +1108,60 @@
                         </div>
                     </div>
                     
+                    <!-- TIER 6 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 6</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Vigor</span>
+                            <span class="talent-effect">+5 Max Energy, 50% chance for +2 Energy per rank</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-vigor" min="0" max="2" value="2" oninput="updateTalentDisplay('vigor', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-vigor">2/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Seal Fate</span>
+                            <span class="talent-effect">Crits Grant Extra CP (20% per rank)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-seal-fate" min="0" max="5" value="5" oninput="updateTalentDisplay('seal-fate', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-seal-fate">5/5</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 7 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 7</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Noxious Assault</span>
+                            <span class="talent-effect">Dual strike, 105 + 35% AP dmg, applies poisons, 1 CP</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-noxious-assault" min="0" max="1" value="1" oninput="updateTalentDisplay('noxious-assault', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-noxious-assault">1/1</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TALENT POINTS COUNTER -->
+                    <div style="margin-top: 10px; padding: 6px; background: rgba(255, 107, 107, 0.15); border-radius: 5px; text-align: center;">
+                        <span style="color: #4ecdc4; font-weight: bold; font-size: 0.85em;">Points: <span id="assassination-points">0</span>/51</span>
+                    </div>
+                    
                     <!-- PRESET BUTTONS -->
-                    <div style="margin-top: 20px;">
-                        <button class="preset-btn" onclick="loadTalentPreset('all-on')">Enable All</button>
-                        <button class="preset-btn" onclick="loadTalentPreset('all-off')">Disable All</button>
+                    <div style="margin-top: 8px; display: flex; gap: 5px;">
+                        <button class="preset-btn" style="padding: 4px 8px; font-size: 0.75em;" onclick="loadTalentPreset('all-on')">Enable All</button>
+                        <button class="preset-btn" style="padding: 4px 8px; font-size: 0.75em;" onclick="loadTalentPreset('all-off')">Disable All</button>
                     </div>
                 </div>
                 
                 <!-- COLUMN 2: COMBAT -->
                 <div class="talents-panel">
-                    <h3 style="color: #ffaa00; margin-bottom: 15px; text-align: center;">COMBAT</h3>
+                    <h3 style="color: #ffaa00; margin-bottom: 6px; text-align: center; font-size: 1em;">COMBAT</h3>
                     
                     <div class="talent-slider-row">
                         <div class="talent-info">
@@ -1111,7 +1181,7 @@
                 
                 <!-- COLUMN 3: SUBTLETY -->
                 <div class="talents-panel">
-                    <h3 style="color: #aa00ff; margin-bottom: 15px; text-align: center;">SUBTLETY</h3>
+                    <h3 style="color: #aa00ff; margin-bottom: 6px; text-align: center; font-size: 1em;">SUBTLETY</h3>
                     
                     <div style="color: #888; font-style: italic; margin-top: 20px; text-align: center;">
                         Subtlety talents coming soon...
@@ -1120,12 +1190,12 @@
                 
                 <!-- COLUMN 4: DPS BREAKDOWN -->
                 <div class="results-panel">
-                    <h3 style="color: #4ecdc4; margin-bottom: 15px; text-align: center;">DPS BREAKDOWN</h3>
+                    <h3 style="color: #4ecdc4; margin-bottom: 8px; text-align: center; font-size: 1em;">DPS BREAKDOWN</h3>
                     
                     <div class="stat-display">
-                        <div class="stat-row">
-                            <span class="stat-label">Total DPS:</span>
-                            <span class="stat-value" id="talents-totalDPS">0</span>
+                        <div class="stat-row" style="font-size: 1.1em; border-bottom: 2px solid rgba(78, 205, 196, 0.5); padding-bottom: 8px; margin-bottom: 8px;">
+                            <span class="stat-label" style="font-weight: bold; color: #fff;">Total DPS:</span>
+                            <span class="stat-value" id="talents-totalDPS" style="font-size: 1.3em; color: #00ff00;">0</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Effective AP:</span>
@@ -1180,7 +1250,7 @@
             murder: 2,
             lethality: 5,
             relentlessStrikes: 1,
-            improvedPoisons: 5,
+            improvedPoisons: 3,
             vilePoisons: 3,
             sealFate: 5,
             ruthlessness: 3,
@@ -1188,7 +1258,11 @@
             improvedSnD: 3,
             improvedRupture: 3,
             precision: 5,
-            coldBlood: 1
+            coldBlood: 1,
+            improvedEviscerate: 0,
+            efficientPoisons: 3,
+            envenom: 1,
+            noxiousAssault: 1
         };
         
         // TAB SWITCHING
@@ -1227,6 +1301,36 @@
             talentState.improvedRupture = parseInt(document.getElementById('talent-improved-rupture').value);
             talentState.precision = parseInt(document.getElementById('talent-precision').value);
             talentState.coldBlood = parseInt(document.getElementById('talent-cold-blood').value);
+            talentState.improvedEviscerate = parseInt(document.getElementById('talent-improved-eviscerate').value);
+            talentState.efficientPoisons = parseInt(document.getElementById('talent-efficient-poisons').value);
+            talentState.envenom = parseInt(document.getElementById('talent-envenom').value);
+            talentState.noxiousAssault = parseInt(document.getElementById('talent-noxious-assault').value);
+            
+            // Calculate Assassination talent points
+            const assassinationPoints = talentState.malice + 
+                                        talentState.murder + 
+                                        talentState.lethality + 
+                                        talentState.relentlessStrikes + 
+                                        talentState.improvedPoisons + 
+                                        talentState.vilePoisons + 
+                                        talentState.sealFate + 
+                                        talentState.ruthlessness + 
+                                        talentState.vigor + 
+                                        talentState.improvedSnD + 
+                                        talentState.improvedRupture + 
+                                        talentState.coldBlood + 
+                                        talentState.improvedEviscerate + 
+                                        talentState.efficientPoisons + 
+                                        talentState.envenom + 
+                                        talentState.noxiousAssault;
+            
+            // Update point counter
+            const pointsElement = document.getElementById('assassination-points');
+            if (pointsElement) {
+                pointsElement.textContent = assassinationPoints;
+                // Change color if over 51 points
+                pointsElement.style.color = assassinationPoints > 51 ? '#ff6b6b' : '#00ff00';
+            }
             
             // Recalculate DPS
             calculate();
@@ -1277,6 +1381,11 @@
                 set: 'darkmantle',
                 stats: { strength: 10, agility: 15, stamina: 10 }
             },
+            'sanctum-bark-wraps': {
+                name: 'Sanctum Bark Wraps',
+                slot: 'wrists',
+                stats: { agility: 15, strength: 15, stamina: 14, hastePct: 1 }
+            },
             'darkmantle-gloves': {
                 name: 'Darkmantle Gloves',
                 slot: 'hands',
@@ -1294,6 +1403,11 @@
                 slot: 'legs',
                 set: 'darkmantle',
                 stats: { strength: 16, agility: 25, stamina: 17, critPct: 1 }
+            },
+            'dreamhide-leggings': {
+                name: 'Dreamhide Leggings',
+                slot: 'legs',
+                stats: { agility: 26, stamina: 9, hastePct: 3 }
             },
             'darkmantle-boots': {
                 name: 'Darkmantle Boots',
@@ -2061,7 +2175,10 @@
             // Estimate poison procs based on actual proc chances
             const bloodfangCount = sets.bloodfang || 0;
             const hasBloodfang3pc = bloodfangCount >= 3;
-            const basePoisonProcChance = CONFIG.poisonBaseProc + (talentState.improvedPoisons * 0.02) + CONFIG.envenomProcBonus + (hasBloodfang3pc ? 0.05 : 0); // Improved Poisons: +2% per rank (0-5 ranks)
+            
+            // Improved Poisons: [0, 3, 6, 10]% per rank (3 ranks total)
+            const improvedPoisonsBonus = [0, 0.03, 0.06, 0.10][talentState.improvedPoisons] || 0;
+            const basePoisonProcChance = CONFIG.poisonBaseProc + improvedPoisonsBonus + (talentState.envenom > 0 ? CONFIG.envenomProcBonus : 0) + (hasBloodfang3pc ? 0.05 : 0);
             
             // Estimate poison procs from auto-attacks (without Noxious - conservative)
             let estimatedPoisonProcs = (mhHits + ohHits) * Math.min(1.0, basePoisonProcChance);
@@ -2121,9 +2238,9 @@
                                       renatakiCharmEnergy +
                                       relentlessEnergy;
             
-            // Calculate Noxious count
+            // Calculate Noxious count (only if talent is active)
             const energyForNoxious = conservativeEnergy - (5 * CONFIG.envenomEnergy) - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
-            let noxiousCount = Math.max(0, Math.floor(energyForNoxious / CONFIG.noxiousAssaultEnergy));
+            let noxiousCount = talentState.noxiousAssault > 0 ? Math.max(0, Math.floor(energyForNoxious / CONFIG.noxiousAssaultEnergy)) : 0;
             
             // Collect energy data for display
             const energyData = {
@@ -2297,7 +2414,8 @@
             const eviscrateCount = 3;
             const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP;
             const eviscrateAfterArmor = eviscrateBaseDmg * armorMultiplier;
-            const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier;
+            const improvedEviscrateMultiplier = 1 + (talentState.improvedEviscerate * 0.05); // +5/10/15% per rank
+            const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier * improvedEviscrateMultiplier;
             
             // Cold Blood: ONE guaranteed crit Eviscerate, rest use normal crit rate
             let eviscrateTotalDmg = 0;
@@ -2446,18 +2564,18 @@
             
             const totalSpent = energyData.noxiousEnergy + energyData.sndEnergy + energyData.envenomEnergy + energyData.eviscrateEnergy + energyData.ruptureEnergy;
             const leftover = energyData.total - totalSpent;
-            html += `<div style="color: #a0a0a0; margin-top: 8px; font-size: 0.9em;">Spent: ${Math.round(totalSpent)}</div>`;
-            html += `<div style="color: ${leftover > 0 ? '#4ecdc4' : '#ff6b6b'}; font-size: 0.9em;">Leftover: ${Math.round(leftover)}</div>`;
+            html += `<div style="color: #ff6b6b; margin-top: 8px; font-size: 1em; font-weight: bold;">Spent: ${Math.round(totalSpent)}</div>`;
+            html += `<div style="color: ${leftover > 0 ? '#00ff00' : '#ff6b6b'}; font-size: 1em; font-weight: bold;">Leftover: ${Math.round(leftover)}</div>`;
             
             // Combo Points
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 12px; margin-bottom: 5px;">Combo Points:</div>';
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (base): ${energyData.cpFromNoxious}</div>`;
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Seal Fate: ${Math.round(energyData.cpFromSealFate)}</div>`;
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Ruthlessness: ${energyData.cpFromRuthlessness}</div>`;
-            html += `<div style="color: #4ecdc4; font-weight: bold; margin-top: 5px; font-size: 0.9em;">Total Generated: ${Math.round(energyData.cpGenerated)}</div>`;
-            html += `<div style="color: #ff6b6b; font-weight: bold; font-size: 0.9em;">Total Spent: ${energyData.cpSpent}</div>`;
+            html += `<div style="color: #00ff00; font-weight: bold; margin-top: 5px; font-size: 1em;">Total Generated: ${Math.round(energyData.cpGenerated)}</div>`;
+            html += `<div style="color: #ff6b6b; font-weight: bold; font-size: 1em;">Spent: ${energyData.cpSpent}</div>`;
             const cpLeftover = energyData.cpGenerated - energyData.cpSpent;
-            html += `<div style="color: ${cpLeftover >= 0 ? '#4ecdc4' : '#ff6b6b'}; font-weight: bold; font-size: 0.9em;">Leftover: ${Math.round(cpLeftover)}</div>`;
+            html += `<div style="color: ${cpLeftover >= 0 ? '#00ff00' : '#ff6b6b'}; font-weight: bold; font-size: 1em;">Leftover: ${Math.round(cpLeftover)}</div>`;
             
             html += '</div>';
             
@@ -2691,7 +2809,8 @@
                 if (select) select.value = enchantId;
             });
             
-            calculate();
+            // Initialize talent point counter
+            toggleTalent();
         }
     </script>
 </body>
