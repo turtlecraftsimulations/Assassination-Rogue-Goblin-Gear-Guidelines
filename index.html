@@ -1536,6 +1536,12 @@
                 weaponStats: { minDmg: 35.2, maxDmg: 72.2, speed: 1.30 }, // 47.8 DPS
                 stats: { intellect: 8, spirit: 6 }
             },
+            'crystal-sword-of-the-blossom': {
+                name: 'Crystal Sword of the Blossom',
+                slot: 'mainhand',
+                weaponStats: { minDmg: 79, maxDmg: 147, speed: 1.80 }, // 62.8 DPS
+                stats: { stamina: 11, attackPower: 20, hitPct: 1 }
+            },
             'the-ripper': {
                 name: 'The Ripper',
                 slot: 'weapon',
@@ -1560,6 +1566,11 @@
                 name: 'Hand of Justice',
                 slot: 'trinket',
                 stats: { attackPower: 20 }
+            },
+            'the-heart-of-dreams': {
+                name: 'The Heart of Dreams',
+                slot: 'trinket',
+                stats: { hastePct: 2, critPct: 2 }
             },
             'whip-of-encouragement': {
                 name: 'Whip of Encouragement',
@@ -1830,7 +1841,16 @@
                     if (matches) {
                         const option = document.createElement('option');
                         option.value = id;
-                        option.textContent = item.name;
+                        
+                        // Calculate and display DPS for weapons
+                        if (item.weaponStats && item.weaponStats.minDmg && item.weaponStats.maxDmg && item.weaponStats.speed) {
+                            const avgDmg = (item.weaponStats.minDmg + item.weaponStats.maxDmg) / 2;
+                            const dps = avgDmg / item.weaponStats.speed;
+                            option.textContent = `${item.name} (${dps.toFixed(1)} DPS)`;
+                        } else {
+                            option.textContent = item.name;
+                        }
+                        
                         select.appendChild(option);
                     }
                 });
