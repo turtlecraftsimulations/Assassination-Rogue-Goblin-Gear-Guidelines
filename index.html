@@ -1086,10 +1086,10 @@
                     <div class="talent-slider-row">
                         <div class="talent-info">
                             <span class="talent-name">Efficient Poisons</span>
-                            <span class="talent-effect">-12% resist, 45% chance no charge consumed</span>
+                            <span class="talent-effect" id="effect-efficient-poisons">-12% resist, 45% chance no charge consumed</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-efficient-poisons" min="0" max="3" value="3" oninput="updateTalentDisplay('efficient-poisons', 3); toggleTalent()">
+                            <input type="range" id="talent-efficient-poisons" min="0" max="3" value="3" oninput="updateEfficientPoisonsDisplay(); toggleTalent()">
                             <span class="talent-rank" id="rank-efficient-poisons">3/3</span>
                         </div>
                     </div>
@@ -1255,10 +1255,10 @@
                     <div class="talent-slider-row">
                         <div class="talent-info">
                             <span class="talent-name">Hack and Slash</span>
-                            <span class="talent-effect">2/5% extra attack (Axe/Sword)</span>
+                            <span class="talent-effect" id="effect-hack-and-slash">Not talented</span>
                         </div>
                         <div class="talent-controls">
-                            <input type="range" id="talent-hack-and-slash" min="0" max="2" value="0" oninput="updateTalentDisplay('hack-and-slash', 2); toggleTalent()">
+                            <input type="range" id="talent-hack-and-slash" min="0" max="2" value="0" oninput="updateHackAndSlashDisplay(); toggleTalent()">
                             <span class="talent-rank" id="rank-hack-and-slash">0/2</span>
                         </div>
                     </div>
@@ -1457,6 +1457,33 @@
         window.updateTalentDisplay = function(talentName, maxRank) {
             const value = document.getElementById(`talent-${talentName}`).value;
             document.getElementById(`rank-${talentName}`).textContent = `${value}/${maxRank}`;
+        };
+        
+        // Special handler for Efficient Poisons to update effect text
+        window.updateEfficientPoisonsDisplay = function() {
+            const rank = parseInt(document.getElementById('talent-efficient-poisons').value);
+            const resistReduction = [0, 4, 8, 12][rank];
+            const chargeChance = [0, 15, 30, 45][rank];
+            
+            const effectText = rank === 0 
+                ? 'Not talented'
+                : `-${resistReduction}% resist, ${chargeChance}% chance no charge consumed`;
+            
+            document.getElementById('effect-efficient-poisons').textContent = effectText;
+            document.getElementById('rank-efficient-poisons').textContent = `${rank}/3`;
+        };
+        
+        // Special handler for Hack and Slash to update effect text
+        window.updateHackAndSlashDisplay = function() {
+            const rank = parseInt(document.getElementById('talent-hack-and-slash').value);
+            const procChance = [0, 2, 5][rank];
+            
+            const effectText = rank === 0 
+                ? 'Not talented'
+                : `${procChance}% extra attack (Axe/Sword)`;
+            
+            document.getElementById('effect-hack-and-slash').textContent = effectText;
+            document.getElementById('rank-hack-and-slash').textContent = `${rank}/2`;
         };
         
         // TALENT TOGGLE
@@ -2173,6 +2200,7 @@
             poisonBaseDmg: 124.5,
             poisonAPRatio: 0.0475, // 4.75% AP scaling
             poisonBaseProc: 0.30, // 30% base proc chance
+            poisonResistance: 0.16, // 16% of poison applications are resisted
             
             // Set Bonuses
             darkmantleProc: 0.02, // 2% chance to restore energy
@@ -2582,28 +2610,32 @@
             const bladeRushAttackSpeed = [0, 0.02, 0.05][talentState.bladeRush] || 0;
             
             const totalHaste = (1 + sndHaste) * (1 + haste + stormshroud4pcHaste + bladeRushAttackSpeed);
-            const effectiveSpeed = CONFIG.mh.speed / totalHaste;
             
-            // Swings per weapon
-            const swingsPerWeapon = fightLength / effectiveSpeed;
+            // Calculate swings separately for MH and OH based on their actual weapon speeds
+            const mhEffectiveSpeed = CONFIG.mh.speed / totalHaste;
+            const ohEffectiveSpeed = CONFIG.oh.speed / totalHaste;
+            
+            const mhSwings = fightLength / mhEffectiveSpeed;
+            const ohSwings = fightLength / ohEffectiveSpeed;
             
             // White hits: Apply both miss AND dodge (6.5% for level 63 bosses)
             // Weapon skill reduces dodge: -0.1% per point above 300
             const dodgeReduction = weaponSkillBonus * 0.001; // 0.1% per point
             const whiteDodgeRate = Math.max(0, CONFIG.bossDodge - dodgeReduction);
             const whiteHitRate = hitRate * (1 - whiteDodgeRate); // Miss first, then dodge
-            const mhHits = swingsPerWeapon * whiteHitRate;
-            const ohHits = swingsPerWeapon * whiteHitRate;
+            const mhHits = mhSwings * whiteHitRate;
+            const ohHits = ohSwings * whiteHitRate;
             
             // Energy budget - estimate poison procs more accurately for Vigor energy
             // IMPORTANT: In Turtle WoW, haste does NOT increase energy regeneration (always 10/sec)
             const baseEnergyRegen = fightLength * CONFIG.energyRegen;
             
-            // Blade Rush: Reduces energy tick time by agility (1 agi = 1ms reduction)
+            // Blade Rush: Reduces energy tick time by agility (1 agi = 0.0012s reduction)
             // Base tick: 2.0 seconds (20 energy per tick)
-            // With Blade Rush: 2.0 - (agility / 1000) seconds per tick
-            const bladeRushEnergyBonus = talentState.bladeRush > 0 ? (totalAgility / 1000) : 0;
-            const energyTickTime = 2.0 - bladeRushEnergyBonus; // Time between energy ticks
+            // With Blade Rush: 2.0 - (agility × 0.0012) seconds per tick
+            // Example: 400 agi → 2.0 - (400 × 0.0012) = 2.0 - 0.48 = 1.52s ✓
+            const bladeRushTickReduction = talentState.bladeRush > 0 ? (totalAgility * 0.0012) : 0;
+            const energyTickTime = Math.max(0.5, 2.0 - bladeRushTickReduction); // Minimum 0.5s tick time (safety cap)
             const energyPerTick = 20; // Energy gained per tick
             const bladeRushBonusEnergy = talentState.bladeRush > 0 
                 ? (fightLength * (energyPerTick / energyTickTime)) - baseEnergyRegen 
@@ -2745,7 +2777,7 @@
             
             // Calculate Backstab crit rate for CP generation (needed early)
             const improvedBackstabCritBonus = [0, 0.10, 0.20, 0.30][talentState.improvedBackstab] || 0;
-            const backstabCritRate = Math.min(1.0, totalCrit * (1 + improvedBackstabCritBonus));
+            const backstabCritRate = Math.min(1.0, totalCrit + improvedBackstabCritBonus);
             
             // Improved Backstab bonus CP: 15/30/45% chance per rank
             const improvedBackstabCPBonus = [0, 0.15, 0.30, 0.45][talentState.improvedBackstab] || 0;
@@ -2848,6 +2880,15 @@
                 totalPoisonProcs += windfuryPoisonProcs;
             }
             
+            // Apply poison resistance: 16% base, reduced by Efficient Poisons talent
+            // Efficient Poisons: -4/8/12% resistance per rank (additive)
+            const efficientPoisonsReduction = [0, 0.04, 0.08, 0.12][talentState.efficientPoisons] || 0;
+            const effectivePoisonResistance = Math.max(0, CONFIG.poisonResistance - efficientPoisonsReduction);
+            const successfulPoisonProcs = totalPoisonProcs * (1 - effectivePoisonResistance);
+            
+            // Use successfulPoisonProcs for all poison-related calculations
+            // (damage, Vigor energy, etc.)
+            
             // Taste for Blood talent: +1/2/3% damage per CP at 5CP = 5/10/15% total
             const tasteForBloodMultiplier = 1 + (talentState.improvedRupture * 0.05);
             
@@ -2886,6 +2927,43 @@
             const ohTotalDmg = ohHits * ohDmgPerHit;
             
             let autoAttackDmg = mhTotalDmg + ohTotalDmg;
+            
+            // Hack and Slash: Extra attacks for axes/swords (2/5% per rank)
+            let hackAndSlashDmg = 0;
+            let hackAndSlashProcs = 0;
+            if (talentState.hackAndSlash > 0) {
+                const hackAndSlashProcChance = [0, 0.02, 0.05][talentState.hackAndSlash] || 0;
+                
+                // Check if mainhand is axe or sword
+                const mhIsAxeOrSword = mainhandItem && (mainhandItem.weaponType === 'axe' || mainhandItem.weaponType === 'sword');
+                
+                // Check if offhand is axe or sword
+                const offhandItem = ITEMS[currentGear['offhand']];
+                const ohIsAxeOrSword = offhandItem && (offhandItem.weaponType === 'axe' || offhandItem.weaponType === 'sword');
+                
+                // MH procs: triggers on all MH attacks (auto-attacks + abilities that deal weapon damage)
+                // For now, only counting auto-attacks
+                if (mhIsAxeOrSword) {
+                    const mhProcs = mhHits * hackAndSlashProcChance;
+                    hackAndSlashProcs += mhProcs;
+                    hackAndSlashDmg += mhProcs * mhDmgPerHit;
+                }
+                
+                // OH procs: triggers on OH auto-attacks
+                if (ohIsAxeOrSword) {
+                    const ohProcs = ohHits * hackAndSlashProcChance;
+                    hackAndSlashProcs += ohProcs;
+                    hackAndSlashDmg += ohProcs * ohDmgPerHit;
+                }
+                
+                autoAttackDmg += hackAndSlashDmg;
+                
+                // Add Hack and Slash procs to poison calculation (extra attacks can proc poison)
+                if (hackAndSlashProcs > 0) {
+                    const hackAndSlashPoisonProcs = hackAndSlashProcs * Math.min(1.0, basePoisonProcChance);
+                    totalPoisonProcs += hackAndSlashPoisonProcs;
+                }
+            }
             
             // The Ripper procs (if equipped in main hand)
             let ripperProcDmg = 0;
@@ -2940,9 +3018,9 @@
                 const afterArmor = totalBaseDmg * armorMultiplier * opportunityMultiplier;
                 const withBuffs = afterArmor * tasteForBloodMultiplier;
                 
-                // Improved Backstab: 10/20/30% MULTIPLICATIVE crit bonus per rank
+                // Improved Backstab: 10/20/30% ADDITIVE crit bonus per rank
                 const improvedBackstabCritBonus = [0, 0.10, 0.20, 0.30][talentState.improvedBackstab] || 0;
-                const backstabCritRate = Math.min(1.0, totalCrit * (1 + improvedBackstabCritBonus));
+                const backstabCritRate = Math.min(1.0, totalCrit + improvedBackstabCritBonus);
                 
                 generatorDmgPerUse = (1 - backstabCritRate) * withBuffs + 
                                     backstabCritRate * withBuffs * (2.0 + (talentState.lethality * 0.06));
@@ -2972,7 +3050,7 @@
             const poisonBaseDmg = CONFIG.poisonBaseDmg + (effectiveAP * CONFIG.poisonAPRatio);
             const poisonWithTalents = poisonBaseDmg * (1 + (talentState.vilePoisons * 0.10)); // Vile Poisons: +10% per rank (0-3 ranks)
             const poisonWithBuffs = isPatch181 ? poisonWithTalents : (poisonWithTalents * tasteForBloodMultiplier);
-            const poisonTotalDmg = totalPoisonProcs * poisonWithBuffs;
+            const poisonTotalDmg = successfulPoisonProcs * poisonWithBuffs;
             
             // Rupture Damage
             const ruptureCount = Math.floor(fightLength / (CONFIG.ruptureBaseDuration + (talentState.improvedRupture * 2))); // Taste for Blood: +2/4/6s duration
@@ -3041,7 +3119,7 @@
             displaySetBonuses(sets, activeSetBonuses);
             
             // Update Vigor energy with actual poison hits (not the estimate)
-            energyData.vigorEnergy = (totalPoisonProcs * (talentState.vigor * 0.50) * CONFIG.vigorEnergyPerPoison); // Vigor: 50/100% proc chance
+            energyData.vigorEnergy = (successfulPoisonProcs * (talentState.vigor * 0.50) * CONFIG.vigorEnergyPerPoison); // Vigor: 50/100% proc chance
             
             displayEnergyBreakdown(energyData);
             
@@ -3060,11 +3138,11 @@
             document.getElementById('talents-dodgeRate').textContent = (whiteDodgeRate * 100).toFixed(1) + '%';
             
             // Calculate total auto-attack hits (MH + OH + Windfury if applicable)
-            const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0);
+            const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0) + hackAndSlashProcs;
             
             // Build damage breakdown array
             const damageBreakdown = [
-                { name: 'Dissolvent Poison II', damage: poisonTotalDmg, hits: totalPoisonProcs, color: '#95e1d3' },
+                { name: 'Dissolvent Poison II', damage: poisonTotalDmg, hits: successfulPoisonProcs, color: '#95e1d3' },
                 { name: 'Auto-Attacks', damage: autoAttackDmg, hits: totalAutoHits, color: '#ff6b6b' },
                 { name: generatorName, damage: generatorTotalDmg, hits: generatorCount, color: '#4ecdc4' },
                 { name: 'Eviscerate', damage: eviscrateTotalDmg, hits: eviscrateCount, color: '#feca57' },
