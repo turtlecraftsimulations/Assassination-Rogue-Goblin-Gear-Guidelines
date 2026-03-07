@@ -1163,6 +1163,34 @@
                 <div class="talents-panel">
                     <h3 style="color: #ffaa00; margin-bottom: 6px; text-align: center; font-size: 1em;">COMBAT</h3>
                     
+                    <!-- TIER 1 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 1</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Opportunity</span>
+                            <span class="talent-effect">+4/8/12/16/20% Backstab/Garrote/Ambush dmg</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-opportunity" min="0" max="5" value="0" oninput="updateTalentDisplay('opportunity', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-opportunity">0/5</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 2 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 2</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Improved Backstab</span>
+                            <span class="talent-effect">+30% crit, 45% chance +1 CP</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-backstab" min="0" max="3" value="0" oninput="updateTalentDisplay('improved-backstab', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-backstab">0/3</span>
+                        </div>
+                    </div>
+                    
                     <div class="talent-slider-row">
                         <div class="talent-info">
                             <span class="talent-name">Precision</span>
@@ -1174,8 +1202,122 @@
                         </div>
                     </div>
                     
-                    <div style="color: #888; font-style: italic; margin-top: 20px; text-align: center;">
-                        More Combat talents coming soon...
+                    <!-- TIER 3 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 3</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Improved Sprint</span>
+                            <span class="talent-effect">Filler - Not relevant for DPS</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-improved-sprint" min="0" max="2" value="0" oninput="updateTalentDisplay('improved-sprint', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-improved-sprint">0/2</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 4 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 4</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Dual Wield Specialization</span>
+                            <span class="talent-effect">+10/20/30/40/50% offhand damage</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-dual-wield-spec" min="0" max="5" value="0" oninput="updateTalentDisplay('dual-wield-spec', 5); toggleTalent()">
+                            <span class="talent-rank" id="rank-dual-wield-spec">0/5</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 5 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 5</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Surprise Attack</span>
+                            <span class="talent-effect">Filler - Not relevant for DPS</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-surprise-attack" min="0" max="1" value="0" oninput="updateTalentDisplay('surprise-attack', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-surprise-attack">0/1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Hack and Slash</span>
+                            <span class="talent-effect">2/5% extra attack (Axe/Sword)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-hack-and-slash" min="0" max="2" value="0" oninput="updateTalentDisplay('hack-and-slash', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-hack-and-slash">0/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Weapon Expertise</span>
+                            <span class="talent-effect">+3/5 weapon skill</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-weapon-expertise" min="0" max="2" value="0" oninput="updateTalentDisplay('weapon-expertise', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-weapon-expertise">0/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Close Quarters Combat</span>
+                            <span class="talent-effect">+2/5% crit (Mace/Dagger/Fist)</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-close-quarters" min="0" max="2" value="0" oninput="updateTalentDisplay('close-quarters', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-close-quarters">0/2</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 6 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 6</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Blade Rush</span>
+                            <span class="talent-effect">+2/5% atk speed, energy regen boost</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-blade-rush" min="0" max="2" value="0" oninput="updateTalentDisplay('blade-rush', 2); toggleTalent()">
+                            <span class="talent-rank" id="rank-blade-rush">0/2</span>
+                        </div>
+                    </div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Aggression</span>
+                            <span class="talent-effect">+3/6/10% SS/Evisc/Riposte/SA dmg</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-aggression" min="0" max="3" value="0" oninput="updateTalentDisplay('aggression', 3); toggleTalent()">
+                            <span class="talent-rank" id="rank-aggression">0/3</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TIER 7 -->
+                    <div style="color: #888; font-size: 0.7em; margin-top: 5px; margin-bottom: 2px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px;">Tier 7</div>
+                    
+                    <div class="talent-slider-row">
+                        <div class="talent-info">
+                            <span class="talent-name">Adrenaline Rush</span>
+                            <span class="talent-effect">100% energy regen for 15s</span>
+                        </div>
+                        <div class="talent-controls">
+                            <input type="range" id="talent-adrenaline-rush" min="0" max="1" value="0" oninput="updateTalentDisplay('adrenaline-rush', 1); toggleTalent()">
+                            <span class="talent-rank" id="rank-adrenaline-rush">0/1</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TALENT POINTS COUNTER -->\n                    <div style="margin-top: 10px; padding: 6px; background: rgba(255, 165, 0, 0.15); border-radius: 5px; text-align: center;">
+                        <span style="color: #4ecdc4; font-weight: bold; font-size: 0.85em;">Points: <span id="combat-points">0</span>/51</span>
                     </div>
                 </div>
                 
@@ -1186,11 +1328,23 @@
                     <div style="color: #888; font-style: italic; margin-top: 20px; text-align: center;">
                         Subtlety talents coming soon...
                     </div>
+                    
+                    <!-- TALENT POINTS COUNTER -->
+                    <div style="margin-top: 10px; padding: 6px; background: rgba(170, 0, 255, 0.15); border-radius: 5px; text-align: center;">
+                        <span style="color: #4ecdc4; font-weight: bold; font-size: 0.85em;">Points: <span id="subtlety-points">0</span>/51</span>
+                    </div>
                 </div>
                 
                 <!-- COLUMN 4: DPS BREAKDOWN -->
                 <div class="results-panel">
                     <h3 style="color: #4ecdc4; margin-bottom: 8px; text-align: center; font-size: 1em;">DPS BREAKDOWN</h3>
+                    
+                    <!-- SPEC PRESET BUTTONS -->
+                    <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                        <button class="preset-btn" style="flex: 1; padding: 6px 4px; font-size: 0.75em; background: rgba(255, 107, 107, 0.2); border-color: rgba(255, 107, 107, 0.4);" onclick="loadSpecPreset('assassination')">Assassination</button>
+                        <button class="preset-btn" style="flex: 1; padding: 6px 4px; font-size: 0.75em; background: rgba(255, 165, 0, 0.2); border-color: rgba(255, 165, 0, 0.4);" onclick="loadSpecPreset('combat')">Combat</button>
+                        <button class="preset-btn" style="flex: 1; padding: 6px 4px; font-size: 0.75em; background: rgba(170, 0, 255, 0.2); border-color: rgba(170, 0, 255, 0.4);" onclick="loadSpecPreset('subtlety')">Subtlety</button>
+                    </div>
                     
                     <div class="stat-display">
                         <div class="stat-row" style="font-size: 1.1em; border-bottom: 2px solid rgba(78, 205, 196, 0.5); padding-bottom: 8px; margin-bottom: 8px;">
@@ -1262,7 +1416,19 @@
             improvedEviscerate: 0,
             efficientPoisons: 3,
             envenom: 1,
-            noxiousAssault: 1
+            noxiousAssault: 1,
+            // Combat talents
+            opportunity: 0,
+            improvedBackstab: 0,
+            improvedSprint: 0,
+            dualWieldSpec: 0,
+            surpriseAttack: 0,
+            hackAndSlash: 0,
+            weaponExpertise: 0,
+            closeQuarters: 0,
+            bladeRush: 0,
+            aggression: 0,
+            adrenalineRush: 0
         };
         
         // TAB SWITCHING
@@ -1306,6 +1472,19 @@
             talentState.envenom = parseInt(document.getElementById('talent-envenom').value);
             talentState.noxiousAssault = parseInt(document.getElementById('talent-noxious-assault').value);
             
+            // Combat talents
+            talentState.opportunity = parseInt(document.getElementById('talent-opportunity').value);
+            talentState.improvedBackstab = parseInt(document.getElementById('talent-improved-backstab').value);
+            talentState.improvedSprint = parseInt(document.getElementById('talent-improved-sprint').value);
+            talentState.dualWieldSpec = parseInt(document.getElementById('talent-dual-wield-spec').value);
+            talentState.surpriseAttack = parseInt(document.getElementById('talent-surprise-attack').value);
+            talentState.hackAndSlash = parseInt(document.getElementById('talent-hack-and-slash').value);
+            talentState.weaponExpertise = parseInt(document.getElementById('talent-weapon-expertise').value);
+            talentState.closeQuarters = parseInt(document.getElementById('talent-close-quarters').value);
+            talentState.bladeRush = parseInt(document.getElementById('talent-blade-rush').value);
+            talentState.aggression = parseInt(document.getElementById('talent-aggression').value);
+            talentState.adrenalineRush = parseInt(document.getElementById('talent-adrenaline-rush').value);
+            
             // Calculate Assassination talent points
             const assassinationPoints = talentState.malice + 
                                         talentState.murder + 
@@ -1324,12 +1503,42 @@
                                         talentState.envenom + 
                                         talentState.noxiousAssault;
             
-            // Update point counter
-            const pointsElement = document.getElementById('assassination-points');
-            if (pointsElement) {
-                pointsElement.textContent = assassinationPoints;
-                // Change color if over 51 points
-                pointsElement.style.color = assassinationPoints > 51 ? '#ff6b6b' : '#00ff00';
+            // Calculate Combat talent points
+            const combatPoints = talentState.opportunity + 
+                                talentState.improvedBackstab + 
+                                talentState.improvedSprint + 
+                                talentState.dualWieldSpec + 
+                                talentState.surpriseAttack + 
+                                talentState.hackAndSlash + 
+                                talentState.weaponExpertise + 
+                                talentState.closeQuarters + 
+                                talentState.bladeRush + 
+                                talentState.aggression + 
+                                talentState.adrenalineRush + 
+                                talentState.precision;
+            
+            // Calculate Subtlety talent points (currently 0, but ready for future)
+            const subtletyPoints = 0; // No Subtlety talents yet
+            
+            // Update Assassination point counter
+            const assassinationElement = document.getElementById('assassination-points');
+            if (assassinationElement) {
+                assassinationElement.textContent = assassinationPoints;
+                assassinationElement.style.color = assassinationPoints > 51 ? '#ff6b6b' : '#00ff00';
+            }
+            
+            // Update Combat point counter
+            const combatElement = document.getElementById('combat-points');
+            if (combatElement) {
+                combatElement.textContent = combatPoints;
+                combatElement.style.color = combatPoints > 51 ? '#ff6b6b' : '#00ff00';
+            }
+            
+            // Update Subtlety point counter
+            const subtletyElement = document.getElementById('subtlety-points');
+            if (subtletyElement) {
+                subtletyElement.textContent = subtletyPoints;
+                subtletyElement.style.color = subtletyPoints > 51 ? '#ff6b6b' : '#00ff00';
             }
             
             // Recalculate DPS
@@ -1347,6 +1556,133 @@
             });
             
             calculate();
+        };
+        
+        // SPEC PRESET LOADER
+        window.loadSpecPreset = function(specName) {
+            const specs = {
+                assassination: {
+                    malice: 5,
+                    murder: 2,
+                    lethality: 5,
+                    relentlessStrikes: 1,
+                    improvedPoisons: 3,
+                    vilePoisons: 3,
+                    sealFate: 5,
+                    ruthlessness: 3,
+                    vigor: 2,
+                    improvedSnD: 3,
+                    improvedRupture: 3,
+                    precision: 5,
+                    coldBlood: 1,
+                    improvedEviscerate: 0,
+                    efficientPoisons: 3,
+                    envenom: 1,
+                    noxiousAssault: 1,
+                    // Combat talents
+                    opportunity: 0,
+                    improvedBackstab: 0,
+                    improvedSprint: 0,
+                    dualWieldSpec: 0,
+                    surpriseAttack: 0,
+                    hackAndSlash: 0,
+                    weaponExpertise: 0,
+                    closeQuarters: 0,
+                    bladeRush: 0,
+                    aggression: 0,
+                    adrenalineRush: 0
+                },
+                combat: {
+                    // Combat build: 21 points Assassination / 30+ points Combat
+                    // Assassination: Malice, Ruthlessness, Imp SnD, Relentless, Lethality, TfB
+                    malice: 5,
+                    murder: 0,
+                    lethality: 5,
+                    relentlessStrikes: 1,
+                    improvedPoisons: 0,
+                    vilePoisons: 0,
+                    sealFate: 0,
+                    ruthlessness: 3,
+                    vigor: 0,
+                    improvedSnD: 3,
+                    improvedRupture: 3,
+                    precision: 5,
+                    coldBlood: 0,
+                    improvedEviscerate: 0,
+                    efficientPoisons: 0,
+                    envenom: 0,
+                    noxiousAssault: 0,
+                    // Combat talents
+                    opportunity: 5,
+                    improvedBackstab: 3,
+                    improvedSprint: 2,
+                    dualWieldSpec: 5,
+                    surpriseAttack: 1,
+                    hackAndSlash: 0,
+                    weaponExpertise: 2,
+                    closeQuarters: 2,
+                    bladeRush: 2,
+                    aggression: 3,
+                    adrenalineRush: 1
+                },
+                subtlety: {
+                    // Subtlety spec to be defined later
+                    malice: 0,
+                    murder: 0,
+                    lethality: 0,
+                    relentlessStrikes: 0,
+                    improvedPoisons: 0,
+                    vilePoisons: 0,
+                    sealFate: 0,
+                    ruthlessness: 0,
+                    vigor: 0,
+                    improvedSnD: 0,
+                    improvedRupture: 0,
+                    precision: 0,
+                    coldBlood: 0,
+                    improvedEviscerate: 0,
+                    efficientPoisons: 0,
+                    envenom: 0,
+                    noxiousAssault: 0,
+                    // Combat talents
+                    opportunity: 0,
+                    improvedBackstab: 0,
+                    improvedSprint: 0,
+                    dualWieldSpec: 0,
+                    surpriseAttack: 0,
+                    hackAndSlash: 0,
+                    weaponExpertise: 0,
+                    closeQuarters: 0,
+                    bladeRush: 0,
+                    aggression: 0,
+                    adrenalineRush: 0
+                }
+            };
+            
+            const spec = specs[specName];
+            if (!spec) return;
+            
+            // Update talent state
+            Object.keys(spec).forEach(talent => {
+                talentState[talent] = spec[talent];
+            });
+            
+            // Update UI sliders
+            Object.keys(spec).forEach(talent => {
+                const sliderName = talent.replace(/([A-Z])/g, '-$1').toLowerCase();
+                const slider = document.getElementById(`talent-${sliderName}`);
+                const rankDisplay = document.getElementById(`rank-${sliderName}`);
+                
+                if (slider) {
+                    slider.value = spec[talent];
+                    if (rankDisplay) {
+                        rankDisplay.textContent = `${spec[talent]}/${slider.max}`;
+                    }
+                }
+            });
+            
+            // Recalculate
+            toggleTalent();
         };
         
         // ITEM DATABASE
@@ -1521,42 +1857,77 @@
             'alcors-sunrazor': {
                 name: "Alcor's Sunrazor",
                 slot: 'weapon',
+                weaponType: 'dagger',
                 weaponStats: { minDmg: 41, maxDmg: 77, speed: 1.30 },
                 stats: {}
             },
             'distracting-dagger': {
                 name: 'Distracting Dagger',
                 slot: 'offhand',
+                weaponType: 'dagger',
                 weaponStats: { minDmg: 42, maxDmg: 64, speed: 1.30 },
+                stats: {}
+            },
+            'core-hound-tooth': {
+                name: 'Core Hound Tooth',
+                slot: 'weapon',
+                weaponType: 'dagger',
+                weaponStats: { minDmg: 59, maxDmg: 109, speed: 1.60 }, // 52.5 DPS
+                stats: { stamina: 9, critPct: 1, attackPower: 22 }
+            },
+            'chromatically-tempered-sword': {
+                name: 'Chromatically Tempered Sword',
+                slot: 'weapon',
+                weaponType: 'sword',
+                weaponStats: { minDmg: 106, maxDmg: 198, speed: 2.60 }, // 58.5 DPS
+                stats: { agility: 14, strength: 14, stamina: 7 }
+            },
+            'dragonfang-blade': {
+                name: 'Dragonfang Blade',
+                slot: 'weapon',
+                weaponType: 'dagger',
+                weaponStats: { minDmg: 69, maxDmg: 130, speed: 1.80 }, // 55.3 DPS
+                stats: { agility: 13, stamina: 13 }
+            },
+            'perditions-blade': {
+                name: "Perdition's Blade",
+                slot: 'weapon',
+                weaponType: 'dagger',
+                weaponStats: { minDmg: 73, maxDmg: 137, speed: 1.80 }, // 58.3 DPS
                 stats: {}
             },
             'fang-of-venoxis': {
                 name: 'Fang of Venoxis',
                 slot: 'mainhand',
+                weaponType: 'dagger',
                 weaponStats: { minDmg: 35.2, maxDmg: 72.2, speed: 1.30 }, // 47.8 DPS
                 stats: { intellect: 8, spirit: 6 }
             },
             'crystal-sword-of-the-blossom': {
                 name: 'Crystal Sword of the Blossom',
-                slot: 'mainhand',
+                slot: 'weapon',
+                weaponType: 'sword',
                 weaponStats: { minDmg: 79, maxDmg: 147, speed: 1.80 }, // 62.8 DPS
                 stats: { stamina: 11, attackPower: 20, hitPct: 1 }
             },
             'the-ripper': {
                 name: 'The Ripper',
                 slot: 'weapon',
+                weaponType: 'dagger',
                 weaponStats: { minDmg: 47, maxDmg: 85, speed: 1.40 },
                 stats: {} // Chance on hit: -60 armor + 10 Nature dmg/5s for 30s (5% proc) + Poison 19-32 dmg (5% proc)
             },
             'dooms-edge': {
                 name: "Doom's Edge",
                 slot: 'weapon',
+                weaponType: 'axe',
                 weaponStats: { minDmg: 83, maxDmg: 154, speed: 2.30 },
                 stats: { agility: 12, strength: 9, stamina: 7 }
             },
             'crulshorukh-edge-of-chaos': {
                 name: "Crul'shorukh, Edge of Chaos",
                 slot: 'mainhand',
+                weaponType: 'axe',
                 weaponStats: { minDmg: 101, maxDmg: 188, speed: 2.30 },
                 stats: { agility: 13, stamina: 13, attackPower: 36 }
             },
@@ -1758,6 +2129,8 @@
             
             // Abilities - Energy Costs
             noxiousAssaultEnergy: 45,
+            backstabEnergy: 60,
+            sinisterStrikeEnergy: 40,
             envenomEnergy: 20,
             eviscrateEnergy: 30,
             sndEnergy: 20,
@@ -1767,6 +2140,16 @@
             noxiousAssaultBaseDmg: 105,
             noxiousAssaultAPRatioPre: 0.35, // 35% AP scaling (pre-patch)
             noxiousAssaultAPRatioPost: 0.30, // 30% AP scaling (patch 1.8.1)
+            
+            backstabBaseDmg: 210,
+            backstabWeaponDmgMultiplier: 1.50, // 150% weapon damage
+            
+            sinisterStrikeBaseDmg: 68, // Rank 9 base damage
+            sinisterStrikeWeaponDmgMultiplier: 1.00, // 100% weapon damage (normalized)
+            
+            hemorrhageBaseDmg: 0, // No base damage
+            hemorrhageWeaponDmgMultiplier: 1.10, // 110% weapon damage
+            hemorrhageEnergy: 35,
             
             eviscerateBaseDamage5CP: 900, // Base damage for 5 CP Eviscerate
             
@@ -2114,6 +2497,15 @@
             if (hasTricksTrade) totalCrit += 0.04;
             if (hasMongoose) totalCrit += 0.02;
             
+            // Close Quarters Combat: +2/5% crit with daggers, maces, and fist weapons
+            const mainhandItem = ITEMS[currentGear['mainhand']];
+            const closeQuartersCritBonus = [0, 0.02, 0.05][talentState.closeQuarters] || 0;
+            let closeQuartersCritActive = 0;
+            if (mainhandItem && (mainhandItem.weaponType === 'dagger' || mainhandItem.weaponType === 'mace' || mainhandItem.weaponType === 'fist')) {
+                totalCrit += closeQuartersCritBonus;
+                closeQuartersCritActive = closeQuartersCritBonus;
+            }
+            
             // Calculate hit
             let hit = (stats.hitPct || 0) / 100 + (talentState.precision * 0.01); // Precision: +1% hit per rank (0-5 ranks)
             
@@ -2174,7 +2566,10 @@
             const stormshroud4pcHasteUptime = hasStormshroud4pc ? 0.30 : 0;
             const stormshroud4pcHaste = stormshroud4pcHasteUptime * 0.10; // 3% effective haste (30% uptime × 10% haste)
             
-            const totalHaste = (1 + sndHaste) * (1 + haste + stormshroud4pcHaste);
+            // Blade Rush: +2/5% attack speed (rank 1/2)
+            const bladeRushAttackSpeed = [0, 0.02, 0.05][talentState.bladeRush] || 0;
+            
+            const totalHaste = (1 + sndHaste) * (1 + haste + stormshroud4pcHaste + bladeRushAttackSpeed);
             const effectiveSpeed = CONFIG.mh.speed / totalHaste;
             
             // Swings per weapon
@@ -2191,6 +2586,16 @@
             // Energy budget - estimate poison procs more accurately for Vigor energy
             // IMPORTANT: In Turtle WoW, haste does NOT increase energy regeneration (always 10/sec)
             const baseEnergyRegen = fightLength * CONFIG.energyRegen;
+            
+            // Blade Rush: Reduces energy tick time by agility (1 agi = 1ms reduction)
+            // Base tick: 2.0 seconds (20 energy per tick)
+            // With Blade Rush: 2.0 - (agility / 1000) seconds per tick
+            const bladeRushEnergyBonus = talentState.bladeRush > 0 ? (totalAgility / 1000) : 0;
+            const energyTickTime = 2.0 - bladeRushEnergyBonus; // Time between energy ticks
+            const energyPerTick = 20; // Energy gained per tick
+            const bladeRushBonusEnergy = talentState.bladeRush > 0 
+                ? (fightLength * (energyPerTick / energyTickTime)) - baseEnergyRegen 
+                : 0;
             
             // Estimate poison procs based on actual proc chances
             const bloodfangCount = sets.bloodfang || 0;
@@ -2230,6 +2635,16 @@
             
             let thistleTeaEnergy = hasThistleTea ? 100 : 0;
             
+            // Adrenaline Rush: 100% energy regeneration for 15 seconds
+            // Base: 10 energy/sec × 15s = 150 energy
+            // With AR: 20 energy/sec × 15s = 300 energy
+            // Bonus: 300 - 150 = 150 energy
+            // With Blade Rush: tick time is reduced, so bonus scales with agility
+            const adrenalineRushDuration = 15; // seconds
+            const adrenalineRushEnergy = talentState.adrenalineRush > 0 
+                ? (adrenalineRushDuration * (energyPerTick / energyTickTime)) // Energy during AR
+                : 0;
+            
             // Renataki's Charm of Trickery: +60 energy on use
             const hasRenatakiCharm = currentGear['trinket1'] === 'renatakis-charm-of-trickery' || 
                                      currentGear['trinket2'] === 'renatakis-charm-of-trickery';
@@ -2250,6 +2665,8 @@
             const vigorMaxEnergyBonus = talentState.vigor * 5; // +5/+10 max energy
             
             const conservativeEnergy = baseEnergyRegen + 
+                                      bladeRushBonusEnergy +
+                                      adrenalineRushEnergy +
                                       (autoAttackPoisonProcs * vigorEnergyBonus) + 
                                       conservativeDarkmantleEnergy + 
                                       conservativeStormshroud4pcEnergy +
@@ -2258,14 +2675,77 @@
                                       renatakiCharmEnergy +
                                       relentlessEnergy;
             
-            // Calculate Noxious count (only if talent is active)
-            const energyForNoxious = conservativeEnergy - (5 * CONFIG.envenomEnergy) - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
-            let noxiousCount = talentState.noxiousAssault > 0 ? Math.max(0, Math.floor(energyForNoxious / CONFIG.noxiousAssaultEnergy)) : 0;
+            // Determine which generator to use based on talents and weapon
+            let generatorEnergy, generatorName, generatorBaseDmg, generatorAPRatio, generatorWeaponMult;
+            
+            const isDagger = mainhandItem && mainhandItem.weaponType === 'dagger';
+            
+            // Calculate Combat talent points to determine spec priority
+            const combatPoints = talentState.opportunity + 
+                                talentState.improvedBackstab + 
+                                talentState.improvedSprint + 
+                                talentState.dualWieldSpec + 
+                                talentState.surpriseAttack + 
+                                talentState.hackAndSlash + 
+                                talentState.weaponExpertise + 
+                                talentState.closeQuarters + 
+                                talentState.bladeRush + 
+                                talentState.aggression + 
+                                talentState.adrenalineRush + 
+                                talentState.precision;
+            
+            // Combat spec logic: If 30+ points in Combat, ignore Noxious Assault
+            const isCombatSpec = combatPoints >= 30;
+            
+            if (talentState.noxiousAssault > 0 && !isCombatSpec) {
+                // Priority 1: Noxious Assault if talented AND not Combat spec
+                generatorEnergy = CONFIG.noxiousAssaultEnergy;
+                generatorName = 'Noxious Assault';
+                generatorBaseDmg = CONFIG.noxiousAssaultBaseDmg;
+                generatorAPRatio = CONFIG.noxiousAssaultAPRatioPre; // Using pre-patch scaling
+                generatorWeaponMult = 0; // Noxious doesn't use weapon damage multiplier
+            } else if (isDagger) {
+                // Priority 2: Backstab if dagger equipped (or Combat spec)
+                generatorEnergy = CONFIG.backstabEnergy;
+                generatorName = 'Backstab';
+                generatorBaseDmg = CONFIG.backstabBaseDmg;
+                generatorAPRatio = 0; // Backstab uses weapon damage, not AP ratio
+                generatorWeaponMult = CONFIG.backstabWeaponDmgMultiplier;
+            } else {
+                // Priority 3: Sinister Strike for non-daggers (or Combat spec)
+                generatorEnergy = CONFIG.sinisterStrikeEnergy;
+                generatorName = 'Sinister Strike';
+                generatorBaseDmg = CONFIG.sinisterStrikeBaseDmg;
+                generatorAPRatio = 0; // Sinister Strike uses weapon damage
+                generatorWeaponMult = CONFIG.sinisterStrikeWeaponDmgMultiplier;
+            }
+            
+            // Determine Envenom usage based on talent
+            const envenomCount = talentState.envenom > 0 ? 5 : 0;
+            const envenomEnergy = envenomCount * CONFIG.envenomEnergy;
+            
+            // Calculate generator count (replacing old noxiousCount)
+            const energyForGenerator = conservativeEnergy - envenomEnergy - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
+            let generatorCount = Math.max(0, Math.floor(energyForGenerator / generatorEnergy));
+            
+            // Keep noxiousCount for backward compatibility (set to generatorCount if Noxious is active AND not Combat spec, else 0)
+            let noxiousCount = (talentState.noxiousAssault > 0 && !isCombatSpec) ? generatorCount : 0;
+            
+            // Calculate Backstab crit rate for CP generation (needed early)
+            const improvedBackstabCritBonus = [0, 0.10, 0.20, 0.30][talentState.improvedBackstab] || 0;
+            const backstabCritRate = Math.min(1.0, totalCrit * (1 + improvedBackstabCritBonus));
+            
+            // Improved Backstab bonus CP: 15/30/45% chance per rank
+            const improvedBackstabCPBonus = [0, 0.15, 0.30, 0.45][talentState.improvedBackstab] || 0;
+            const cpFromImprovedBackstab = (generatorName === 'Backstab') ? (generatorCount * improvedBackstabCPBonus) : 0;
             
             // Collect energy data for display
             const energyData = {
                 total: conservativeEnergy,
                 baseRegen: baseEnergyRegen,
+                bladeRushEnergy: bladeRushBonusEnergy,
+                bladeRushTickTime: energyTickTime,
+                adrenalineRushEnergy: adrenalineRushEnergy,
                 vigorEnergy: autoAttackPoisonProcs * vigorEnergyBonus,
                 darkmantleEnergy: conservativeDarkmantleEnergy,
                 stormshroudEnergy: conservativeStormshroud4pcEnergy,
@@ -2273,24 +2753,33 @@
                 thistleTeaEnergy: thistleTeaEnergy,
                 renatakiCharmEnergy: renatakiCharmEnergy,
                 startingPool: CONFIG.baseEnergy + vigorMaxEnergyBonus,
+                generatorName: generatorName,
+                generatorCount: generatorCount,
+                generatorEnergy: generatorCount * generatorEnergy,
                 noxiousCount: noxiousCount,
                 noxiousEnergy: noxiousCount * CONFIG.noxiousAssaultEnergy,
                 sndCount: 5,
                 sndEnergy: 5 * CONFIG.sndEnergy,
-                envenomCount: 5,
-                envenomEnergy: 5 * CONFIG.envenomEnergy,
+                envenomCount: envenomCount,
+                envenomEnergy: envenomEnergy,
                 eviscrateCount: 3,
                 eviscrateEnergy: 3 * CONFIG.eviscrateEnergy,
                 ruptureCount: 2,
                 ruptureEnergy: 2 * CONFIG.ruptureEnergy,
                 // Combo Points
-                cpFromNoxious: noxiousCount * 1, // Base 1 CP per Noxious
-                cpFromSealFate: (noxiousCount * totalCrit) * (talentState.sealFate * 0.20), // Seal Fate: 20/40/60/80/100% chance (0-5 ranks)
-                cpFromRuthlessness: ((5 + 5 + 3 + 2) * 1) * (talentState.ruthlessness / 3), // Ruthlessness: SnD(5) + Envenom(5) + Eviscerate(3) + Rupture(2)
-                cpGenerated: (noxiousCount * 1) + 
-                            ((noxiousCount * totalCrit) * (talentState.sealFate * 0.20)) + 
-                            (((5 + 5 + 3 + 2) * 1) * (talentState.ruthlessness / 3)), // Total CP generated (includes 3 Eviscerates)
-                cpSpent: 5 + 5 + 15 + 10 // SnD(5) + Envenom(5) + Eviscerate(3×5) + Rupture(2×5)
+                cpFromGenerator: generatorCount * 1, // Base 1 CP per generator
+                cpFromImprovedBackstab: cpFromImprovedBackstab, // 15/30/45% bonus CP for Backstab
+                cpFromSealFate: (generatorName === 'Backstab') 
+                    ? (generatorCount * backstabCritRate * (talentState.sealFate * 0.20)) // Use Backstab's higher crit rate
+                    : (generatorCount * totalCrit * (talentState.sealFate * 0.20)), // Seal Fate: 20/40/60/80/100% chance (0-5 ranks)
+                cpFromRuthlessness: ((5 + envenomCount + 3 + 2) * 1) * (talentState.ruthlessness / 3), // Ruthlessness: SnD(5) + Envenom(0-5) + Eviscerate(3) + Rupture(2)
+                cpGenerated: (generatorCount * 1) + 
+                            cpFromImprovedBackstab +
+                            ((generatorName === 'Backstab') 
+                                ? (generatorCount * backstabCritRate * (talentState.sealFate * 0.20))
+                                : (generatorCount * totalCrit * (talentState.sealFate * 0.20))) +
+                            (((5 + envenomCount + 3 + 2) * 1) * (talentState.ruthlessness / 3)), // Total CP generated (includes 3 Eviscerates)
+                cpSpent: 5 + envenomCount + 15 + 10 // SnD(5) + Envenom(0-5) + Eviscerate(3×5) + Rupture(2×5)
             };
             
             // Poison procs
@@ -2371,7 +2860,12 @@
             // OH Auto-Attack Damage
             const ohBaseDmg = (CONFIG.oh.minDmg + CONFIG.oh.maxDmg) / 2;
             const ohAPBonus = (effectiveAP / 14) * CONFIG.oh.speed;
-            const ohBeforeArmor = (ohBaseDmg + ohAPBonus) * CONFIG.offhandPenalty;
+            
+            // Dual Wield Specialization: +10/20/30/40/50% offhand damage per rank
+            const dualWieldSpecBonus = [0, 0.10, 0.20, 0.30, 0.40, 0.50][talentState.dualWieldSpec] || 0;
+            const dualWieldSpecMultiplier = 1 + dualWieldSpecBonus;
+            
+            const ohBeforeArmor = (ohBaseDmg + ohAPBonus) * CONFIG.offhandPenalty * dualWieldSpecMultiplier;
             const ohAfterArmor = ohBeforeArmor * armorMultiplier * tasteForBloodMultiplier;
             
             const ohDmgPerHit = (glancingRate * ohAfterArmor * glancingDmg) + 
@@ -2409,16 +2903,58 @@
                 autoAttackDmg += windfuryDmg;
             }
             
-            // Noxious Assault Damage
-            const noxiousAPRatio = isPatch181 ? CONFIG.noxiousAssaultAPRatioPost : CONFIG.noxiousAssaultAPRatioPre;
-            const noxiousBaseDmg = CONFIG.noxiousAssaultBaseDmg + (effectiveAP * noxiousAPRatio);
-            const noxiousAfterArmor = noxiousBaseDmg * armorMultiplier;
-            const noxiousWithBuffs = noxiousAfterArmor * tasteForBloodMultiplier; // Relentless Strikes doesn't affect CP-generators
+            // Generator Damage (Noxious Assault / Backstab / Sinister Strike)
+            let generatorDmgPerUse = 0;
             
-            // Normal crit rate for Noxious (Cold Blood used elsewhere)
-            const noxiousDmgPerUse = (1 - totalCrit) * noxiousWithBuffs + 
-                                      totalCrit * noxiousWithBuffs * (2.0 + (talentState.lethality * 0.06)); // Lethality: +6% crit dmg per rank (0-5 ranks)
-            const noxiousTotalDmg = noxiousCount * noxiousDmgPerUse * yellowHitRate; // Apply yellow hit rate
+            if (generatorName === 'Noxious Assault') {
+                // Noxious Assault: Base + AP scaling
+                const noxiousAPRatio = isPatch181 ? CONFIG.noxiousAssaultAPRatioPost : CONFIG.noxiousAssaultAPRatioPre;
+                const noxiousBaseDmg = generatorBaseDmg + (effectiveAP * noxiousAPRatio);
+                const noxiousAfterArmor = noxiousBaseDmg * armorMultiplier;
+                const noxiousWithBuffs = noxiousAfterArmor * tasteForBloodMultiplier;
+                generatorDmgPerUse = (1 - totalCrit) * noxiousWithBuffs + 
+                                     totalCrit * noxiousWithBuffs * (2.0 + (talentState.lethality * 0.06));
+            } else if (generatorName === 'Backstab') {
+                // Backstab: Weapon damage + base + Opportunity bonus + Improved Backstab crit
+                const mhWeapon = ITEMS[currentGear['mainhand']];
+                const mhAvgDmg = mhWeapon ? (mhWeapon.weaponStats.minDmg + mhWeapon.weaponStats.maxDmg) / 2 : 0;
+                const weaponDmg = mhAvgDmg * generatorWeaponMult;
+                const totalBaseDmg = weaponDmg + generatorBaseDmg;
+                
+                // Opportunity: 4/8/12/16/20% Backstab damage per rank
+                const opportunityBonus = [0, 0.04, 0.08, 0.12, 0.16, 0.20][talentState.opportunity] || 0;
+                const opportunityMultiplier = 1 + opportunityBonus;
+                
+                const afterArmor = totalBaseDmg * armorMultiplier * opportunityMultiplier;
+                const withBuffs = afterArmor * tasteForBloodMultiplier;
+                
+                // Improved Backstab: 10/20/30% MULTIPLICATIVE crit bonus per rank
+                const improvedBackstabCritBonus = [0, 0.10, 0.20, 0.30][talentState.improvedBackstab] || 0;
+                const backstabCritRate = Math.min(1.0, totalCrit * (1 + improvedBackstabCritBonus));
+                
+                generatorDmgPerUse = (1 - backstabCritRate) * withBuffs + 
+                                    backstabCritRate * withBuffs * (2.0 + (talentState.lethality * 0.06));
+            } else {
+                // Sinister Strike: Weapon damage + base + Aggression bonus
+                const mhWeapon = ITEMS[currentGear['mainhand']];
+                const mhAvgDmg = mhWeapon ? (mhWeapon.weaponStats.minDmg + mhWeapon.weaponStats.maxDmg) / 2 : 0;
+                const weaponDmg = mhAvgDmg * generatorWeaponMult;
+                const totalBaseDmg = weaponDmg + generatorBaseDmg;
+                
+                // Aggression: 3/6/10% Sinister Strike damage per rank
+                const aggressionBonus = [0, 0.03, 0.06, 0.10][talentState.aggression] || 0;
+                const aggressionMultiplier = 1 + aggressionBonus;
+                
+                const afterArmor = totalBaseDmg * armorMultiplier * aggressionMultiplier;
+                const withBuffs = afterArmor * tasteForBloodMultiplier;
+                generatorDmgPerUse = (1 - totalCrit) * withBuffs + 
+                                    totalCrit * withBuffs * (2.0 + (talentState.lethality * 0.06));
+            }
+            
+            const generatorTotalDmg = generatorCount * generatorDmgPerUse * yellowHitRate;
+            
+            // Keep noxiousTotalDmg for backward compatibility in breakdown
+            const noxiousTotalDmg = talentState.noxiousAssault > 0 ? generatorTotalDmg : 0;
             
             // Poison Damage
             const poisonBaseDmg = CONFIG.poisonBaseDmg + (effectiveAP * CONFIG.poisonAPRatio);
@@ -2434,8 +2970,13 @@
             const eviscrateCount = 3;
             const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP;
             const eviscrateAfterArmor = eviscrateBaseDmg * armorMultiplier;
+            
+            // Aggression: 3/6/10% Eviscerate damage per rank
+            const aggressionBonus = [0, 0.03, 0.06, 0.10][talentState.aggression] || 0;
+            const aggressionMultiplier = 1 + aggressionBonus;
+            
             const improvedEviscrateMultiplier = 1 + (talentState.improvedEviscerate * 0.05); // +5/10/15% per rank
-            const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier * improvedEviscrateMultiplier;
+            const eviscrateWithBuffs = eviscrateAfterArmor * tasteForBloodMultiplier * relentlessMultiplier * improvedEviscrateMultiplier * aggressionMultiplier;
             
             // Cold Blood: ONE guaranteed crit Eviscerate, rest use normal crit rate
             let eviscrateTotalDmg = 0;
@@ -2459,7 +3000,7 @@
             const stormshroud3pcDmg = stormshroud3pcProcs * 43; // Average of 35-51
             
             // Total Damage and DPS
-            let totalDamage = autoAttackDmg + noxiousTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
+            let totalDamage = autoAttackDmg + generatorTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
             
             // Murder talent: +1% per rank (0/1/2 ranks)
             const murderMultiplier = 1 + (talentState.murder * 0.01);
@@ -2474,7 +3015,14 @@
             // Character Stats AP includes gear AP + AP from stats + set bonuses
             const characterStatsAP = apFromStats + totalAttackPower + (hasStormshroud2pc ? 24 : 0) + (hasMadcap2pc ? 20 : 0);
             document.getElementById('totalAttackPower').textContent = Math.round(characterStatsAP);
-            document.getElementById('totalCrit').textContent = (totalCrit * 100).toFixed(2) + '%';
+            
+            // Display crit with Close Quarters Combat bonus if active
+            let critDisplay = (totalCrit * 100).toFixed(2) + '%';
+            if (closeQuartersCritActive > 0) {
+                critDisplay += ` (+${(closeQuartersCritActive * 100).toFixed(0)}% CQC)`;
+            }
+            document.getElementById('totalCrit').textContent = critDisplay;
+            
             document.getElementById('totalHit').textContent = ((stats.hitPct || 0) + (talentState.precision ? 5 : 0)) + '%';
             document.getElementById('totalHaste').textContent = ((stats.hastePct || 0) + (hasPotionQuickness ? 2.5 : 0) + (hasJujuFlurry ? 1 : 0) + (hasDanonzoMedley ? 2 : 0)).toFixed(1) + '%';
             
@@ -2506,7 +3054,7 @@
             const damageBreakdown = [
                 { name: 'Dissolvent Poison II', damage: poisonTotalDmg, hits: totalPoisonProcs, color: '#95e1d3' },
                 { name: 'Auto-Attacks', damage: autoAttackDmg, hits: totalAutoHits, color: '#ff6b6b' },
-                { name: 'Noxious Assault', damage: noxiousTotalDmg, hits: noxiousCount, color: '#4ecdc4' },
+                { name: generatorName, damage: generatorTotalDmg, hits: generatorCount, color: '#4ecdc4' },
                 { name: 'Eviscerate', damage: eviscrateTotalDmg, hits: eviscrateCount, color: '#feca57' },
                 { name: 'Rupture', damage: ruptureTotalDmg, hits: ruptureCount, color: '#f38181' }
             ];
@@ -2558,6 +3106,12 @@
             // Energy sources
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-bottom: 5px;">Sources:</div>';
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Base Regen: ${Math.round(energyData.baseRegen)}</div>`;
+            if (energyData.bladeRushEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Blade Rush: ${Math.round(energyData.bladeRushEnergy)} (tick: ${energyData.bladeRushTickTime.toFixed(2)}s)</div>`;
+            }
+            if (energyData.adrenalineRushEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Adrenaline Rush: ${Math.round(energyData.adrenalineRushEnergy)} (15s burst)</div>`;
+            }
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Vigor: ${Math.round(energyData.vigorEnergy)}</div>`;
             if (energyData.darkmantleEnergy > 0) {
                 html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Darkmantle: ${Math.round(energyData.darkmantleEnergy)}</div>`;
@@ -2576,20 +3130,25 @@
             
             // Energy usage
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 8px; margin-bottom: 5px;">Usage:</div>';
-            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Noxious: ${Math.round(energyData.noxiousEnergy)} (${energyData.noxiousCount}×)</div>`;
+            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• ${energyData.generatorName}: ${Math.round(energyData.generatorEnergy)} (${energyData.generatorCount}×)</div>`;
             html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• SnD: ${energyData.sndEnergy} (${energyData.sndCount}×)</div>`;
-            html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Envenom: ${energyData.envenomEnergy} (${energyData.envenomCount}×)</div>`;
+            if (energyData.envenomCount > 0) {
+                html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Envenom: ${energyData.envenomEnergy} (${energyData.envenomCount}×)</div>`;
+            }
             html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Eviscerate: ${energyData.eviscrateEnergy} (${energyData.eviscrateCount}×)</div>`;
             html += `<div style="margin-left: 10px; color: #ff6b6b; font-size: 0.9em;">• Rupture: ${energyData.ruptureEnergy} (${energyData.ruptureCount}×)</div>`;
             
-            const totalSpent = energyData.noxiousEnergy + energyData.sndEnergy + energyData.envenomEnergy + energyData.eviscrateEnergy + energyData.ruptureEnergy;
+            const totalSpent = energyData.generatorEnergy + energyData.sndEnergy + energyData.envenomEnergy + energyData.eviscrateEnergy + energyData.ruptureEnergy;
             const leftover = energyData.total - totalSpent;
             html += `<div style="color: #ff6b6b; margin-top: 8px; font-size: 1em; font-weight: bold;">Spent: ${Math.round(totalSpent)}</div>`;
             html += `<div style="color: ${leftover > 0 ? '#00ff00' : '#ff6b6b'}; font-size: 1em; font-weight: bold;">Leftover: ${Math.round(leftover)}</div>`;
             
             // Combo Points
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-top: 12px; margin-bottom: 5px;">Combo Points:</div>';
-            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Noxious (base): ${energyData.cpFromNoxious}</div>`;
+            html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• ${energyData.generatorName} (base): ${energyData.cpFromGenerator}</div>`;
+            if (energyData.cpFromImprovedBackstab > 0) {
+                html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Improved Backstab: ${Math.round(energyData.cpFromImprovedBackstab)}</div>`;
+            }
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Seal Fate: ${Math.round(energyData.cpFromSealFate)}</div>`;
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.85em;">• Ruthlessness: ${energyData.cpFromRuthlessness}</div>`;
             html += `<div style="color: #00ff00; font-weight: bold; margin-top: 5px; font-size: 1em;">Total Generated: ${Math.round(energyData.cpGenerated)}</div>`;
