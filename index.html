@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newth Rogue DPS Calculator - Turtle WoW</title>
+    <title>Rogue - Gear Guidelines - Turtle WoW</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
@@ -467,8 +467,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Assassination Rogue - Goblin Gear Guidelines</h1>
-        <div class="subtitle">Turtle Craft - DPS Simulation (60s Fight) - A Work in Progress by Newth</div>
+        <h1>Rogue - Gear Guidelines</h1>
+        <div class="subtitle">Turtle Craft - DPS Calculations - A Work in Progress by Newth</div>
         
         <!-- TAB NAVIGATION -->
         <div class="tab-navigation">
@@ -879,6 +879,14 @@
                 </div>
                 
                 <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Combat Settings</div>
+                
+                <div class="control-group">
+                    <label>Fight Length</label>
+                    <div class="slider-container">
+                        <input type="range" id="fightLength" min="40" max="60" value="60" step="10">
+                        <span class="value-display" id="fightLengthValue">60s</span>
+                    </div>
+                </div>
                 
                 <div class="control-group">
                     <label>Weapon Skill</label>
@@ -2363,7 +2371,7 @@
             });
             
             // Sliders
-            const sliders = ['weaponSkill', 'armorPen'];
+            const sliders = ['fightLength', 'weaponSkill', 'armorPen'];
             sliders.forEach(id => {
                 const elem = document.getElementById(id);
                 if (elem) {
@@ -2379,7 +2387,12 @@
             const slider = document.getElementById(id);
             const display = document.getElementById(id + 'Value');
             if (slider && display) {
-                display.textContent = slider.value;
+                // Special formatting for fight length
+                if (id === 'fightLength') {
+                    display.textContent = slider.value + 's';
+                } else {
+                    display.textContent = slider.value;
+                }
             }
         }
         
@@ -2397,8 +2410,6 @@
             } else {
                 CONFIG.oh = { minDmg: 0, maxDmg: 0, speed: 1.0 }; // Default if no weapon
             }
-            
-            const fightLength = CONFIG.fightLength;
             
             // Get all buff/consumable/debuff states
             const isPatch181 = document.getElementById('patch181').checked;
@@ -2428,6 +2439,7 @@
             const hasNatureAmmo = document.getElementById('natureAmmo').checked;
             
             // Combat settings
+            const fightLength = parseInt(document.getElementById('fightLength').value);
             const weaponSkill = parseInt(document.getElementById('weaponSkill').value);
             const armorPen = parseInt(document.getElementById('armorPen').value);
             
