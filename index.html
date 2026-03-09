@@ -491,6 +491,7 @@
                             <option value="">No Enchant</option>
                             <option value="head-ap">+28 AP</option>
                             <option value="head-haste">+1% Haste</option>
+                            <option value="head-agi">+8 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -536,6 +537,7 @@
                         <select id="enchant-chest" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="chest-stats">+3 All Stats</option>
+                            <option value="chest-agi-str" selected>+4 Agi/+4 Str</option>
                         </select>
                     </div>
                 </div>
@@ -547,6 +549,7 @@
                         <select id="enchant-wrists" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="wrists-agi">+5 Agi</option>
+                            <option value="wrists-greater-agi" selected>+7 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -558,6 +561,8 @@
                         <select id="enchant-hands" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="hands-haste">+1% Haste</option>
+                            <option value="hands-agi">+7 Agility</option>
+                            <option value="hands-greater-agi">+15 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -581,6 +586,7 @@
                             <option value="">No Enchant</option>
                             <option value="legs-ap">+28 AP</option>
                             <option value="legs-haste">+1% Haste</option>
+                            <option value="legs-agi">+8 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -592,6 +598,7 @@
                         <select id="enchant-feet" style="font-size: 0.85em;">
                             <option value="">No Enchant</option>
                             <option value="feet-agi">+5 Agi</option>
+                            <option value="feet-greater-agi" selected>+7 Agility</option>
                         </select>
                     </div>
                 </div>
@@ -790,6 +797,13 @@
                     </label>
                 </div>
                 
+                <div class="control-group" style="margin-bottom: 5px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="graceOfAir">
+                        <span>Grace of Air Totem - 77 Agi</span>
+                    </label>
+                </div>
+                
                 <div class="section-title" style="margin-top: 15px; font-size: 0.95em;">Consumables</div>
                 
                 <div class="control-group" style="margin-bottom: 5px;">
@@ -803,6 +817,13 @@
                     <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
                         <input type="checkbox" id="giants">
                         <span>Elixir of Giants - 25 Str</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 5px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="squidSkewer">
+                        <span>Squid Eel Skewer - 20 Agi</span>
                     </label>
                 </div>
                 
@@ -939,8 +960,9 @@
                     <thead>
                         <tr>
                             <th>Damage Source</th>
-                            <th>Hits</th>
                             <th>Damage</th>
+                            <th>DPS</th>
+                            <th>Hits</th>
                             <th>%</th>
                         </tr>
                     </thead>
@@ -1383,6 +1405,9 @@
                             <tr>
                                 <th>Source</th>
                                 <th>Damage</th>
+                                <th>DPS</th>
+                                <th>Hits</th>
+                                <th>%</th>
                             </tr>
                         </thead>
                         <tbody id="talents-breakdownTable">
@@ -1392,6 +1417,9 @@
                             <tr style="font-weight: bold; border-top: 2px solid #4ecdc4;">
                                 <td>Total Damage:</td>
                                 <td id="talents-totalDamage">0</td>
+                                <td id="talents-totalDPS">0</td>
+                                <td>-</td>
+                                <td>100%</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -2040,6 +2068,11 @@
                 slot: 'back',
                 stats: { strength: 11, agility: 11, stamina: 8, hastePct: 1 }
             },
+            'cloak-of-the-shrouded-mists': {
+                name: 'Cloak of the Shrouded Mists',
+                slot: 'back',
+                stats: { agility: 26, stamina: 12, hastePct: 1 }
+            },
             
             // CLUTCH OF HIVAXXIS
             'clutch-of-hivaxxis': {
@@ -2103,17 +2136,24 @@
         const ENCHANTS = {
             'head-ap': { attackPower: 28 },
             'head-haste': { hastePct: 1 },
+            'head-agi': { agility: 8 },
             'neck-agi': { agility: 6 },
             'shoulders-haste': { hastePct: 2 },
             'shoulders-ap': { attackPower: 30 },
             'back-agi': { agility: 3 },
             'chest-stats': { strength: 3, agility: 3 },
+            'chest-agi-str': { agility: 4, strength: 4 },
             'wrists-agi': { agility: 5 },
+            'wrists-greater-agi': { agility: 7 },
             'hands-haste': { hastePct: 1 },
+            'hands-agi': { agility: 7 },
+            'hands-greater-agi': { agility: 15 },
             'waist-agi': { agility: 6 },
             'legs-ap': { attackPower: 28 },
             'legs-haste': { hastePct: 1 },
+            'legs-agi': { agility: 8 },
             'feet-agi': { agility: 5 },
+            'feet-greater-agi': { agility: 7 },
             'ring-agi': { agility: 6 },
             'weapon-crusader': { attackPower: 100 },
             'weapon-agi': { agility: 15 }
@@ -2373,9 +2413,9 @@
         }
         
         function setupEventListeners() {
-            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'battleShout', 'blessingMight', 
+            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'graceOfAir', 'battleShout', 'blessingMight', 
                               'blessingKings', 'leaderPack', 'tricksTrade', 'trueshot', 'markDeath', 'markDeathPrep',
-                              'mongoose', 'giants', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea',
+                              'mongoose', 'giants', 'squidSkewer', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea',
                               'exposeArmor', 'sunderArmor', 'curseRecklessness', 'fairieFire', 'natureAmmo'];
             checkboxes.forEach(id => {
                 const elem = document.getElementById(id);
@@ -2451,8 +2491,10 @@
             const hasMarkDeathPrep = document.getElementById('markDeathPrep').checked;
             const hasWindfury = document.getElementById('windfury').checked;
             const hasStrengthEarth = document.getElementById('strengthEarth').checked;
+            const hasGraceOfAir = document.getElementById('graceOfAir').checked;
             const hasMongoose = document.getElementById('mongoose').checked;
             const hasGiants = document.getElementById('giants').checked;
+            const hasSquidSkewer = document.getElementById('squidSkewer').checked;
             const hasFirewater = document.getElementById('firewater').checked;
             const hasPotionQuickness = document.getElementById('potionQuickness').checked;
             const hasJujuFlurry = document.getElementById('jujuFlurry').checked;
@@ -2481,6 +2523,8 @@
             if (hasGiants) totalStrength += 25;
             if (hasFirewater) totalAttackPower += 35;
             if (hasStrengthEarth) totalStrength += 77;
+            if (hasGraceOfAir) totalAgility += 77;
+            if (hasSquidSkewer) totalAgility += 20;
             
             // Apply Blessing of Kings (10% to Str/Agi)
             if (hasBlessingKings) {
@@ -2583,8 +2627,8 @@
             const weaponSkillBonus = Math.max(0, weaponSkill - 300);
             
             // Glancing blow damage: 65% base + 2% per weapon skill point above 300 (Turtle WoW)
-            // 300→65%, 301→67%, 302→69%, 315→95%, 318→101%, etc.
-            const glancingDmg = 0.65 + (weaponSkillBonus * 0.02);
+            // 300→65%, 301→67%, 302→69%, 315→95% (CAPPED!)
+            const glancingDmg = Math.min(0.95, 0.65 + (weaponSkillBonus * 0.02));
             
             // Miss rate reduction: 0.2% per weapon skill point up to 330
             const weaponSkillReduction = Math.min(weaponSkillBonus, 30) * 0.002; // 0.2% per point, max 30 points (330 skill)
@@ -3005,10 +3049,16 @@
                 generatorDmgPerUse = (1 - totalCrit) * noxiousWithBuffs + 
                                      totalCrit * noxiousWithBuffs * (2.0 + (talentState.lethality * 0.06));
             } else if (generatorName === 'Backstab') {
-                // Backstab: Weapon damage + base + Opportunity bonus + Improved Backstab crit
+                // Backstab: ((AP/14 * 1.7 + Weapon) * 1.5) + 210
                 const mhWeapon = ITEMS[currentGear['mainhand']];
                 const mhAvgDmg = mhWeapon ? (mhWeapon.weaponStats.minDmg + mhWeapon.weaponStats.maxDmg) / 2 : 0;
-                const weaponDmg = mhAvgDmg * generatorWeaponMult;
+                
+                // Normalized weapon damage: (AP/14) * 1.7 normalization for daggers
+                const normalizedAPBonus = (effectiveAP / 14) * 1.7;
+                const normalizedWeaponDmg = normalizedAPBonus + mhAvgDmg;
+                
+                // Apply 150% weapon damage multiplier, then add base damage
+                const weaponDmg = normalizedWeaponDmg * generatorWeaponMult;
                 const totalBaseDmg = weaponDmg + generatorBaseDmg;
                 
                 // Opportunity: 4/8/12/16/20% Backstab damage per rank
@@ -3025,11 +3075,18 @@
                 generatorDmgPerUse = (1 - backstabCritRate) * withBuffs + 
                                     backstabCritRate * withBuffs * (2.0 + (talentState.lethality * 0.06));
             } else {
-                // Sinister Strike: Weapon damage + base + Aggression bonus
+                // Sinister Strike: ((AP/14) * 2.4 + Weapon) + 68
+                // Uses 2.4s normalization for swords/axes (NOT a weapon multiplier!)
                 const mhWeapon = ITEMS[currentGear['mainhand']];
                 const mhAvgDmg = mhWeapon ? (mhWeapon.weaponStats.minDmg + mhWeapon.weaponStats.maxDmg) / 2 : 0;
-                const weaponDmg = mhAvgDmg * generatorWeaponMult;
-                const totalBaseDmg = weaponDmg + generatorBaseDmg;
+                
+                // Normalized AP bonus: 2.4s for swords/axes, 1.7s for daggers
+                const weaponType = mhWeapon?.weaponType || 'sword';
+                const normalizationSpeed = (weaponType === 'dagger') ? 1.7 : 2.4;
+                const normalizedAPBonus = (effectiveAP / 14) * normalizationSpeed;
+                
+                // Base = (normalized AP + weapon damage) + base damage
+                const totalBaseDmg = normalizedAPBonus + mhAvgDmg + generatorBaseDmg;
                 
                 // Aggression: 3/6/10% Sinister Strike damage per rank
                 const aggressionBonus = [0, 0.03, 0.06, 0.10][talentState.aggression] || 0;
@@ -3160,7 +3217,7 @@
             }
             
             // Update damage breakdown
-            updateDamageBreakdown(damageBreakdown);
+            updateDamageBreakdown(damageBreakdown, fightLength);
         }
         
         function displaySetBonuses(sets, activeSetBonuses) {
@@ -3257,10 +3314,11 @@
             }
         }
         
-        function updateDamageBreakdown(breakdown) {
+        function updateDamageBreakdown(breakdown, fightLength) {
             breakdown.sort((a, b) => b.damage - a.damage);
             
             const total = breakdown.reduce((sum, item) => sum + item.damage, 0);
+            const totalDPS = total / fightLength;
             
             // Update gear page table
             const tbody = document.getElementById('breakdownTable');
@@ -3272,16 +3330,21 @@
             
             breakdown.forEach(item => {
                 const pct = ((item.damage / total) * 100).toFixed(1);
+                const dps = (item.damage / fightLength).toFixed(1);
                 const hits = item.hits !== undefined ? Math.round(item.hits) : '-';
                 const row = `<tr>
                     <td><span class="color-indicator" style="background: ${item.color}"></span>${item.name}</td>
                     <td>${Math.round(item.damage).toLocaleString()}</td>
-                    <td>${pct}%</td>
+                    <td>${dps}</td>
                     <td>${hits}</td>
+                    <td>${pct}%</td>
                 </tr>`;
                 tbody.innerHTML += row;
                 talentsTbody.innerHTML += row;
             });
+            
+            // Update total DPS in talents tab footer
+            document.getElementById('talents-totalDPS').textContent = totalDPS.toFixed(1);
             
             updateChart(breakdown);
         }
@@ -3380,12 +3443,12 @@
                 currentEnchants['neck'] = 'neck-agi';
                 currentEnchants['shoulders'] = 'shoulders-haste';
                 currentEnchants['back'] = 'back-agi';
-                currentEnchants['chest'] = 'chest-stats';
-                currentEnchants['wrists'] = 'wrists-agi';
+                currentEnchants['chest'] = 'chest-agi-str';
+                currentEnchants['wrists'] = 'wrists-greater-agi';
                 currentEnchants['hands'] = 'hands-haste';
                 currentEnchants['waist'] = 'waist-agi';
                 currentEnchants['legs'] = 'legs-ap';
-                currentEnchants['feet'] = 'feet-agi';
+                currentEnchants['feet'] = 'feet-greater-agi';
                 currentEnchants['ring1'] = 'ring-agi';
                 currentEnchants['ring2'] = 'ring-agi';
                 currentEnchants['mainhand'] = 'weapon-crusader';
@@ -3434,12 +3497,12 @@
                 currentEnchants['neck'] = 'neck-agi';
                 currentEnchants['shoulders'] = 'shoulders-haste';
                 currentEnchants['back'] = 'back-agi';
-                currentEnchants['chest'] = 'chest-stats';
-                currentEnchants['wrists'] = 'wrists-agi';
+                currentEnchants['chest'] = 'chest-agi-str';
+                currentEnchants['wrists'] = 'wrists-greater-agi';
                 currentEnchants['hands'] = 'hands-haste';
                 currentEnchants['waist'] = 'waist-agi';
                 currentEnchants['legs'] = 'legs-ap';
-                currentEnchants['feet'] = 'feet-agi';
+                currentEnchants['feet'] = 'feet-greater-agi';
                 currentEnchants['ring1'] = 'ring-agi';
                 currentEnchants['ring2'] = 'ring-agi';
                 currentEnchants['mainhand'] = 'weapon-crusader';
