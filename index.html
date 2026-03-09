@@ -1416,8 +1416,8 @@
                         <tfoot>
                             <tr style="font-weight: bold; border-top: 2px solid #4ecdc4;">
                                 <td>Total Damage:</td>
-                                <td id="talents-totalDamage">0</td>
-                                <td id="talents-totalDPS">0</td>
+                                <td id="talents-totalDamage-footer">0</td>
+                                <td id="talents-totalDPS-footer">0</td>
                                 <td>-</td>
                                 <td>100%</td>
                             </tr>
@@ -3343,8 +3343,9 @@
                 talentsTbody.innerHTML += row;
             });
             
-            // Update total DPS in talents tab footer
-            document.getElementById('talents-totalDPS').textContent = totalDPS.toFixed(1);
+            // Update total DPS in talents tab breakdown table footer
+            document.getElementById('talents-totalDPS-footer').textContent = totalDPS.toFixed(1);
+            document.getElementById('talents-totalDamage-footer').textContent = Math.round(totalDamage).toLocaleString();
             
             updateChart(breakdown);
         }
