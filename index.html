@@ -3180,19 +3180,32 @@
             
             displayEnergyBreakdown(energyData);
             
-            document.getElementById('totalDPS').textContent = totalDPS.toFixed(0);
-            document.getElementById('totalDamage').textContent = Math.round(totalDamage).toLocaleString();
-            document.getElementById('effectiveAP').textContent = effectiveAP.toFixed(0);
-            document.getElementById('bossArmor').textContent = effectiveArmor.toLocaleString();
-            document.getElementById('missRate').textContent = (missRate * 100).toFixed(1) + '%';
+            const totalDPSElem = document.getElementById('totalDPS');
+            const totalDamageElem = document.getElementById('totalDamage');
+            const effectiveAPElem = document.getElementById('effectiveAP');
+            const bossArmorElem = document.getElementById('bossArmor');
+            const missRateElem = document.getElementById('missRate');
+            
+            if (totalDPSElem) totalDPSElem.textContent = totalDPS.toFixed(0);
+            if (totalDamageElem) totalDamageElem.textContent = Math.round(totalDamage).toLocaleString();
+            if (effectiveAPElem) effectiveAPElem.textContent = effectiveAP.toFixed(0);
+            if (bossArmorElem) bossArmorElem.textContent = effectiveArmor.toLocaleString();
+            if (missRateElem) missRateElem.textContent = (missRate * 100).toFixed(1) + '%';
             
             // Update talents page display
-            document.getElementById('talents-totalDPS').textContent = totalDPS.toFixed(0);
-            document.getElementById('talents-totalDamage').textContent = Math.round(totalDamage).toLocaleString();
-            document.getElementById('talents-effectiveAP').textContent = effectiveAP.toFixed(0);
-            document.getElementById('talents-bossArmor').textContent = effectiveArmor.toLocaleString();
-            document.getElementById('talents-missRate').textContent = (missRate * 100).toFixed(1) + '%';
-            document.getElementById('talents-dodgeRate').textContent = (whiteDodgeRate * 100).toFixed(1) + '%';
+            const talentsTotalDPS = document.getElementById('talents-totalDPS');
+            const talentsTotalDamage = document.getElementById('talents-totalDamage');
+            const talentsEffectiveAP = document.getElementById('talents-effectiveAP');
+            const talentsBossArmor = document.getElementById('talents-bossArmor');
+            const talentsMissRate = document.getElementById('talents-missRate');
+            const talentsDodgeRate = document.getElementById('talents-dodgeRate');
+            
+            if (talentsTotalDPS) talentsTotalDPS.textContent = totalDPS.toFixed(0);
+            if (talentsTotalDamage) talentsTotalDamage.textContent = Math.round(totalDamage).toLocaleString();
+            if (talentsEffectiveAP) talentsEffectiveAP.textContent = effectiveAP.toFixed(0);
+            if (talentsBossArmor) talentsBossArmor.textContent = effectiveArmor.toLocaleString();
+            if (talentsMissRate) talentsMissRate.textContent = (missRate * 100).toFixed(1) + '%';
+            if (talentsDodgeRate) talentsDodgeRate.textContent = (whiteDodgeRate * 100).toFixed(1) + '%';
             
             // Calculate total auto-attack hits (MH + OH + Windfury if applicable)
             const totalAutoHits = mhHits + ohHits + (hasWindfury ? windfuryProcs : 0) + hackAndSlashProcs;
@@ -3315,17 +3328,31 @@
         }
         
         function updateDamageBreakdown(breakdown, fightLength) {
+            console.log('updateDamageBreakdown called with:', breakdown, fightLength);
+            
             breakdown.sort((a, b) => b.damage - a.damage);
             
             const total = breakdown.reduce((sum, item) => sum + item.damage, 0);
             const totalDPS = total / fightLength;
             
+            console.log('Total damage:', total, 'Total DPS:', totalDPS);
+            
             // Update gear page table
             const tbody = document.getElementById('breakdownTable');
+            console.log('Gear tbody element:', tbody);
+            if (!tbody) {
+                console.error('breakdownTable element not found');
+                return;
+            }
             tbody.innerHTML = '';
             
             // Update talents page table
             const talentsTbody = document.getElementById('talents-breakdownTable');
+            console.log('Talents tbody element:', talentsTbody);
+            if (!talentsTbody) {
+                console.error('talents-breakdownTable element not found');
+                return;
+            }
             talentsTbody.innerHTML = '';
             
             breakdown.forEach(item => {
@@ -3339,13 +3366,19 @@
                     <td>${hits}</td>
                     <td>${pct}%</td>
                 </tr>`;
+                console.log('Adding row:', row);
                 tbody.innerHTML += row;
                 talentsTbody.innerHTML += row;
             });
             
+            console.log('Final tbody HTML:', tbody.innerHTML);
+            console.log('Final talentsTbody HTML:', talentsTbody.innerHTML);
+            
             // Update total DPS in talents tab breakdown table footer
-            document.getElementById('talents-totalDPS-footer').textContent = totalDPS.toFixed(1);
-            document.getElementById('talents-totalDamage-footer').textContent = Math.round(totalDamage).toLocaleString();
+            const footerDPS = document.getElementById('talents-totalDPS-footer');
+            const footerDamage = document.getElementById('talents-totalDamage-footer');
+            if (footerDPS) footerDPS.textContent = totalDPS.toFixed(1);
+            if (footerDamage) footerDamage.textContent = Math.round(total).toLocaleString();
             
             updateChart(breakdown);
         }
@@ -3544,6 +3577,9 @@
             
             // Initialize talent point counter
             toggleTalent();
+            
+            // Trigger calculation to populate everything
+            calculate();
         }
     </script>
 </body>
