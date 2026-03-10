@@ -1970,7 +1970,7 @@
                 name: 'Deathbringer',
                 slot: 'weapon',
                 weaponType: 'axe',
-                weaponStats: { minDmg: 114, maxDmg: 213, speed: 2.90 }, // 56.4 DPS
+                weaponStats: { minDmg: 117, maxDmg: 216, speed: 2.90 }, // 57.5 DPS
                 stats: {}
             },
             'hedgecutter': {
@@ -1984,7 +1984,9 @@
                 name: "Vis'kag the Bloodletter",
                 slot: 'weapon',
                 weaponType: 'sword',
-                weaponStats: { minDmg: 100, maxDmg: 187, speed: 2.60 }, // 55.2 DPS
+                weaponStats: { minDmg: 106, maxDmg: 193, speed: 2.60 }, // 57.5 DPS
+                procChance: 0.06, // 6% chance on all attack sources
+                procDamage: 240,  // Deals 240 damage
                 stats: {}
             },
             'zulian-hacker': {
@@ -2359,8 +2361,10 @@
                     const option = document.createElement('option');
                     option.value = id;
                     
-                    // Display DPS for weapons
-                    if (dps > 0) {
+                    // Display DPS and speed for weapons
+                    if (dps > 0 && item.weaponStats && item.weaponStats.speed) {
+                        option.textContent = `${item.name} (${dps.toFixed(1)} DPS, ${item.weaponStats.speed.toFixed(2)}s)`;
+                    } else if (dps > 0) {
                         option.textContent = `${item.name} (${dps.toFixed(1)} DPS)`;
                     } else {
                         option.textContent = item.name;
@@ -3217,6 +3221,26 @@
             const poisonWithBuffs = isPatch181 ? poisonWithTalents : (poisonWithTalents * tasteForBloodMultiplier);
             const poisonTotalDmg = successfulPoisonProcs * poisonWithBuffs;
             
+            // Vis'kag the Bloodletter proc damage
+            // 6% chance on all attack sources (MH, OH, generators) to deal 240 damage
+            let viskagProcDmg = 0;
+            const mhWeapon = ITEMS[currentGear['mainhand']];
+            const ohWeapon = ITEMS[currentGear['offhand']];
+            const hasViskagMH = mhWeapon && mhWeapon.procChance && mhWeapon.procDamage;
+            const hasViskagOH = ohWeapon && ohWeapon.procChance && ohWeapon.procDamage;
+            
+            if (hasViskagMH || hasViskagOH) {
+                const viskagProcChance = hasViskagMH ? mhWeapon.procChance : ohWeapon.procChance;
+                const viskagDamage = hasViskagMH ? mhWeapon.procDamage : ohWeapon.procDamage;
+                
+                // Total attacks that can proc: MH hits + OH hits + generators
+                const totalAttacksForProc = mhHits + ohHits + generatorCount;
+                
+                // Calculate proc damage (affected by armor but not by crit or other modifiers)
+                const viskagProcCount = totalAttacksForProc * viskagProcChance;
+                viskagProcDmg = viskagProcCount * viskagDamage * armorMultiplier;
+            }
+            
             // Rupture Damage (using ruptureCount from earlier: 3 for 60s, 2 for shorter)
             const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * relentlessMultiplier * yellowHitRate; // Relentless Strikes affects finishers
             
@@ -3254,7 +3278,7 @@
             const stormshroud3pcDmg = stormshroud3pcProcs * 43; // Average of 35-51
             
             // Total Damage and DPS
-            let totalDamage = autoAttackDmg + generatorTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg;
+            let totalDamage = autoAttackDmg + generatorTotalDmg + poisonTotalDmg + ruptureTotalDmg + eviscrateTotalDmg + stormshroud3pcDmg + viskagProcDmg;
             
             // Murder talent: +1% per rank (0/1/2 ranks)
             const murderMultiplier = 1 + (talentState.murder * 0.01);
@@ -3325,6 +3349,19 @@
                 { name: 'Eviscerate', damage: eviscrateTotalDmg, hits: eviscrateCount, color: '#feca57' },
                 { name: 'Rupture', damage: ruptureTotalDmg, hits: ruptureCount, color: '#f38181' }
             ];
+            
+            // Add Vis'kag proc if equipped
+            if ((hasViskagMH || hasViskagOH) && viskagProcDmg > 0) {
+                const viskagProcChance = hasViskagMH ? mhWeapon.procChance : ohWeapon.procChance;
+                const totalAttacksForProc = mhHits + ohHits + generatorCount;
+                const viskagProcCount = totalAttacksForProc * viskagProcChance;
+                damageBreakdown.push({ 
+                    name: "Vis'kag Proc", 
+                    damage: viskagProcDmg, 
+                    hits: viskagProcCount, 
+                    color: '#ee5a6f' 
+                });
+            }
             
             // Add Stormshroud 3pc if active
             if (hasStormshroud3pc && stormshroud3pcDmg > 0) {
