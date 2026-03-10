@@ -2027,6 +2027,11 @@
                 set: 'madcap',
                 stats: {} // Use: Instantly increases energy by 60
             },
+            'molten-emberstone': {
+                name: 'Molten Emberstone',
+                slot: 'trinket',
+                stats: {} // Use: +200 AP for 20 seconds (calculated with uptime)
+            },
             
             // NECK
             'onyxia-tooth-pendant': {
@@ -2557,6 +2562,15 @@
             // Madcap 2pc: +20 Attack Power
             if (hasMadcap2pc) baseAP += 20;
             
+            // Molten Emberstone: +200 AP for 20 seconds (uptime-based)
+            const hasMoltenEmberstone = currentGear['trinket1'] === 'molten-emberstone' || currentGear['trinket2'] === 'molten-emberstone';
+            if (hasMoltenEmberstone) {
+                const emberstoneDuration = 20;
+                const emberstoneUptime = Math.min(1.0, emberstoneDuration / fightLength);
+                const emberstoneAP = 200 * emberstoneUptime;
+                baseAP += emberstoneAP;
+            }
+            
             // Trueshot 3% AP multiplier
             if (hasTrueshot) {
                 const apBeforeTrueshot = baseAP - 30;
@@ -2808,12 +2822,41 @@
                 generatorWeaponMult = CONFIG.sinisterStrikeWeaponDmgMultiplier;
             }
             
-            // Determine Envenom usage based on talent
-            const envenomCount = talentState.envenom > 0 ? 5 : 0;
+            // Determine Slice and Dice count based on fight duration
+            let sndCount;
+            if (fightLength <= 40) {
+                sndCount = 3;
+            } else if (fightLength <= 50) {
+                sndCount = 4;
+            } else {
+                sndCount = 5;
+            }
+            
+            // Determine Rupture count based on fight duration
+            let ruptureCount;
+            if (fightLength >= 60) {
+                ruptureCount = 3;
+            } else {
+                ruptureCount = 2;
+            }
+            
+            // Determine Envenom usage based on talent and fight duration
+            let envenomCount;
+            if (talentState.envenom > 0) {
+                if (fightLength <= 40) {
+                    envenomCount = 3;
+                } else if (fightLength <= 50) {
+                    envenomCount = 4;
+                } else {
+                    envenomCount = 5;
+                }
+            } else {
+                envenomCount = 0;
+            }
             const envenomEnergy = envenomCount * CONFIG.envenomEnergy;
             
             // Calculate generator count (replacing old noxiousCount)
-            const energyForGenerator = conservativeEnergy - envenomEnergy - (5 * CONFIG.sndEnergy) - (2 * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
+            const energyForGenerator = conservativeEnergy - envenomEnergy - (sndCount * CONFIG.sndEnergy) - (ruptureCount * CONFIG.ruptureEnergy) - (3 * CONFIG.eviscrateEnergy);
             let generatorCount = Math.max(0, Math.floor(energyForGenerator / generatorEnergy));
             
             // Keep noxiousCount for backward compatibility (set to generatorCount if Noxious is active AND not Combat spec, else 0)
@@ -2846,28 +2889,28 @@
                 generatorEnergy: generatorCount * generatorEnergy,
                 noxiousCount: noxiousCount,
                 noxiousEnergy: noxiousCount * CONFIG.noxiousAssaultEnergy,
-                sndCount: 5,
-                sndEnergy: 5 * CONFIG.sndEnergy,
+                sndCount: sndCount,
+                sndEnergy: sndCount * CONFIG.sndEnergy,
                 envenomCount: envenomCount,
                 envenomEnergy: envenomEnergy,
                 eviscrateCount: 3,
                 eviscrateEnergy: 3 * CONFIG.eviscrateEnergy,
-                ruptureCount: 2,
-                ruptureEnergy: 2 * CONFIG.ruptureEnergy,
+                ruptureCount: ruptureCount,
+                ruptureEnergy: ruptureCount * CONFIG.ruptureEnergy,
                 // Combo Points
                 cpFromGenerator: generatorCount * 1, // Base 1 CP per generator
                 cpFromImprovedBackstab: cpFromImprovedBackstab, // 15/30/45% bonus CP for Backstab
                 cpFromSealFate: (generatorName === 'Backstab') 
                     ? (generatorCount * backstabCritRate * (talentState.sealFate * 0.20)) // Use Backstab's higher crit rate
                     : (generatorCount * totalCrit * (talentState.sealFate * 0.20)), // Seal Fate: 20/40/60/80/100% chance (0-5 ranks)
-                cpFromRuthlessness: ((5 + envenomCount + 3 + 2) * 1) * (talentState.ruthlessness / 3), // Ruthlessness: SnD(5) + Envenom(0-5) + Eviscerate(3) + Rupture(2)
+                cpFromRuthlessness: ((sndCount + envenomCount + 3 + ruptureCount) * 1) * (talentState.ruthlessness / 3), // Ruthlessness: SnD(sndCount) + Envenom(envenomCount) + Eviscerate(3) + Rupture(ruptureCount)
                 cpGenerated: (generatorCount * 1) + 
                             cpFromImprovedBackstab +
                             ((generatorName === 'Backstab') 
                                 ? (generatorCount * backstabCritRate * (talentState.sealFate * 0.20))
                                 : (generatorCount * totalCrit * (talentState.sealFate * 0.20))) +
-                            (((5 + envenomCount + 3 + 2) * 1) * (talentState.ruthlessness / 3)), // Total CP generated (includes 3 Eviscerates)
-                cpSpent: 5 + envenomCount + 15 + 10 // SnD(5) + Envenom(0-5) + Eviscerate(3×5) + Rupture(2×5)
+                            (((sndCount + envenomCount + 3 + ruptureCount) * 1) * (talentState.ruthlessness / 3)), // Total CP generated (includes SnD + Envenom + Eviscerate + Rupture)
+                cpSpent: sndCount + envenomCount + 15 + (ruptureCount * 5) // SnD(sndCount) + Envenom(envenomCount) + Eviscerate(3×5) + Rupture(ruptureCount×5)
             };
             
             // Poison procs
@@ -3109,8 +3152,7 @@
             const poisonWithBuffs = isPatch181 ? poisonWithTalents : (poisonWithTalents * tasteForBloodMultiplier);
             const poisonTotalDmg = successfulPoisonProcs * poisonWithBuffs;
             
-            // Rupture Damage
-            const ruptureCount = Math.floor(fightLength / (CONFIG.ruptureBaseDuration + (talentState.improvedRupture * 2))); // Taste for Blood: +2/4/6s duration
+            // Rupture Damage (using ruptureCount from earlier: 3 for 60s, 2 for shorter)
             const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * relentlessMultiplier * yellowHitRate; // Relentless Strikes affects finishers
             
             // Eviscerate Damage (3 casts at 5 CP each)
