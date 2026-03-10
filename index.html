@@ -55,11 +55,11 @@
         }
         
         .panel {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(78, 205, 196, 0.3);
             display: flex;
             flex-direction: column;
         }
@@ -801,6 +801,13 @@
                     <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
                         <input type="checkbox" id="graceOfAir">
                         <span>Grace of Air Totem - 77 Agi</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 5px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="bloodFury">
+                        <span>Blood Fury - 120 AP (15s)</span>
                     </label>
                 </div>
                 
@@ -1959,11 +1966,39 @@
                 weaponStats: { minDmg: 73, maxDmg: 137, speed: 1.80 }, // 58.3 DPS
                 stats: {}
             },
+            'deathbringer': {
+                name: 'Deathbringer',
+                slot: 'weapon',
+                weaponType: 'axe',
+                weaponStats: { minDmg: 114, maxDmg: 213, speed: 2.90 }, // 56.4 DPS
+                stats: {}
+            },
+            'hedgecutter': {
+                name: 'Hedgecutter',
+                slot: 'weapon',
+                weaponType: 'axe',
+                weaponStats: { minDmg: 60, maxDmg: 90, speed: 1.90 }, // 39.5 DPS
+                stats: { stamina: 10, strength: 5 }
+            },
+            'viskag-the-bloodletter': {
+                name: "Vis'kag the Bloodletter",
+                slot: 'weapon',
+                weaponType: 'sword',
+                weaponStats: { minDmg: 100, maxDmg: 187, speed: 2.60 }, // 55.2 DPS
+                stats: {}
+            },
+            'zulian-hacker': {
+                name: 'Zulian Hacker',
+                slot: 'weapon',
+                weaponType: 'axe',
+                weaponStats: { minDmg: 71, maxDmg: 134, speed: 2.40 }, // 42.7 DPS
+                stats: {}
+            },
             'fang-of-venoxis': {
                 name: 'Fang of Venoxis',
                 slot: 'mainhand',
                 weaponType: 'dagger',
-                weaponStats: { minDmg: 35.2, maxDmg: 72.2, speed: 1.30 }, // 47.8 DPS
+                weaponStats: { minDmg: 43.64, maxDmg: 80.64, speed: 1.30 }, // 47.8 DPS
                 stats: { intellect: 8, spirit: 6 }
             },
             'crystal-sword-of-the-blossom': {
@@ -2293,6 +2328,7 @@
                 let slotType = slot.replace(/[12]$/, ''); // Remove numbers from ring1/ring2, etc.
                 
                 // Find items for this slot
+                const matchingItems = [];
                 Object.entries(ITEMS).forEach(([id, item]) => {
                     // Check if item matches this slot
                     let matches = item.slot === slotType || item.slot === slot;
@@ -2303,20 +2339,34 @@
                     }
                     
                     if (matches) {
-                        const option = document.createElement('option');
-                        option.value = id;
-                        
-                        // Calculate and display DPS for weapons
+                        // Calculate DPS for weapons
+                        let dps = 0;
                         if (item.weaponStats && item.weaponStats.minDmg && item.weaponStats.maxDmg && item.weaponStats.speed) {
                             const avgDmg = (item.weaponStats.minDmg + item.weaponStats.maxDmg) / 2;
-                            const dps = avgDmg / item.weaponStats.speed;
-                            option.textContent = `${item.name} (${dps.toFixed(1)} DPS)`;
-                        } else {
-                            option.textContent = item.name;
+                            dps = avgDmg / item.weaponStats.speed;
                         }
-                        
-                        select.appendChild(option);
+                        matchingItems.push({ id, item, dps });
                     }
+                });
+                
+                // Sort weapons by DPS (descending) for mainhand/offhand slots
+                if (slot === 'mainhand' || slot === 'offhand') {
+                    matchingItems.sort((a, b) => b.dps - a.dps);
+                }
+                
+                // Add sorted items to dropdown
+                matchingItems.forEach(({ id, item, dps }) => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    
+                    // Display DPS for weapons
+                    if (dps > 0) {
+                        option.textContent = `${item.name} (${dps.toFixed(1)} DPS)`;
+                    } else {
+                        option.textContent = item.name;
+                    }
+                    
+                    select.appendChild(option);
                 });
                 
                 // Event listener
@@ -2418,7 +2468,7 @@
         }
         
         function setupEventListeners() {
-            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'graceOfAir', 'battleShout', 'blessingMight', 
+            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'graceOfAir', 'bloodFury', 'battleShout', 'blessingMight', 
                               'blessingKings', 'leaderPack', 'tricksTrade', 'trueshot', 'markDeath', 'markDeathPrep',
                               'mongoose', 'giants', 'squidSkewer', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea',
                               'exposeArmor', 'sunderArmor', 'curseRecklessness', 'fairieFire', 'natureAmmo'];
@@ -2497,6 +2547,7 @@
             const hasWindfury = document.getElementById('windfury').checked;
             const hasStrengthEarth = document.getElementById('strengthEarth').checked;
             const hasGraceOfAir = document.getElementById('graceOfAir').checked;
+            const hasBloodFury = document.getElementById('bloodFury').checked;
             const hasMongoose = document.getElementById('mongoose').checked;
             const hasGiants = document.getElementById('giants').checked;
             const hasSquidSkewer = document.getElementById('squidSkewer').checked;
@@ -2569,6 +2620,20 @@
                 const emberstoneUptime = Math.min(1.0, emberstoneDuration / fightLength);
                 const emberstoneAP = 200 * emberstoneUptime;
                 baseAP += emberstoneAP;
+            }
+            
+            // Blood Fury (Orc Racial): +120 AP for 15 seconds
+            // Period-based (used at 10s):
+            //   Period 1 (0-10s): 0 AP
+            //   Period 2 (10-25s): +120 AP
+            //   Period 3 (25s-end): 0 AP
+            // Average AP = 120 × (15s / fightLength)
+            //   40s: +45 AP, 50s: +36 AP, 60s: +30 AP
+            if (hasBloodFury) {
+                const bloodFuryDuration = 15;
+                const bloodFuryUptime = bloodFuryDuration / fightLength;
+                const avgBloodFuryAP = 120 * bloodFuryUptime;
+                baseAP += avgBloodFuryAP;
             }
             
             // Trueshot 3% AP multiplier
