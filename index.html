@@ -3100,11 +3100,17 @@ STATS:
             // Calculate hit
             let hit = (stats.hitPct || 0) / 100 + (talentState.precision * 0.01); // Precision: +1% hit per rank (0-5 ranks)
             
-            // Calculate haste
-            let haste = (stats.hastePct || 0) / 100;
-            if (hasPotionQuickness) haste += (30 / 60) * 0.05;
-            if (hasJujuFlurry) haste += (20 / 60) * 0.03;
-            if (hasDanonzoMedley) haste += 0.02; // 2% haste, permanent consumable
+            // Calculate GEAR haste using CHAINED formula
+            // Each 1% haste on gear is applied to the previous result (not base)
+            // Formula: Speed = BaseSpeed × (1/1.01)^N where N = total haste percentage
+            const gearHastePct = stats.hastePct || 0;
+            const chainedGearHasteMultiplier = Math.pow(1.01, gearHastePct); // (1.01)^N for gear haste
+            
+            // Calculate CONSUMABLE/PROC haste using MULTIPLICATIVE formula (standard WoW)
+            let consumableHaste = 1.0;
+            if (hasPotionQuickness) consumableHaste *= (1 + (30 / 60) * 0.05); // 2.5% effective haste
+            if (hasJujuFlurry) consumableHaste *= (1 + (20 / 60) * 0.03); // 1% effective haste
+            if (hasDanonzoMedley) consumableHaste *= 1.02; // 2% haste, permanent consumable
             
             // Effective AP with Crusader (30% uptime per weapon) and Mark for Death
             let effectiveAP = baseAP + markDeathBonus;
@@ -3161,14 +3167,20 @@ STATS:
             const sndHaste = 0.30;
             
             // Stormshroud 4pc: +10% melee attack speed for 8 seconds with 2% proc chance
-            // Using fixed 30% uptime estimate
+            // Using fixed 30% uptime estimate (MULTIPLICATIVE)
             const stormshroud4pcHasteUptime = hasStormshroud4pc ? 0.30 : 0;
-            const stormshroud4pcHaste = stormshroud4pcHasteUptime * 0.10; // 3% effective haste (30% uptime × 10% haste)
+            const stormshroud4pcMultiplier = hasStormshroud4pc ? (1 + stormshroud4pcHasteUptime * 0.10) : 1.0;
             
-            // Blade Rush: +2/5% attack speed (rank 1/2)
+            // Blade Rush: +2/5% attack speed (rank 1/2) (MULTIPLICATIVE)
             const bladeRushAttackSpeed = [0, 0.02, 0.05][talentState.bladeRush] || 0;
+            const bladeRushMultiplier = 1 + bladeRushAttackSpeed;
             
-            const totalHaste = (1 + sndHaste) * (1 + haste + stormshroud4pcHaste + bladeRushAttackSpeed);
+            // FINAL HASTE CALCULATION:
+            // 1. Chained gear haste (applied first)
+            // 2. Consumables (multiplicative)
+            // 3. Procs (multiplicative)
+            // 4. SnD (multiplicative)
+            const totalHaste = (1 + sndHaste) * chainedGearHasteMultiplier * consumableHaste * stormshroud4pcMultiplier * bladeRushMultiplier;
             
             // Calculate swings separately for MH and OH based on their actual weapon speeds
             const mhEffectiveSpeed = CONFIG.mh.speed / totalHaste;
@@ -3918,7 +3930,14 @@ STATS:
             document.getElementById('totalCrit').textContent = critDisplay;
             
             document.getElementById('totalHit').textContent = ((stats.hitPct || 0) + (talentState.precision ? 5 : 0)) + '%';
-            document.getElementById('totalHaste').textContent = ((stats.hastePct || 0) + (hasPotionQuickness ? 2.5 : 0) + (hasJujuFlurry ? 1 : 0) + (hasDanonzoMedley ? 2 : 0)).toFixed(1) + '%';
+            
+            // Display total haste (gear + consumables)
+            // Note: This shows the ADDITIVE total for display, but calculation uses chained formula
+            const displayHaste = (stats.hastePct || 0) + 
+                                 (hasPotionQuickness ? 2.5 : 0) + 
+                                 (hasJujuFlurry ? 1 : 0) + 
+                                 (hasDanonzoMedley ? 2 : 0);
+            document.getElementById('totalHaste').textContent = displayHaste.toFixed(1) + '%';
             
             // Update Armor Penetration display with dynamic total
             const armorPenDisplay = document.getElementById('armorPenValue');
