@@ -671,7 +671,7 @@
                 <div class="control-group" style="margin-bottom: 2px;">
                     <label style="font-size: 0.8em; margin-bottom: 1px;">Fight Length</label>
                     <div class="slider-container" style="padding: 1px 0;">
-                        <input type="range" id="fightLength" min="40" max="60" value="60" step="10" style="height: 2px;">
+                        <input type="range" id="fightLength" min="20" max="60" value="60" step="10" style="height: 2px;">
                         <span class="value-display" id="fightLengthValue" style="font-size: 0.8em;">60s</span>
                     </div>
                 </div>
@@ -843,6 +843,13 @@
                     <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
                         <input type="checkbox" id="bloodFury">
                         <span>Blood Fury - 120 AP (15s)</span>
+                    </label>
+                </div>
+                
+                <div class="control-group" style="margin-bottom: 5px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-weight: normal;">
+                        <input type="checkbox" id="vaelastrasz">
+                        <span>Vaelastrasz the Corrupt</span>
                     </label>
                 </div>
                 
@@ -2891,7 +2898,7 @@ STATS:
         }
         
         function setupEventListeners() {
-            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'graceOfAir', 'bloodFury', 'battleShout', 'blessingMight', 
+            const checkboxes = ['patch181', 'windfury', 'strengthEarth', 'graceOfAir', 'bloodFury', 'vaelastrasz', 'battleShout', 'blessingMight', 
                               'blessingKings', 'leaderPack', 'tricksTrade', 'hemorrhageBuff', 'trueshot', 'markDeath', 'markDeathPrep',
                               'mongoose', 'giants', 'squidSkewer', 'firewater', 'potionQuickness', 'jujuFlurry', 'danonzoMedley', 'thistleTea',
                               'exposeArmor', 'sunderArmor', 'curseRecklessness', 'fairieFire', 'natureAmmo'];
@@ -2972,6 +2979,7 @@ STATS:
             const hasStrengthEarth = document.getElementById('strengthEarth').checked;
             const hasGraceOfAir = document.getElementById('graceOfAir').checked;
             const hasBloodFury = document.getElementById('bloodFury').checked;
+            const hasVaelastrasz = document.getElementById('vaelastrasz').checked;
             const hasMongoose = document.getElementById('mongoose').checked;
             const hasGiants = document.getElementById('giants').checked;
             const hasSquidSkewer = document.getElementById('squidSkewer').checked;
@@ -3201,6 +3209,9 @@ STATS:
             // IMPORTANT: In Turtle WoW, haste does NOT increase energy regeneration (always 10/sec)
             const baseEnergyRegen = fightLength * CONFIG.energyRegen;
             
+            // Vaelastrasz the Corrupt: +50 energy per second
+            const vaelastraszEnergy = hasVaelastrasz ? (fightLength * 50) : 0;
+            
             // Blade Rush: Reduces energy tick time by agility (1 agi = 0.0012s reduction)
             // Base tick: 2.0 seconds (20 energy per tick)
             // With Blade Rush: 2.0 - (agility × 0.0012) seconds per tick
@@ -3282,6 +3293,7 @@ STATS:
             const vigorMaxEnergyBonus = talentState.vigor * 5; // +5/+10 max energy
             
             const conservativeEnergy = baseEnergyRegen + 
+                                      vaelastraszEnergy +
                                       bladeRushBonusEnergy +
                                       adrenalineRushEnergy +
                                       (autoAttackPoisonProcs * vigorEnergyBonus) + 
@@ -3349,7 +3361,9 @@ STATS:
             
             // Determine Slice and Dice count based on fight duration
             let sndCount;
-            if (fightLength <= 40) {
+            if (fightLength <= 30) {
+                sndCount = 2; // Short fights: only 2 SnD
+            } else if (fightLength <= 40) {
                 sndCount = 3;
             } else if (fightLength <= 50) {
                 sndCount = 4;
@@ -3359,7 +3373,9 @@ STATS:
             
             // Determine Rupture count based on fight duration
             let ruptureCount;
-            if (fightLength >= 60) {
+            if (fightLength <= 30) {
+                ruptureCount = 1; // Short fights: only 1 Rupture
+            } else if (fightLength >= 60) {
                 ruptureCount = 3;
             } else {
                 ruptureCount = 2;
@@ -3368,7 +3384,9 @@ STATS:
             // Determine Envenom usage based on talent and fight duration
             let envenomCount;
             if (talentState.envenom > 0) {
-                if (fightLength <= 40) {
+                if (fightLength <= 30) {
+                    envenomCount = 2; // Short fights: only 2 Envenom
+                } else if (fightLength <= 40) {
                     envenomCount = 3;
                 } else if (fightLength <= 50) {
                     envenomCount = 4;
@@ -3380,9 +3398,18 @@ STATS:
             }
             const envenomEnergy = envenomCount * CONFIG.envenomEnergy;
             
-            // Determine Eviscerate count
+            // Determine Eviscerate count based on fight duration
             // NOT used when Hemorrhage is talented (Hemorrhage spec uses Rupture as main finisher)
-            const eviscrateCount = talentState.hemorrhage > 0 ? 0 : 3;
+            let eviscrateCount;
+            if (talentState.hemorrhage > 0) {
+                eviscrateCount = 0; // Hemorrhage spec doesn't use Eviscerate
+            } else if (fightLength <= 20) {
+                eviscrateCount = 1; // 20s fights: only 1 Eviscerate
+            } else if (fightLength <= 30) {
+                eviscrateCount = 2; // 30s fights: 2 Eviscerate
+            } else {
+                eviscrateCount = 3; // 40s+ fights: 3 Eviscerate
+            }
             
             // Determine Shadow of Death casts (1 or 2 with Preparation)
             const shadowOfDeathCasts = (talentState.shadowOfDeath > 0) ? (talentState.preparation > 0 ? 2 : 1) : 0;
@@ -3408,6 +3435,7 @@ STATS:
             
             // Recalculate conservativeEnergy with actual relentlessEnergy
             const conservativeEnergyFinal = baseEnergyRegen + 
+                                           vaelastraszEnergy +
                                            bladeRushBonusEnergy +
                                            adrenalineRushEnergy +
                                            (autoAttackPoisonProcs * vigorEnergyBonus) + 
@@ -3429,6 +3457,33 @@ STATS:
             const energyForGenerator = conservativeEnergyFinal - envenomEnergy - (sndCount * CONFIG.sndEnergy) - (ruptureCount * CONFIG.ruptureEnergy) - eviscrateEnergySpent - shadowOfDeathEnergy - markForDeathEnergy;
             let generatorCount = Math.max(0, Math.floor(energyForGenerator / generatorEnergy));
             
+            // GLOBAL COOLDOWN LIMITATION (1.0 second for all instant abilities)
+            // Calculate total GCD-locked time from all abilities
+            const totalAbilities = generatorCount + sndCount + envenomCount + eviscrateCount + ruptureCount + shadowOfDeathCasts + markForDeathCasts;
+            const gcdPerAbility = 1.0; // 1.0 second GCD for instant abilities
+            const totalGCDTime = totalAbilities * gcdPerAbility;
+            
+            // If total GCD time exceeds fight length, we need to reduce ability casts
+            if (totalGCDTime > fightLength) {
+                const maxAbilities = Math.floor(fightLength / gcdPerAbility);
+                
+                // Calculate how many abilities we need to reduce (proportionally)
+                const reductionRatio = maxAbilities / totalAbilities;
+                
+                // Reduce generator count proportionally
+                // Finishers (SnD, Envenom, Eviscerate, Rupture) are fixed by rotation logic
+                // So we primarily reduce generators
+                const fixedAbilities = sndCount + envenomCount + eviscrateCount + ruptureCount + shadowOfDeathCasts + markForDeathCasts;
+                const availableGCDsForGenerators = maxAbilities - fixedAbilities;
+                
+                if (availableGCDsForGenerators > 0) {
+                    generatorCount = Math.min(generatorCount, Math.floor(availableGCDsForGenerators));
+                } else {
+                    // Not enough GCDs even for finishers - this shouldn't happen in normal scenarios
+                    generatorCount = 0;
+                }
+            }
+            
             // Keep noxiousCount for backward compatibility (set to generatorCount if Noxious is active AND not Combat spec, else 0)
             let noxiousCount = (talentState.noxiousAssault > 0 && !isCombatSpec) ? generatorCount : 0;
             
@@ -3444,6 +3499,7 @@ STATS:
             const energyData = {
                 total: conservativeEnergyFinal,
                 baseRegen: baseEnergyRegen,
+                vaelastraszEnergy: vaelastraszEnergy,
                 bladeRushEnergy: bladeRushBonusEnergy,
                 bladeRushTickTime: energyTickTime,
                 adrenalineRushEnergy: adrenalineRushEnergy,
@@ -3789,8 +3845,9 @@ STATS:
             const serratedBladesRuptureBonus = talentState.serratedBlades > 0 ? 1.30 : 1.0;
             const ruptureTotalDmg = ruptureCount * CONFIG.ruptureDamage5CP * armorMultiplier * tasteForBloodMultiplier * relentlessMultiplier * serratedBladesRuptureBonus * yellowHitRate; // Relentless Strikes affects finishers
             
-            // Eviscerate Damage (eviscrateCount already defined earlier: 0 when Hemorrhage, 3 otherwise)
-            const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP;
+            // Eviscerate Damage (eviscrateCount already defined earlier: 0 when Hemorrhage, 1/2/3 based on fight length)
+            // Base damage = 900 + (AP × 0.15)
+            const eviscrateBaseDmg = CONFIG.eviscerateBaseDamage5CP + (effectiveAP * 0.15);
             const eviscrateAfterArmor = eviscrateBaseDmg * armorMultiplier;
             
             // Aggression: 3/6/10% Eviscerate damage per rank
@@ -4065,6 +4122,9 @@ STATS:
             // Energy sources
             html += '<div style="color: #a0a0a0; font-size: 0.95em; margin-bottom: 5px;">Sources:</div>';
             html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Base Regen: ${Math.round(energyData.baseRegen)}</div>`;
+            if (energyData.vaelastraszEnergy > 0) {
+                html += `<div style="margin-left: 10px; color: #ffd700; font-size: 0.9em; font-weight: bold;">• Vaelastrasz: ${Math.round(energyData.vaelastraszEnergy)} (50/sec)</div>`;
+            }
             if (energyData.bladeRushEnergy > 0) {
                 html += `<div style="margin-left: 10px; color: #e0e0e0; font-size: 0.9em;">• Blade Rush: ${Math.round(energyData.bladeRushEnergy)} (tick: ${energyData.bladeRushTickTime.toFixed(2)}s)</div>`;
             }
